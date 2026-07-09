@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: USERNAME/REPOSITORY
+  repo: repo: elmmdo/elmmdo.github.io
   branch: main
 
 media_folder: "assets/images/uploads"
