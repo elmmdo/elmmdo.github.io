@@ -4,29 +4,45 @@ title: خانه
 ---
 
 <section class="hero">
-  <h1>سلام، من [نام شما] هستم</h1>
-  <p>
-    اینجا درباره پژوهش‌ها، یادداشت‌ها و تجربه‌های شخصی‌ام می‌نویسم.
-  </p>
+  <div class="hero-content">
+    <p class="eyebrow">وبلاگ شخصی</p>
+
+    <h1>سلام، به وبلاگ من خوش آمدید</h1>
+
+    <p class="hero-text">
+      اینجا درباره یادداشت‌ها، تجربه‌ها، پژوهش‌ها و چیزهایی که یاد می‌گیرم می‌نویسم.
+    </p>
+
+    <div class="hero-actions">
+      <a class="btn primary" href="{{ '/archive/' | relative_url }}">مشاهده نوشته‌ها</a>
+      <a class="btn secondary" href="{{ '/about/' | relative_url }}">درباره من</a>
+    </div>
+  </div>
 </section>
 
-<section class="intro">
-  <h2>درباره این وبلاگ</h2>
-  <p>
-    در این وبلاگ می‌توانید نوشته‌هایی درباره علم، فناوری، آموزش و تجربه‌های من بخوانید.
-  </p>
-</section>
+<section class="section">
+  <div class="section-title">
+    <h2>آخرین نوشته‌ها</h2>
+    <p>جدیدترین مطالب منتشرشده در وبلاگ</p>
+  </div>
 
-<section class="latest-posts">
-  <h2>آخرین نوشته‌ها</h2>
+  <div class="post-grid">
+    {% for post in site.posts limit:6 %}
+      <article class="post-card">
+        <a href="{{ post.url | relative_url }}">
+          <h3>{{ post.title }}</h3>
+        </a>
 
-  <ul>
-    {% for post in site.posts limit:5 %}
-      <li>
-        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-        <span>{{ post.date | date: "%Y/%m/%d" }}</span>
-      </li>
+        <div class="card-meta">
+          <span>{{ post.date | date: "%Y/%m/%d" }}</span>
+        </div>
+
+        {% if post.excerpt %}
+          <p>{{ post.excerpt | strip_html | truncate: 120 }}</p>
+        {% endif %}
+
+        <a class="read-more" href="{{ post.url | relative_url }}">ادامه مطلب ←</a>
+      </article>
     {% endfor %}
-  </ul>
+  </div>
 </section>
-.
