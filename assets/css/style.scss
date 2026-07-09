@@ -508,3 +508,82 @@ body.dark-theme .category-block,
 body.dark-theme .tag-block {
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
 }
+.theme-toggle {
+  border: 0;
+  background: #e0f2fe;
+  color: #0f172a;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background: #bae6fd;
+  transform: translateY(-1px);
+}
+
+body.dark-mode {
+  background: #020617;
+  color: #e5e7eb;
+}
+
+body.dark-mode .site-header,
+body.dark-mode .site-footer,
+body.dark-mode .post-card,
+body.dark-mode .archive-list li,
+body.dark-mode .category-block,
+body.dark-mode .tag-block,
+body.dark-mode .profile-card,
+body.dark-mode .post-content {
+  background: #0f172a;
+  border-color: #1e293b;
+  color: #e5e7eb;
+}
+
+body.dark-mode .site-title,
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode .post-card h2,
+body.dark-mode .category-block h2,
+body.dark-mode .tag-block h2 {
+  color: #f8fafc;
+}
+
+body.dark-mode a {
+  color: #93c5fd;
+}
+
+body.dark-mode .site-nav a {
+  color: #cbd5e1;
+}
+
+body.dark-mode .site-nav a:hover {
+  background: #1e293b;
+  color: #ffffff;
+}
+
+body.dark-mode .hero,
+body.dark-mode .intro,
+body.dark-mode .latest-posts,
+body.dark-mode .page-heading {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  border-color: #334155;
+}
+
+body.dark-mode .hero p,
+body.dark-mode .intro p,
+body.dark-mode .page-heading p,
+body.dark-mode .post-meta,
+body.dark-mode time {
+  color: #cbd5e1;
+}
+
+body.dark-mode .tag,
+body.dark-mode .category {
+  background: #1e293b;
+  color: #bfdbfe;
+}
