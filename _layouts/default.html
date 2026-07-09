@@ -11,13 +11,17 @@
     <div class="container nav">
       <a class="logo" href="{{ '/' | relative_url }}">{{ site.title }}</a>
 
-      <nav>
+    <nav>
   <a href="{{ '/' | relative_url }}">خانه</a>
   <a href="{{ '/archive/' | relative_url }}">آرشیو</a>
   <a href="{{ '/categories/' | relative_url }}">موضوعات</a>
   <a href="{{ '/tags/' | relative_url }}">برچسب‌ها</a>
   <a href="{{ '/about/' | relative_url }}">درباره</a>
-      </nav>
+  <button id="theme-toggle" class="theme-toggle" type="button">
+    🌙
+  </button>
+</nav>
+
 
   <button class="theme-toggle" id="theme-toggle" type="button">
   تغییر حالت
