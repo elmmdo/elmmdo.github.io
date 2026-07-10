@@ -12,34 +12,33 @@ locale: "fa"
 
 collections:
   - name: "posts"
-    label: "Posts"
-    label_singular: "Post"
+    label: "نوشته‌ها"
+    label_singular: "نوشته"
     folder: "_posts"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    summary: "{{title}} - {{date}}"
+    summary: "{{title}}"
     fields:
-      - label: "Title"
+      - label: "عنوان"
         name: "title"
         widget: "string"
 
-      - label: "Description"
+      - label: "توضیح کوتاه"
         name: "description"
         widget: "text"
         required: false
 
-      - label: "Publish Date"
+      - label: "تاریخ انتشار"
         name: "date"
         widget: "datetime"
-        format: "YYYY-MM-DD HH:mm:ss Z"
 
-      - label: "Author"
+      - label: "نویسنده"
         name: "author"
         widget: "string"
         default: "Elmmdo"
         required: false
 
-      - label: "Category"
+      - label: "دسته‌بندی"
         name: "category"
         widget: "select"
         options:
@@ -49,161 +48,32 @@ collections:
           - "عمومی"
         required: false
 
-      - label: "Tags"
+      - label: "برچسب‌ها"
         name: "tags"
         widget: "list"
         required: false
         field:
-          label: "Tag"
+          label: "برچسب"
           name: "tag"
           widget: "string"
 
-      - label: "Cover Image"
+      - label: "تصویر شاخص"
         name: "image"
         widget: "image"
         required: false
 
-      - label: "Featured Post"
+      - label: "نوشته ویژه"
         name: "featured"
         widget: "boolean"
         default: false
         required: false
 
-      - label: "Draft"
+      - label: "پیش‌نویس"
         name: "draft"
         widget: "boolean"
         default: false
         required: false
 
-      - label: "Body"
+      - label: "متن کامل"
         name: "body"
         widget: "markdown"
-
-  - name: "pages"
-    label: "Pages"
-    label_singular: "Page"
-    folder: "pages"
-    create: true
-    slug: "{{slug}}"
-    summary: "{{title}}"
-    fields:
-      - label: "Title"
-        name: "title"
-        widget: "string"
-
-      - label: "Permalink"
-        name: "permalink"
-        widget: "string"
-        hint: "Example: /about/"
-        required: false
-
-      - label: "Description"
-        name: "description"
-        widget: "text"
-        required: false
-
-      - label: "Cover Image"
-        name: "image"
-        widget: "image"
-        required: false
-
-      - label: "Body"
-        name: "body"
-        widget: "markdown"
-
-  - name: "projects"
-    label: "Projects"
-    label_singular: "Project"
-    folder: "_projects"
-    create: true
-    slug: "{{slug}}"
-    summary: "{{title}}"
-    fields:
-      - label: "Title"
-        name: "title"
-        widget: "string"
-
-      - label: "Description"
-        name: "description"
-        widget: "text"
-
-      - label: "Project Image"
-        name: "image"
-        widget: "image"
-        required: false
-
-      - label: "Project URL"
-        name: "url"
-        widget: "string"
-        required: false
-
-      - label: "GitHub URL"
-        name: "github"
-        widget: "string"
-        required: false
-
-      - label: "Technologies"
-        name: "technologies"
-        widget: "list"
-        required: false
-        field:
-          label: "Technology"
-          name: "technology"
-          widget: "string"
-
-      - label: "Featured Project"
-        name: "featured"
-        widget: "boolean"
-        default: false
-        required: false
-
-      - label: "Body"
-        name: "body"
-        widget: "markdown"
-        required: false
-
-  - name: "settings"
-    label: "Site Settings"
-    files:
-      - label: "General Settings"
-        name: "general"
-        file: "_data/settings.yml"
-        fields:
-          - label: "Site Title"
-            name: "site_title"
-            widget: "string"
-
-          - label: "Site Description"
-            name: "site_description"
-            widget: "text"
-            required: false
-
-          - label: "Logo"
-            name: "logo"
-            widget: "image"
-            required: false
-
-          - label: "Author Name"
-            name: "author_name"
-            widget: "string"
-            required: false
-
-          - label: "Email"
-            name: "email"
-            widget: "string"
-            required: false
-
-          - label: "GitHub"
-            name: "github"
-            widget: "string"
-            required: false
-
-          - label: "Instagram"
-            name: "instagram"
-            widget: "string"
-            required: false
-
-          - label: "Telegram"
-            name: "telegram"
-            widget: "string"
-            required: false
