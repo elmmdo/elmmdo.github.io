@@ -1,7 +1,3 @@
-media_folder: "assets/images/uploads"
-public_folder: "/assets/images/uploads"
-
-
 backend:
   name: github
   repo: elmmdo/elmmdo.github.io
@@ -16,34 +12,34 @@ locale: "fa"
 
 collections:
   - name: "posts"
-    label: "Posts"
-    label_singular: "Post"
+    label: "نوشته‌ها"
+    label_singular: "نوشته"
     folder: "_posts"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     summary: "{{title}} - {{date}}"
     fields:
-      - label: "Title"
+      - label: "عنوان"
         name: "title"
         widget: "string"
 
-      - label: "Description"
+      - label: "توضیح کوتاه"
         name: "description"
         widget: "text"
         required: false
 
-      - label: "Publish Date"
+      - label: "تاریخ انتشار"
         name: "date"
         widget: "datetime"
         format: "YYYY-MM-DD HH:mm:ss Z"
 
-      - label: "Author"
+      - label: "نویسنده"
         name: "author"
         widget: "string"
         default: "Elmmdo"
         required: false
 
-      - label: "Category"
+      - label: "دسته‌بندی"
         name: "category"
         widget: "select"
         options:
@@ -53,162 +49,161 @@ collections:
           - "عمومی"
         required: false
 
-      - label: "Tags"
+      - label: "برچسب‌ها"
         name: "tags"
         widget: "list"
         required: false
         field:
-          label: "Tag"
+          label: "برچسب"
           name: "tag"
           widget: "string"
 
-      - label: "Cover Image"
+      - label: "تصویر شاخص"
         name: "image"
         widget: "image"
         required: false
 
-      - label: "Featured Post"
+      - label: "نوشته ویژه"
         name: "featured"
         widget: "boolean"
         default: false
         required: false
 
-      - label: "Draft"
+      - label: "پیش‌نویس"
         name: "draft"
         widget: "boolean"
         default: false
         required: false
 
-      - label: "Body"
+      - label: "متن کامل"
         name: "body"
         widget: "markdown"
 
   - name: "pages"
-    label: "Pages"
-    label_singular: "Page"
+    label: "صفحه‌ها"
+    label_singular: "صفحه"
     folder: "pages"
     create: true
     slug: "{{slug}}"
     summary: "{{title}}"
     fields:
-      - label: "Title"
+      - label: "عنوان"
         name: "title"
         widget: "string"
 
-      - label: "Permalink"
+      - label: "آدرس صفحه"
         name: "permalink"
         widget: "string"
-        hint: "Example: /about/"
+        hint: "مثال: /about/"
         required: false
 
-      - label: "Description"
+      - label: "توضیح کوتاه"
         name: "description"
         widget: "text"
         required: false
 
-      - label: "Cover Image"
+      - label: "تصویر"
         name: "image"
         widget: "image"
         required: false
 
-      - label: "Body"
+      - label: "متن صفحه"
         name: "body"
         widget: "markdown"
 
   - name: "projects"
-    label: "Projects"
-    label_singular: "Project"
+    label: "پروژه‌ها"
+    label_singular: "پروژه"
     folder: "_projects"
     create: true
     slug: "{{slug}}"
     summary: "{{title}}"
     fields:
-      - label: "Title"
+      - label: "عنوان پروژه"
         name: "title"
         widget: "string"
 
-      - label: "Description"
+      - label: "توضیحات"
         name: "description"
         widget: "text"
 
-      - label: "Project Image"
+      - label: "تصویر پروژه"
         name: "image"
         widget: "image"
         required: false
 
-      - label: "Project URL"
+      - label: "آدرس پروژه"
         name: "url"
         widget: "string"
         required: false
 
-      - label: "GitHub URL"
+      - label: "آدرس گیت‌هاب"
         name: "github"
         widget: "string"
         required: false
 
-      - label: "Technologies"
+      - label: "تکنولوژی‌ها"
         name: "technologies"
         widget: "list"
         required: false
         field:
-          label: "Technology"
+          label: "تکنولوژی"
           name: "technology"
           widget: "string"
 
-      - label: "Featured Project"
+      - label: "پروژه ویژه"
         name: "featured"
         widget: "boolean"
         default: false
         required: false
 
-      - label: "Body"
+      - label: "متن کامل"
         name: "body"
         widget: "markdown"
         required: false
 
   - name: "settings"
-    label: "Site Settings"
+    label: "تنظیمات سایت"
     files:
-      - label: "General Settings"
+      - label: "تنظیمات عمومی"
         name: "general"
         file: "_data/settings.yml"
         fields:
-          - label: "Site Title"
+          - label: "عنوان سایت"
             name: "site_title"
             widget: "string"
 
-          - label: "Site Description"
+          - label: "توضیحات سایت"
             name: "site_description"
             widget: "text"
             required: false
 
-          - label: "Logo"
+          - label: "لوگو"
             name: "logo"
             widget: "image"
             required: false
 
-          - label: "Author Name"
+          - label: "نام نویسنده"
             name: "author_name"
             widget: "string"
             required: false
 
-          - label: "Email"
+          - label: "ایمیل"
             name: "email"
             widget: "string"
             required: false
 
-          - label: "GitHub"
+          - label: "گیت‌هاب"
             name: "github"
             widget: "string"
             required: false
 
-          - label: "Instagram"
+          - label: "اینستاگرام"
             name: "instagram"
             widget: "string"
             required: false
 
-          - label: "Telegram"
+          - label: "تلگرام"
             name: "telegram"
             widget: "string"
             required: false
-
