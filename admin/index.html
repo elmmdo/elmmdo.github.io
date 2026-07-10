@@ -1,136 +1,243 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Content Manager</title>
-</head>
-<body>
-  <script src="https://unpkg.com/decap-cms@3.1.10/dist/decap-cms.js"></script>
+  <head>
+    <meta charset="utf-8">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    >
 
-  <script>
-    const CMS = window.CMS || window.DecapCMS;
+    <title>مدیریت محتوای سایت</title>
 
-    const PostPreview = createClass({
-      render: function () {
-        const entry = this.props.entry;
-        const image = entry.getIn(["data", "image"]);
-        const title = entry.getIn(["data", "title"]);
-        const description = entry.getIn(["data", "description"]);
-        const category = entry.getIn(["data", "category"]);
-        const author = entry.getIn(["data", "author"]);
-        const body = this.props.widgetFor("body");
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vazirmatn@33.0.3/Vazirmatn-font-face.css"
+    >
 
-        return h("main", { style: styles.page },
-          h("article", { style: styles.card },
-            image && h("img", {
-              src: this.props.getAsset(image).toString(),
-              style: styles.image
-            }),
-            h("p", { style: styles.meta }, [category, author].filter(Boolean).join(" / ")),
-            h("h1", { style: styles.title }, title || "بدون عنوان"),
-            description && h("p", { style: styles.description }, description),
-            h("div", { style: styles.body }, body)
-          )
+    <style>
+      html,
+      body {
+        direction: rtl;
+        margin: 0;
+        min-height: 100%;
+        background: #f5f7fa;
+      }
+
+      body,
+      button,
+      input,
+      textarea,
+      select {
+        font-family: Vazirmatn, Tahoma, Arial, sans-serif !important;
+      }
+
+      input,
+      textarea {
+        direction: rtl;
+        text-align: right;
+      }
+
+      textarea {
+        line-height: 1.9;
+      }
+
+      [role="button"],
+      button {
+        font-weight: 600;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script src="https://unpkg.com/decap-cms@3.1.10/dist/decap-cms.js"></script>
+
+    <script>
+      CMS.registerPreviewStyle(
+        "https://cdn.jsdelivr.net/npm/vazirmatn@33.0.3/Vazirmatn-font-face.css"
+      );
+
+      const previewStyles = `
+        body {
+          direction: rtl;
+          max-width: 850px;
+          margin: 0 auto;
+          padding: 32px;
+          color: #1f2937;
+          font-family: Vazirmatn, Tahoma, Arial, sans-serif;
+          line-height: 2;
+        }
+
+        article {
+          width: 100%;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+          line-height: 1.5;
+        }
+
+        h1 {
+          margin-bottom: 16px;
+          font-size: 2rem;
+        }
+
+        img {
+          display: block;
+          width: 100%;
+          height: auto;
+          margin: 24px 0;
+          border-radius: 12px;
+        }
+
+        .description {
+          color: #64748b;
+          font-size: 1.05rem;
+        }
+
+        .meta {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin: 16px 0 24px;
+          color: #64748b;
+          font-size: 0.9rem;
+        }
+
+        .meta span {
+          padding: 4px 10px;
+          border-radius: 999px;
+          background: #f1f5f9;
+        }
+
+        .content {
+          margin-top: 24px;
+        }
+
+        a {
+          color: #2563eb;
+        }
+
+        pre {
+          overflow-x: auto;
+          direction: ltr;
+          padding: 16px;
+          border-radius: 8px;
+          background: #0f172a;
+          color: #e2e8f0;
+          text-align: left;
+        }
+
+        code {
+          direction: ltr;
+        }
+      `;
+
+      CMS.registerPreviewStyle(previewStyles, { raw: true });
+
+      const createElement = React.createElement;
+
+      function PostPreview({ entry, widgetFor }) {
+        const data = entry.get("data");
+
+        return createElement(
+          "article",
+          null,
+          data.get("image")
+            ? createElement("img", {
+                src: data.get("image"),
+                alt: data.get("image_alt") || data.get("title") || "",
+              })
+            : null,
+          createElement("h1", null, data.get("title") || "عنوان نوشته"),
+          data.get("description")
+            ? createElement(
+                "p",
+                { className: "description" },
+                data.get("description")
+              )
+            : null,
+          createElement(
+            "div",
+            { className: "meta" },
+            data.get("category")
+              ? createElement("span", null, data.get("category"))
+              : null,
+            data.get("author")
+              ? createElement("span", null, data.get("author"))
+              : null,
+            data.get("date")
+              ? createElement("span", null, data.get("date"))
+              : null
+          ),
+          createElement("div", { className: "content" }, widgetFor("body"))
         );
       }
-    });
 
-    const PagePreview = createClass({
-      render: function () {
-        const entry = this.props.entry;
-        const image = entry.getIn(["data", "image"]);
-        const title = entry.getIn(["data", "title"]);
-        const description = entry.getIn(["data", "description"]);
-        const body = this.props.widgetFor("body");
+      function PagePreview({ entry, widgetFor }) {
+        const data = entry.get("data");
 
-        return h("main", { style: styles.page },
-          h("article", { style: styles.card },
-            image && h("img", {
-              src: this.props.getAsset(image).toString(),
-              style: styles.image
-            }),
-            h("h1", { style: styles.title }, title || "بدون عنوان"),
-            description && h("p", { style: styles.description }, description),
-            h("div", { style: styles.body }, body)
-          )
+        return createElement(
+          "article",
+          null,
+          data.get("image")
+            ? createElement("img", {
+                src: data.get("image"),
+                alt: data.get("title") || "",
+              })
+            : null,
+          createElement("h1", null, data.get("title") || "عنوان صفحه"),
+          data.get("description")
+            ? createElement(
+                "p",
+                { className: "description" },
+                data.get("description")
+              )
+            : null,
+          createElement("div", { className: "content" }, widgetFor("body"))
         );
       }
-    });
 
-    const ProjectPreview = createClass({
-      render: function () {
-        const entry = this.props.entry;
-        const image = entry.getIn(["data", "image"]);
-        const title = entry.getIn(["data", "title"]);
-        const description = entry.getIn(["data", "description"]);
-        const url = entry.getIn(["data", "url"]);
-        const github = entry.getIn(["data", "github"]);
-        const body = this.props.widgetFor("body");
+      function ProjectPreview({ entry, widgetFor }) {
+        const data = entry.get("data");
+        const technologies = data.get("technologies");
 
-        return h("main", { style: styles.page },
-          h("article", { style: styles.card },
-            image && h("img", {
-              src: this.props.getAsset(image).toString(),
-              style: styles.image
-            }),
-            h("h1", { style: styles.title }, title || "بدون عنوان"),
-            description && h("p", { style: styles.description }, description),
-            url && h("p", null, h("a", { href: url }, "Project Link")),
-            github && h("p", null, h("a", { href: github }, "GitHub Link")),
-            h("div", { style: styles.body }, body)
-          )
+        return createElement(
+          "article",
+          null,
+          data.get("image")
+            ? createElement("img", {
+                src: data.get("image"),
+                alt: data.get("title") || "",
+              })
+            : null,
+          createElement("h1", null, data.get("title") || "عنوان پروژه"),
+          data.get("description")
+            ? createElement(
+                "p",
+                { className: "description" },
+                data.get("description")
+              )
+            : null,
+          technologies && technologies.size
+            ? createElement(
+                "div",
+                { className: "meta" },
+                technologies
+                  .toArray()
+                  .map((technology) =>
+                    createElement("span", { key: technology }, technology)
+                  )
+              )
+            : null,
+          createElement("div", { className: "content" }, widgetFor("body"))
         );
       }
-    });
 
-    const styles = {
-      page: {
-        direction: "rtl",
-        fontFamily: "Tahoma, Arial, sans-serif",
-        background: "#f5f5f5",
-        minHeight: "100vh",
-        padding: "40px 20px",
-        color: "#222"
-      },
-      card: {
-        maxWidth: "760px",
-        margin: "0 auto",
-        background: "#fff",
-        padding: "32px",
-        borderRadius: "14px",
-        boxShadow: "0 8px 30px rgba(0,0,0,0.08)"
-      },
-      image: {
-        width: "100%",
-        maxHeight: "360px",
-        objectFit: "cover",
-        borderRadius: "12px",
-        marginBottom: "24px"
-      },
-      meta: {
-        color: "#777",
-        fontSize: "14px"
-      },
-      title: {
-        fontSize: "34px",
-        lineHeight: "1.5",
-        margin: "0 0 16px"
-      },
-      description: {
-        color: "#555",
-        fontSize: "18px",
-        lineHeight: "1.9"
-      },
-      body: {
-        fontSize: "17px",
-        lineHeight: "2"
-      }
-    };
-
-    CMS.registerPreviewTemplate("posts", PostPreview);
-    CMS.registerPreviewTemplate("pages", PagePreview);
-    CMS.registerPreviewTemplate("projects", ProjectPreview);
-  </script>
-</body>
+      CMS.registerPreviewTemplate("posts", PostPreview);
+      CMS.registerPreviewTemplate("pages", PagePreview);
+      CMS.registerPreviewTemplate("projects", ProjectPreview);
+    </script>
+  </body>
 </html>
