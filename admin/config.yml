@@ -468,3 +468,5 @@ collections:
             name: "footer_text"
             widget: "string"
             required: false
+
+  
