@@ -2,28 +2,136 @@
 layout: default
 ---
 
-<article class="post">
-  {% if page.image %}
-  <img src="{{ page.image | relative_url }}" alt="{{ page.title }}" class="post-cover">
-{% endif %}
+{% assign words = content | strip_html | number_of_words %}
+{% assign reading_time = words | divided_by: 180 | plus: 1 %}
 
+<article class="post">
   <header class="post-header">
+    <div class="post-breadcrumb">
+      <a href="{{ '/' | relative_url }}">خانه</a>
+      <span aria-hidden="true">/</span>
+      <a href="{{ '/archive/' | relative_url }}">نوشته‌ها</a>
+    </div>
+
+    {% if page.category %}
+      <a
+        class="post-category"
+        href="{{ '/categories/' | relative_url }}#{{ page.category | slugify }}"
+      >
+        {{ page.category }}
+      </a>
+    {% elsif page.categories %}
+      {% assign first_category = page.categories | first %}
+
+      <a
+        class="post-category"
+        href="{{ '/categories/' | relative_url }}#{{ first_category | slugify }}"
+      >
+        {{ first_category }}
+      </a>
+    {% endif %}
+
     <h1>{{ page.title }}</h1>
 
-    <div class="post-meta">
-      <span>{{ page.date | date: "%Y/%m/%d" }}</span>
+    {% if page.description %}
+      <p class="post-lead">
+        {{ page.description }}
+      </p>
+    {% endif %}
 
-      {% if page.categories %}
-        <span>دسته‌بندی: {{ page.categories | join: "، " }}</span>
-      {% endif %}
+    <div class="post-information">
+      <div class="author">
+        <div class="author-avatar" aria-hidden="true">
+          {{ page.author | default: site.title | slice: 0 }}
+        </div>
 
-      {% if page.tags %}
-        <span>برچسب‌ها: {{ page.tags | join: "، " }}</span>
-      {% endif %}
+        <div>
+          <strong>{{ page.author | default: site.title }}</strong>
+
+          <div class="post-meta">
+            <time datetime="{{ page.date | date_to_xmlschema }}">
+              {{ page.date | date: "%Y/%m/%d" }}
+            </time>
+
+            <span class="meta-separator">•</span>
+            <span>{{ reading_time }} دقیقه مطالعه</span>
+
+            <span class="meta-separator">•</span>
+            <span>{{ words }} واژه</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="copy-link-button" type="button">
+        کپی لینک
+      </button>
     </div>
   </header>
 
-  <div class="post-content">
-    {{ content }}
+  {% if page.image %}
+    <figure class="post-cover-wrapper">
+      <img
+        src="{{ page.image | relative_url }}"
+        alt="{{ page.image_alt | default: page.title | escape }}"
+        class="post-cover"
+      >
+
+      {% if page.image_caption %}
+        <figcaption>{{ page.image_caption }}</figcaption>
+      {% endif %}
+    </figure>
+  {% endif %}
+
+  <div class="post-layout">
+    <div class="post-content">
+      {{ content }}
+    </div>
+
+    <aside class="post-sidebar">
+      <div class="post-toc">
+        <strong>در این نوشته</strong>
+        <nav id="table-of-contents" aria-label="فهرست مطالب"></nav>
+      </div>
+    </aside>
   </div>
+
+  {% if page.tags %}
+    <footer class="post-tags">
+      <strong>برچسب‌ها:</strong>
+
+      <div>
+        {% for tag in page.tags %}
+          <a href="{{ '/tags/' | relative_url }}#{{ tag | slugify }}">
+            #{{ tag }}
+          </a>
+        {% endfor %}
+      </div>
+    </footer>
+  {% endif %}
 </article>
+
+{% if page.previous or page.next %}
+  <nav class="post-navigation" aria-label="نوشته قبلی و بعدی">
+    {% if page.next %}
+      <a
+        class="post-nav-item next-post"
+        href="{{ page.next.url | relative_url }}"
+      >
+        <span>نوشتهٔ جدیدتر</span>
+        <strong>{{ page.next.title }}</strong>
+      </a>
+    {% else %}
+      <span></span>
+    {% endif %}
+
+    {% if page.previous %}
+      <a
+        class="post-nav-item previous-post"
+        href="{{ page.previous.url | relative_url }}"
+      >
+        <span>نوشتهٔ قدیمی‌تر</span>
+        <strong>{{ page.previous.title }}</strong>
+      </a>
+    {% endif %}
+  </nav>
+{% endif %}
