@@ -1,11 +1,136 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <title>CMS</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Content Manager</title>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@3.1.10/dist/decap-cms.js"></script>
+
+  <script>
+    const CMS = window.CMS || window.DecapCMS;
+
+    const PostPreview = createClass({
+      render: function () {
+        const entry = this.props.entry;
+        const image = entry.getIn(["data", "image"]);
+        const title = entry.getIn(["data", "title"]);
+        const description = entry.getIn(["data", "description"]);
+        const category = entry.getIn(["data", "category"]);
+        const author = entry.getIn(["data", "author"]);
+        const body = this.props.widgetFor("body");
+
+        return h("main", { style: styles.page },
+          h("article", { style: styles.card },
+            image && h("img", {
+              src: this.props.getAsset(image).toString(),
+              style: styles.image
+            }),
+            h("p", { style: styles.meta }, [category, author].filter(Boolean).join(" / ")),
+            h("h1", { style: styles.title }, title || "بدون عنوان"),
+            description && h("p", { style: styles.description }, description),
+            h("div", { style: styles.body }, body)
+          )
+        );
+      }
+    });
+
+    const PagePreview = createClass({
+      render: function () {
+        const entry = this.props.entry;
+        const image = entry.getIn(["data", "image"]);
+        const title = entry.getIn(["data", "title"]);
+        const description = entry.getIn(["data", "description"]);
+        const body = this.props.widgetFor("body");
+
+        return h("main", { style: styles.page },
+          h("article", { style: styles.card },
+            image && h("img", {
+              src: this.props.getAsset(image).toString(),
+              style: styles.image
+            }),
+            h("h1", { style: styles.title }, title || "بدون عنوان"),
+            description && h("p", { style: styles.description }, description),
+            h("div", { style: styles.body }, body)
+          )
+        );
+      }
+    });
+
+    const ProjectPreview = createClass({
+      render: function () {
+        const entry = this.props.entry;
+        const image = entry.getIn(["data", "image"]);
+        const title = entry.getIn(["data", "title"]);
+        const description = entry.getIn(["data", "description"]);
+        const url = entry.getIn(["data", "url"]);
+        const github = entry.getIn(["data", "github"]);
+        const body = this.props.widgetFor("body");
+
+        return h("main", { style: styles.page },
+          h("article", { style: styles.card },
+            image && h("img", {
+              src: this.props.getAsset(image).toString(),
+              style: styles.image
+            }),
+            h("h1", { style: styles.title }, title || "بدون عنوان"),
+            description && h("p", { style: styles.description }, description),
+            url && h("p", null, h("a", { href: url }, "Project Link")),
+            github && h("p", null, h("a", { href: github }, "GitHub Link")),
+            h("div", { style: styles.body }, body)
+          )
+        );
+      }
+    });
+
+    const styles = {
+      page: {
+        direction: "rtl",
+        fontFamily: "Tahoma, Arial, sans-serif",
+        background: "#f5f5f5",
+        minHeight: "100vh",
+        padding: "40px 20px",
+        color: "#222"
+      },
+      card: {
+        maxWidth: "760px",
+        margin: "0 auto",
+        background: "#fff",
+        padding: "32px",
+        borderRadius: "14px",
+        boxShadow: "0 8px 30px rgba(0,0,0,0.08)"
+      },
+      image: {
+        width: "100%",
+        maxHeight: "360px",
+        objectFit: "cover",
+        borderRadius: "12px",
+        marginBottom: "24px"
+      },
+      meta: {
+        color: "#777",
+        fontSize: "14px"
+      },
+      title: {
+        fontSize: "34px",
+        lineHeight: "1.5",
+        margin: "0 0 16px"
+      },
+      description: {
+        color: "#555",
+        fontSize: "18px",
+        lineHeight: "1.9"
+      },
+      body: {
+        fontSize: "17px",
+        lineHeight: "2"
+      }
+    };
+
+    CMS.registerPreviewTemplate("posts", PostPreview);
+    CMS.registerPreviewTemplate("pages", PagePreview);
+    CMS.registerPreviewTemplate("projects", ProjectPreview);
+  </script>
 </body>
 </html>
