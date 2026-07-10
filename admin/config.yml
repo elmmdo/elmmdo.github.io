@@ -5,8 +5,6 @@ backend:
   base_url: https://decap-oauth.elmmdo78.workers.dev
   auth_endpoint: /auth
 
-media_folder: "assets/images/uploads"
-public_folder: "/assets/images/uploads"
 
 locale: "fa"
 
