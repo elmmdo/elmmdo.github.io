@@ -1,9 +1,45 @@
 title: "نام وبلاگ من"
 description: "یادداشت‌ها، پژوهش‌ها و نوشته‌های شخصی من"
-lang: fa
-timezone: Asia/Tehran
+lang: "fa"
+dir: "rtl"
+timezone: "Asia/Tehran"
+
+url: "https://elmmdo.github.io"
+baseurl: ""
+
+permalink: /blog/:year/:month/:day/:title/
 
 collections:
   projects:
     output: true
     permalink: /projects/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+
+  - scope:
+      path: ""
+      type: "projects"
+    values:
+      layout: "default"
+
+markdown: kramdown
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  hard_wrap: false
+
+sass:
+  style: compressed
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
