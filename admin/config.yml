@@ -5,32 +5,74 @@ backend:
   base_url: https://decap-oauth.elmmdo78.workers.dev
   auth_endpoint: /auth
 
+locale: "fa"
+
 media_folder: "assets/images/uploads"
 public_folder: "/assets/images/uploads"
-
-locale: "fa"
 
 collections:
   - name: "posts"
     label: "نوشته‌ها"
     label_singular: "نوشته"
+    description: "مدیریت نوشته‌ها و مطالب سایت"
     folder: "_posts"
     create: true
+    delete: true
+    extension: "md"
+    format: "frontmatter"
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    summary: "{{title}}"
+    identifier_field: "title"
+    summary: "{{title}} | {{date}}"
+
+    sortable_fields:
+      fields:
+        - "title"
+        - "date"
+        - "category"
+      default:
+        field: "date"
+        direction: "Descending"
+
+    view_filters:
+      - label: "نوشته‌های ویژه"
+        field: "featured"
+        pattern: "true"
+
+      - label: "پیش‌نویس‌ها"
+        field: "draft"
+        pattern: "true"
+
+      - label: "نوشته‌های منتشرشده"
+        field: "draft"
+        pattern: "false"
+
+    view_groups:
+      - label: "دسته‌بندی"
+        field: "category"
+
+      - label: "نویسنده"
+        field: "author"
+
     fields:
-      - label: "عنوان"
+      - label: "عنوان نوشته"
         name: "title"
         widget: "string"
+        required: true
+        hint: "عنوان اصلی نوشته را وارد کنید."
 
       - label: "توضیح کوتاه"
         name: "description"
         widget: "text"
         required: false
+        hint: "خلاصه کوتاهی برای نمایش در صفحه اصلی و نتایج جست‌وجو."
 
       - label: "تاریخ انتشار"
         name: "date"
         widget: "datetime"
+        required: true
+        date_format: "YYYY-MM-DD"
+        time_format: "HH:mm"
+        format: "YYYY-MM-DD HH:mm:ss Z"
 
       - label: "نویسنده"
         name: "author"
@@ -41,17 +83,25 @@ collections:
       - label: "دسته‌بندی"
         name: "category"
         widget: "select"
-        options:
-          - "علمی"
-          - "فناوری"
-          - "آموزشی"
-          - "عمومی"
         required: false
+        options:
+          - label: "علمی"
+            value: "علمی"
+          - label: "فناوری"
+            value: "فناوری"
+          - label: "آموزشی"
+            value: "آموزشی"
+          - label: "برنامه‌نویسی"
+            value: "برنامه‌نویسی"
+          - label: "عمومی"
+            value: "عمومی"
 
       - label: "برچسب‌ها"
         name: "tags"
         widget: "list"
         required: false
+        allow_add: true
+        collapsed: false
         field:
           label: "برچسب"
           name: "tag"
@@ -61,19 +111,249 @@ collections:
         name: "image"
         widget: "image"
         required: false
+        choose_url: true
+        media_library:
+          config:
+            multiple: false
+
+      - label: "متن جایگزین تصویر"
+        name: "image_alt"
+        widget: "string"
+        required: false
+        hint: "توضیح کوتاه تصویر برای دسترس‌پذیری و موتورهای جست‌وجو."
 
       - label: "نوشته ویژه"
         name: "featured"
         widget: "boolean"
         default: false
         required: false
+        hint: "با فعال‌کردن این گزینه، نوشته می‌تواند در بخش مطالب ویژه نمایش داده شود."
 
       - label: "پیش‌نویس"
         name: "draft"
         widget: "boolean"
         default: false
         required: false
+        hint: "نوشته‌های پیش‌نویس در سایت منتشر نمی‌شوند."
 
-      - label: "متن کامل"
+      - label: "متن کامل نوشته"
         name: "body"
         widget: "markdown"
+        required: true
+        buttons:
+          - "bold"
+          - "italic"
+          - "code"
+          - "link"
+          - "heading-one"
+          - "heading-two"
+          - "heading-three"
+          - "heading-four"
+          - "quote"
+          - "bulleted-list"
+          - "numbered-list"
+
+  - name: "pages"
+    label: "صفحه‌ها"
+    label_singular: "صفحه"
+    description: "مدیریت صفحه‌های ثابت سایت"
+    folder: "pages"
+    create: true
+    delete: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    identifier_field: "title"
+    summary: "{{title}}"
+
+    sortable_fields:
+      fields:
+        - "title"
+
+    fields:
+      - label: "عنوان صفحه"
+        name: "title"
+        widget: "string"
+        required: true
+
+      - label: "آدرس صفحه"
+        name: "permalink"
+        widget: "string"
+        required: false
+        hint: "مثال: /about/"
+
+      - label: "توضیح کوتاه"
+        name: "description"
+        widget: "text"
+        required: false
+
+      - label: "تصویر صفحه"
+        name: "image"
+        widget: "image"
+        required: false
+
+      - label: "نمایش در منو"
+        name: "show_in_menu"
+        widget: "boolean"
+        default: true
+        required: false
+
+      - label: "ترتیب نمایش"
+        name: "order"
+        widget: "number"
+        default: 1
+        value_type: "int"
+        min: 1
+        required: false
+
+      - label: "متن صفحه"
+        name: "body"
+        widget: "markdown"
+        required: true
+
+  - name: "projects"
+    label: "پروژه‌ها"
+    label_singular: "پروژه"
+    description: "مدیریت نمونه‌کارها و پروژه‌ها"
+    folder: "_projects"
+    create: true
+    delete: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    identifier_field: "title"
+    summary: "{{title}}"
+
+    sortable_fields:
+      fields:
+        - "title"
+        - "date"
+      default:
+        field: "date"
+        direction: "Descending"
+
+    view_filters:
+      - label: "پروژه‌های ویژه"
+        field: "featured"
+        pattern: "true"
+
+    fields:
+      - label: "عنوان پروژه"
+        name: "title"
+        widget: "string"
+        required: true
+
+      - label: "توضیح کوتاه"
+        name: "description"
+        widget: "text"
+        required: true
+
+      - label: "تاریخ پروژه"
+        name: "date"
+        widget: "datetime"
+        required: false
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+
+      - label: "تصویر پروژه"
+        name: "image"
+        widget: "image"
+        required: false
+
+      - label: "آدرس پروژه"
+        name: "url"
+        widget: "string"
+        required: false
+        hint: "آدرس نسخه آنلاین پروژه."
+
+      - label: "مخزن GitHub"
+        name: "github"
+        widget: "string"
+        required: false
+        hint: "آدرس مخزن پروژه در GitHub."
+
+      - label: "فناوری‌ها"
+        name: "technologies"
+        widget: "list"
+        required: false
+        allow_add: true
+        field:
+          label: "فناوری"
+          name: "technology"
+          widget: "string"
+
+      - label: "پروژه ویژه"
+        name: "featured"
+        widget: "boolean"
+        default: false
+        required: false
+
+      - label: "توضیحات کامل پروژه"
+        name: "body"
+        widget: "markdown"
+        required: false
+
+  - name: "settings"
+    label: "تنظیمات سایت"
+    label_singular: "تنظیمات"
+    description: "مدیریت اطلاعات عمومی و شبکه‌های اجتماعی"
+    delete: false
+
+    files:
+      - label: "تنظیمات عمومی"
+        name: "general"
+        file: "_data/settings.yml"
+
+        fields:
+          - label: "عنوان سایت"
+            name: "site_title"
+            widget: "string"
+            default: "Elmmdo"
+            required: true
+
+          - label: "توضیحات سایت"
+            name: "site_description"
+            widget: "text"
+            required: false
+
+          - label: "لوگوی سایت"
+            name: "logo"
+            widget: "image"
+            required: false
+
+          - label: "تصویر آیکون سایت"
+            name: "favicon"
+            widget: "image"
+            required: false
+
+          - label: "نام نویسنده"
+            name: "author_name"
+            widget: "string"
+            default: "Elmmdo"
+            required: false
+
+          - label: "ایمیل"
+            name: "email"
+            widget: "string"
+            required: false
+
+          - label: "لینک GitHub"
+            name: "github"
+            widget: "string"
+            required: false
+
+          - label: "لینک تلگرام"
+            name: "telegram"
+            widget: "string"
+            required: false
+
+          - label: "لینک اینستاگرام"
+            name: "instagram"
+            widget: "string"
+            required: false
+
+          - label: "متن پایین سایت"
+            name: "footer_text"
+            widget: "string"
+            required: false
