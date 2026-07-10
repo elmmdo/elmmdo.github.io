@@ -46,6 +46,57 @@
       [role="button"] {
         font-weight: 600;
       }
+            [class*="AppHeader"],
+      [class*="Sidebar"],
+      [class*="CollectionTop"],
+      [class*="ControlPane"],
+      [class*="EditorContainer"],
+      [class*="ToolbarContainer"] {
+        direction: rtl;
+      }
+
+      [class*="Sidebar"] {
+        text-align: right;
+      }
+
+      [class*="Sidebar"] input {
+        text-align: right;
+      }
+
+      [class*="CollectionTop"] {
+        flex-direction: row-reverse;
+      }
+
+      [class*="CollectionTop"] button {
+        margin-right: 0 !important;
+      }
+
+      [class*="ListCard"],
+      [class*="ListItem"],
+      [class*="EntryListing"],
+      [class*="ControlPane"] {
+        text-align: right;
+      }
+
+      [class*="Dropdown"],
+      [class*="Menu"],
+      [class*="Popover"] {
+        direction: rtl;
+        text-align: right;
+      }
+
+      [class*="Search"] input,
+      [class*="Control"] input,
+      [class*="Control"] textarea {
+        direction: rtl;
+        text-align: right;
+      }
+
+      [class*="IconWrapper"] {
+        margin-left: 8px;
+        margin-right: 0;
+      }
+
     </style>
   </head>
 
