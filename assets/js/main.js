@@ -3,7 +3,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   /* =======================================================
      Element references
-     ======================================================= */
+  ======================================================= */
 
   const root = document.documentElement;
   const body = document.body;
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* =======================================================
      Small utilities
-     ======================================================= */
+  ======================================================= */
 
   function setBodyScrollLock(locked) {
     body.classList.toggle("no-scroll", locked);
@@ -55,8 +55,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function escapeHTML(value = "") {
     const temporaryElement = document.createElement("div");
+
     temporaryElement.textContent = String(value);
+
     return temporaryElement.innerHTML;
+  }
+
+  function prefersReducedMotion() {
+    return Boolean(
+      window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    );
   }
 
   function isMobileMenuOpen() {
@@ -73,7 +82,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const shouldShowOverlay =
       isMobileMenuOpen() || isSearchOpen();
 
-    pageOverlay.classList.toggle("is-visible", shouldShowOverlay);
+    pageOverlay.classList.toggle(
+      "is-visible",
+      shouldShowOverlay
+    );
+
     pageOverlay.setAttribute(
       "aria-hidden",
       shouldShowOverlay ? "false" : "true"
@@ -84,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* =======================================================
      Theme
-     ======================================================= */
+  ======================================================= */
 
   const THEME_STORAGE_KEY = "site-theme";
 
@@ -104,13 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function getPreferredTheme() {
-    const savedTheme = getSavedTheme();
-
-    if (savedTheme === "light" || savedTheme === "dark") {
-      return savedTheme;
-    }
-
+  function getSystemTheme() {
     if (
       window.matchMedia &&
       window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -121,11 +128,22 @@ document.addEventListener("DOMContentLoaded", () => {
     return "light";
   }
 
+  function getPreferredTheme() {
+    const savedTheme = getSavedTheme();
+
+    if (savedTheme === "light" || savedTheme === "dark") {
+      return savedTheme;
+    }
+
+    return getSystemTheme();
+  }
+
   function applyTheme(theme, persist = true) {
     const isDark = theme === "dark";
+    const normalizedTheme = isDark ? "dark" : "light";
 
-    root.dataset.theme = isDark ? "dark" : "light";
-    root.style.colorScheme = isDark ? "dark" : "light";
+    root.dataset.theme = normalizedTheme;
+    root.style.colorScheme = normalizedTheme;
 
     if (themeButton) {
       themeButton.setAttribute(
@@ -150,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (persist) {
-      saveTheme(isDark ? "dark" : "light");
+      saveTheme(normalizedTheme);
     }
   }
 
@@ -158,14 +176,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
   themeButton?.addEventListener("click", () => {
     const nextTheme =
-      root.dataset.theme === "dark" ? "light" : "dark";
+      root.dataset.theme === "dark"
+        ? "light"
+        : "dark";
 
     applyTheme(nextTheme);
   });
 
+  /*
+   * If the user has not selected a theme manually,
+   * keep the website synchronized with the operating system.
+   */
+
+  const systemThemeMedia = window.matchMedia
+    ? window.matchMedia("(prefers-color-scheme: dark)")
+    : null;
+
+  function handleSystemThemeChange(event) {
+    const savedTheme = getSavedTheme();
+
+    if (savedTheme === "light" || savedTheme === "dark") {
+      return;
+    }
+
+    applyTheme(event.matches ? "dark" : "light", false);
+  }
+
+  if (systemThemeMedia) {
+    if (typeof systemThemeMedia.addEventListener === "function") {
+      systemThemeMedia.addEventListener(
+        "change",
+        handleSystemThemeChange
+      );
+    } else if (typeof systemThemeMedia.addListener === "function") {
+      systemThemeMedia.addListener(handleSystemThemeChange);
+    }
+  }
+
   /* =======================================================
      Mobile menu
-     ======================================================= */
+  ======================================================= */
 
   function openMobileMenu() {
     if (!mobileMenu || !menuButton) return;
@@ -177,14 +227,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     menuButton.classList.add("is-active");
     menuButton.setAttribute("aria-expanded", "true");
-    menuButton.setAttribute("aria-label", "بستن منوی اصلی");
+    menuButton.setAttribute(
+      "aria-label",
+      "بستن منوی اصلی"
+    );
 
     updateOverlay();
 
-    const firstLink = mobileMenu.querySelector("a");
+    const firstFocusableElement = mobileMenu.querySelector(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
 
     window.setTimeout(() => {
-      firstLink?.focus();
+      firstFocusableElement?.focus();
     }, 100);
   }
 
@@ -198,7 +253,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     menuButton.classList.remove("is-active");
     menuButton.setAttribute("aria-expanded", "false");
-    menuButton.setAttribute("aria-label", "بازکردن منوی اصلی");
+    menuButton.setAttribute(
+      "aria-label",
+      "بازکردن منوی اصلی"
+    );
 
     updateOverlay();
 
@@ -227,7 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* =======================================================
      Search panel
-     ======================================================= */
+  ======================================================= */
 
   function openSearchPanel() {
     if (!searchPanel || !searchButton) return;
@@ -238,7 +296,10 @@ document.addEventListener("DOMContentLoaded", () => {
     searchPanel.setAttribute("aria-hidden", "false");
 
     searchButton.setAttribute("aria-expanded", "true");
-    searchButton.setAttribute("aria-label", "بستن جست‌وجو");
+    searchButton.setAttribute(
+      "aria-label",
+      "بستن جست‌وجو"
+    );
 
     updateOverlay();
 
@@ -256,7 +317,10 @@ document.addEventListener("DOMContentLoaded", () => {
     searchPanel.setAttribute("aria-hidden", "true");
 
     searchButton.setAttribute("aria-expanded", "false");
-    searchButton.setAttribute("aria-label", "بازکردن جست‌وجو");
+    searchButton.setAttribute(
+      "aria-label",
+      "بازکردن جست‌وجو"
+    );
 
     updateOverlay();
 
@@ -285,39 +349,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* =======================================================
      Search data and search results
-     ======================================================= */
-
-   /* =======================================================
-     Search data and search results
-     ======================================================= */
+  ======================================================= */
 
   let searchItems = [];
   let searchIndexLoaded = false;
   let searchIndexLoading = false;
+  let searchIndexPromise = null;
+  let latestSearchRequest = 0;
+  let searchInputTimeout;
 
   function getSearchIndexUrl() {
-    const baseUrl = document
-      .querySelector('meta[name="baseurl"]')
-      ?.getAttribute("content") || "";
+    const baseUrl =
+      document
+        .querySelector('meta[name="baseurl"]')
+        ?.getAttribute("content")
+        ?.trim() || "";
 
     return `${baseUrl.replace(/\/$/, "")}/search.json`;
   }
 
-  function createSearchableItem(item) {
+  function createSearchableItem(item = {}) {
     const title = item.title || "";
     const description = item.description || "";
     const category = item.category || "";
-    const tags = Array.isArray(item.tags) ? item.tags.join(" ") : "";
+
+    const itemTags = Array.isArray(item.tags)
+      ? item.tags
+      : [];
+
+    const searchableTags = itemTags.join(" ");
 
     return {
       title,
       description,
       category,
-      tags: item.tags || [],
+      tags: itemTags,
       url: item.url || "",
       date: item.date || "",
       searchableText: normalizePersianText(
-        `${title} ${description} ${category} ${tags}`
+        `${title} ${description} ${category} ${searchableTags}`
       )
     };
   }
@@ -351,24 +421,26 @@ document.addEventListener("DOMContentLoaded", () => {
           "[data-search-category], .post-category, .card-category"
         );
 
-        const linkElement =
-          element.matches("a[href]")
-            ? element
-            : element.querySelector("a[href]");
+        const linkElement = element.matches("a[href]")
+          ? element
+          : element.querySelector("a[href]");
 
         return createSearchableItem({
           title:
             element.dataset.searchTitle ||
             titleElement?.textContent?.trim() ||
             "",
+
           description:
             element.dataset.searchDescription ||
             descriptionElement?.textContent?.trim() ||
             "",
+
           category:
             element.dataset.searchCategory ||
             categoryElement?.textContent?.trim() ||
             "",
+
           url:
             element.dataset.searchUrl ||
             linkElement?.getAttribute("href") ||
@@ -379,47 +451,63 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function loadSearchIndex() {
-    if (searchIndexLoaded || searchIndexLoading) {
+    if (searchIndexLoaded) {
       return searchItems;
+    }
+
+    if (searchIndexLoading && searchIndexPromise) {
+      return searchIndexPromise;
     }
 
     searchIndexLoading = true;
 
-    try {
-      const response = await fetch(getSearchIndexUrl(), {
-        headers: {
-          "Accept": "application/json"
+    searchIndexPromise = (async () => {
+      try {
+        const response = await fetch(getSearchIndexUrl(), {
+          headers: {
+            Accept: "application/json"
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            `Search index request failed: ${response.status}`
+          );
         }
-      });
 
-      if (!response.ok) {
-        throw new Error(`Search index request failed: ${response.status}`);
+        const data = await response.json();
+
+        searchItems = Array.isArray(data)
+          ? data
+              .map(createSearchableItem)
+              .filter((item) => item.title && item.url)
+          : [];
+
+        searchIndexLoaded = true;
+
+        return searchItems;
+      } catch (error) {
+        /*
+         * Fallback keeps search usable on pages that
+         * already render post cards.
+         */
+
+        searchItems = collectSearchItemsFromPage();
+        searchIndexLoaded = true;
+
+        return searchItems;
+      } finally {
+        searchIndexLoading = false;
+        searchIndexPromise = null;
       }
+    })();
 
-      const data = await response.json();
-
-      searchItems = Array.isArray(data)
-        ? data.map(createSearchableItem).filter((item) => item.title && item.url)
-        : [];
-
-      searchIndexLoaded = true;
-    } catch (error) {
-      // Fallback keeps search usable on pages that already render post cards.
-      searchItems = collectSearchItemsFromPage();
-      searchIndexLoaded = true;
-
-      if (searchMessage) {
-        searchMessage.textContent =
-          "جست‌وجوی سراسری در دسترس نیست؛ نتایج همین صفحه نمایش داده می‌شود.";
-      }
-    } finally {
-      searchIndexLoading = false;
-    }
-
-    return searchItems;
+    return searchIndexPromise;
   }
 
   function clearSearchResults() {
+    latestSearchRequest += 1;
+
     if (searchResults) {
       searchResults.innerHTML = "";
     }
@@ -437,6 +525,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     results.forEach((item) => {
       const result = document.createElement("a");
+
       result.className = "search-result-item";
       result.href = item.url;
 
@@ -457,7 +546,10 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         </span>
 
-        <span class="search-result-arrow" aria-hidden="true">
+        <span
+          class="search-result-arrow"
+          aria-hidden="true"
+        >
           ←
         </span>
       `;
@@ -471,6 +563,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function renderSearchResults(query) {
     if (!searchResults || !searchMessage) return;
 
+    const requestId = ++latestSearchRequest;
     const normalizedQuery = normalizePersianText(query);
 
     searchResults.innerHTML = "";
@@ -478,12 +571,22 @@ document.addEventListener("DOMContentLoaded", () => {
     if (normalizedQuery.length < 2) {
       searchMessage.textContent =
         "برای جست‌وجو دست‌کم دو نویسه وارد کنید.";
+
       return;
     }
 
     searchMessage.textContent = "در حال جست‌وجو...";
 
     const items = await loadSearchIndex();
+
+    /*
+     * Ignore an old asynchronous response if a newer
+     * search has already started.
+     */
+
+    if (requestId !== latestSearchRequest) {
+      return;
+    }
 
     const queryWords = normalizedQuery
       .split(" ")
@@ -502,6 +605,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (results.length === 0) {
       searchMessage.textContent =
         "مطلبی مطابق عبارت واردشده پیدا نشد.";
+
       return;
     }
 
@@ -513,10 +617,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   searchForm?.addEventListener("submit", (event) => {
     event.preventDefault();
+
+    window.clearTimeout(searchInputTimeout);
+
     renderSearchResults(searchInput?.value || "");
   });
-
-  let searchInputTimeout;
 
   searchInput?.addEventListener("input", () => {
     const query = searchInput.value.trim();
@@ -537,6 +642,8 @@ document.addEventListener("DOMContentLoaded", () => {
     button.addEventListener("click", () => {
       const term = button.dataset.searchTerm || "";
 
+      window.clearTimeout(searchInputTimeout);
+
       if (searchInput) {
         searchInput.value = term;
       }
@@ -546,10 +653,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-
   /* =======================================================
      Reading progress
-     ======================================================= */
+  ======================================================= */
 
   function updateReadingProgress() {
     if (!readingProgress) return;
@@ -566,14 +672,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const contentTop = window.scrollY + contentRect.top;
     const contentHeight = postContent.offsetHeight;
 
-    const viewportReference =
-      window.scrollY + window.innerHeight * 0.35;
+    const viewportReferenceOffset =
+      window.innerHeight * 0.35;
 
-    const readableDistance = Math.max(contentHeight, 1);
+    const viewportReference =
+      window.scrollY + viewportReferenceOffset;
+
+    const readableDistance = Math.max(
+      contentHeight - viewportReferenceOffset,
+      1
+    );
 
     const progress = Math.min(
       Math.max(
-        (viewportReference - contentTop) / readableDistance,
+        (viewportReference - contentTop) /
+          readableDistance,
         0
       ),
       1
@@ -585,7 +698,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* =======================================================
      Back to top and sticky header
-     ======================================================= */
+  ======================================================= */
 
   function updateScrollInterface() {
     const scrollPosition = window.scrollY;
@@ -619,7 +732,9 @@ document.addEventListener("DOMContentLoaded", () => {
   backToTop?.addEventListener("click", () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: prefersReducedMotion()
+        ? "auto"
+        : "smooth"
     });
   });
 
@@ -640,11 +755,25 @@ document.addEventListener("DOMContentLoaded", () => {
     { passive: true }
   );
 
-  window.addEventListener("resize", updateScrollInterface);
+  window.addEventListener("resize", () => {
+    updateScrollInterface();
+
+    /*
+     * Close the mobile menu automatically when the
+     * viewport becomes wide enough for desktop navigation.
+     */
+
+    if (
+      window.innerWidth > 900 &&
+      isMobileMenuOpen()
+    ) {
+      closeMobileMenu(false);
+    }
+  });
 
   /* =======================================================
      Keyboard interactions
-     ======================================================= */
+  ======================================================= */
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
@@ -656,13 +785,18 @@ document.addEventListener("DOMContentLoaded", () => {
       if (isMobileMenuOpen()) {
         closeMobileMenu();
       }
+
+      return;
     }
 
-    const activeTag = document.activeElement?.tagName;
+    const activeElement = document.activeElement;
+    const activeTag = activeElement?.tagName;
+
     const isTyping =
       activeTag === "INPUT" ||
       activeTag === "TEXTAREA" ||
-      activeTag === "SELECT";
+      activeTag === "SELECT" ||
+      activeElement?.isContentEditable;
 
     if (
       event.key === "/" &&
@@ -678,19 +812,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* =======================================================
      Footer year
-     ======================================================= */
+  ======================================================= */
 
   if (currentYear) {
-    currentYear.textContent = new Intl.DateTimeFormat(
-      "fa-IR",
-      { year: "numeric" }
-    ).format(new Date());
+    currentYear.textContent =
+      new Intl.DateTimeFormat("fa-IR", {
+        year: "numeric"
+      }).format(new Date());
   }
 
   /* =======================================================
      Initial state
-     ======================================================= */
+  ======================================================= */
 
   clearSearchResults();
+  updateOverlay();
   updateScrollInterface();
 });
