@@ -287,7 +287,42 @@ document.addEventListener("DOMContentLoaded", () => {
      Search data and search results
      ======================================================= */
 
-  function collectSearchItems() {
+   /* =======================================================
+     Search data and search results
+     ======================================================= */
+
+  let searchItems = [];
+  let searchIndexLoaded = false;
+  let searchIndexLoading = false;
+
+  function getSearchIndexUrl() {
+    const baseUrl = document
+      .querySelector('meta[name="baseurl"]')
+      ?.getAttribute("content") || "";
+
+    return `${baseUrl.replace(/\/$/, "")}/search.json`;
+  }
+
+  function createSearchableItem(item) {
+    const title = item.title || "";
+    const description = item.description || "";
+    const category = item.category || "";
+    const tags = Array.isArray(item.tags) ? item.tags.join(" ") : "";
+
+    return {
+      title,
+      description,
+      category,
+      tags: item.tags || [],
+      url: item.url || "",
+      date: item.date || "",
+      searchableText: normalizePersianText(
+        `${title} ${description} ${category} ${tags}`
+      )
+    };
+  }
+
+  function collectSearchItemsFromPage() {
     const selectors = [
       "[data-search-item]",
       ".post-card",
@@ -321,40 +356,68 @@ document.addEventListener("DOMContentLoaded", () => {
             ? element
             : element.querySelector("a[href]");
 
-        const title =
-          element.dataset.searchTitle ||
-          titleElement?.textContent?.trim() ||
-          "";
-
-        const description =
-          element.dataset.searchDescription ||
-          descriptionElement?.textContent?.trim() ||
-          "";
-
-        const category =
-          element.dataset.searchCategory ||
-          categoryElement?.textContent?.trim() ||
-          "";
-
-        const url =
-          element.dataset.searchUrl ||
-          linkElement?.getAttribute("href") ||
-          "";
-
-        return {
-          title,
-          description,
-          category,
-          url,
-          searchableText: normalizePersianText(
-            `${title} ${description} ${category}`
-          )
-        };
+        return createSearchableItem({
+          title:
+            element.dataset.searchTitle ||
+            titleElement?.textContent?.trim() ||
+            "",
+          description:
+            element.dataset.searchDescription ||
+            descriptionElement?.textContent?.trim() ||
+            "",
+          category:
+            element.dataset.searchCategory ||
+            categoryElement?.textContent?.trim() ||
+            "",
+          url:
+            element.dataset.searchUrl ||
+            linkElement?.getAttribute("href") ||
+            ""
+        });
       })
       .filter((item) => item.title && item.url);
   }
 
-  const searchItems = collectSearchItems();
+  async function loadSearchIndex() {
+    if (searchIndexLoaded || searchIndexLoading) {
+      return searchItems;
+    }
+
+    searchIndexLoading = true;
+
+    try {
+      const response = await fetch(getSearchIndexUrl(), {
+        headers: {
+          "Accept": "application/json"
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Search index request failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      searchItems = Array.isArray(data)
+        ? data.map(createSearchableItem).filter((item) => item.title && item.url)
+        : [];
+
+      searchIndexLoaded = true;
+    } catch (error) {
+      // Fallback keeps search usable on pages that already render post cards.
+      searchItems = collectSearchItemsFromPage();
+      searchIndexLoaded = true;
+
+      if (searchMessage) {
+        searchMessage.textContent =
+          "جست‌وجوی سراسری در دسترس نیست؛ نتایج همین صفحه نمایش داده می‌شود.";
+      }
+    } finally {
+      searchIndexLoading = false;
+    }
+
+    return searchItems;
+  }
 
   function clearSearchResults() {
     if (searchResults) {
@@ -366,39 +429,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function renderSearchResults(query) {
-    if (!searchResults || !searchMessage) return;
-
-    const normalizedQuery = normalizePersianText(query);
-
-    searchResults.innerHTML = "";
-
-    if (normalizedQuery.length < 2) {
-      searchMessage.textContent =
-        "برای جست‌وجو دست‌کم دو نویسه وارد کنید.";
-      return;
-    }
-
-    const queryWords = normalizedQuery
-      .split(" ")
-      .filter(Boolean);
-
-    const results = searchItems
-      .filter((item) =>
-        queryWords.every((word) =>
-          item.searchableText.includes(word)
-        )
-      )
-      .slice(0, 8);
-
-    if (results.length === 0) {
-      searchMessage.textContent =
-        "مطلبی مطابق عبارت واردشده پیدا نشد.";
-      return;
-    }
-
-    searchMessage.textContent =
-      `${results.length} نتیجه پیدا شد.`;
+  function renderSearchResultItems(results) {
+    if (!searchResults) return;
 
     const resultList = document.createElement("div");
     resultList.className = "search-results-list";
@@ -436,20 +468,69 @@ document.addEventListener("DOMContentLoaded", () => {
     searchResults.appendChild(resultList);
   }
 
+  async function renderSearchResults(query) {
+    if (!searchResults || !searchMessage) return;
+
+    const normalizedQuery = normalizePersianText(query);
+
+    searchResults.innerHTML = "";
+
+    if (normalizedQuery.length < 2) {
+      searchMessage.textContent =
+        "برای جست‌وجو دست‌کم دو نویسه وارد کنید.";
+      return;
+    }
+
+    searchMessage.textContent = "در حال جست‌وجو...";
+
+    const items = await loadSearchIndex();
+
+    const queryWords = normalizedQuery
+      .split(" ")
+      .filter(Boolean);
+
+    const results = items
+      .filter((item) =>
+        queryWords.every((word) =>
+          item.searchableText.includes(word)
+        )
+      )
+      .slice(0, 10);
+
+    searchResults.innerHTML = "";
+
+    if (results.length === 0) {
+      searchMessage.textContent =
+        "مطلبی مطابق عبارت واردشده پیدا نشد.";
+      return;
+    }
+
+    searchMessage.textContent =
+      `${results.length} نتیجه پیدا شد.`;
+
+    renderSearchResultItems(results);
+  }
+
   searchForm?.addEventListener("submit", (event) => {
     event.preventDefault();
     renderSearchResults(searchInput?.value || "");
   });
 
+  let searchInputTimeout;
+
   searchInput?.addEventListener("input", () => {
     const query = searchInput.value.trim();
+
+    window.clearTimeout(searchInputTimeout);
 
     if (!query) {
       clearSearchResults();
       return;
     }
 
-    renderSearchResults(query);
+    searchInputTimeout = window.setTimeout(() => {
+      renderSearchResults(query);
+    }, 180);
   });
 
   searchTagButtons.forEach((button) => {
@@ -464,6 +545,7 @@ document.addEventListener("DOMContentLoaded", () => {
       searchInput?.focus();
     });
   });
+
 
   /* =======================================================
      Reading progress
