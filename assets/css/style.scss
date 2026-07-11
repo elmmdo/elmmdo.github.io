@@ -3218,3 +3218,78 @@ html[data-theme="dark"] .post-content td {
     animation-iteration-count: 1 !important;
   }
 }
+/* =========================================================
+   Interactive elements — dark theme
+   ========================================================= */
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] body {
+  color: #d3dbd7;
+  background: #101914;
+}
+
+html[data-theme="dark"] .site-header.is-scrolled {
+  background: rgba(16, 25, 20, 0.9);
+  box-shadow: 0 8px 35px rgba(0, 0, 0, 0.25);
+}
+
+html[data-theme="dark"] .mobile-menu,
+html[data-theme="dark"] .search-dialog {
+  color: #d9e0dc;
+  background: #16221c;
+  border-color: #2c3c34;
+}
+
+html[data-theme="dark"] .mobile-nav a {
+  color: #d9e0dc;
+}
+
+html[data-theme="dark"] .mobile-nav a:hover {
+  color: #fff;
+  background: #21342b;
+}
+
+html[data-theme="dark"] .mobile-menu-footer {
+  border-color: #304038;
+}
+
+html[data-theme="dark"] .mobile-menu-footer p,
+html[data-theme="dark"] .search-message {
+  color: #a5b0aa;
+}
+
+html[data-theme="dark"] .search-form input {
+  color: #e4eae7;
+  background: #1d2c25;
+  border-color: #34483e;
+}
+
+html[data-theme="dark"] .search-tags button {
+  color: #c6d0cb;
+  background: #25362e;
+}
+
+html[data-theme="dark"] .search-result-item {
+  background: #1c2a23;
+  border-color: #304139;
+}
+
+html[data-theme="dark"] .search-result-item:hover {
+  background: #22342b;
+  border-color: #466054;
+}
+
+html[data-theme="dark"] .search-result-content strong {
+  color: #e6ece9;
+}
+
+html[data-theme="dark"] .search-result-content > span {
+  color: #a5b0aa;
+}
+
+html[data-theme="dark"] .search-result-content small {
+  color: #d6b66f;
+}
