@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
 
@@ -10,12 +11,18 @@
 
   <meta
     name="description"
-    content="روایت؛ وبلاگ شخصی درباره تجربه‌ها، یادداشت‌ها، یادگیری و زندگی آگاهانه."
+    content="{{ page.description | default: site.description | escape }}"
   >
 
   <meta name="theme-color" content="#173f35">
 
-  <title>روایت — تجربه‌ها، یادداشت‌ها و آموخته‌ها</title>
+  <title>
+    {% if page.title %}
+      {{ page.title | escape }}
+    {% else %}
+      {{ site.title | default: "روایت" | escape }}
+    {% endif %}
+  </title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,10 +32,16 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="./style.css">
+  <link
+    rel="stylesheet"
+    href="{{ '/assets/css/style.css' | relative_url }}"
+  >
+
+  {% feed_meta %}
+  {% seo %}
 </head>
 
-<body>
+<body class="{% if page.layout %}layout-{{ page.layout }}{% endif %}">
 
   <noscript>
     برای استفاده از جست‌وجو، فیلتر مطالب و تغییر پوسته، JavaScript را فعال کنید.
@@ -51,13 +64,13 @@
 
       <a
         class="brand header-brand"
-        href="index.html"
+        href="{{ '/' | relative_url }}"
         aria-label="صفحه اصلی روایت"
       >
         <span class="brand-mark" aria-hidden="true">ر</span>
 
         <span class="brand-content">
-          <strong>روایت</strong>
+          <strong>{{ site.title | default: "روایت" }}</strong>
           <small>تجربه، یادگیری و زندگی</small>
         </span>
       </a>
@@ -67,11 +80,31 @@
         id="mainMenu"
         aria-label="منوی اصلی"
       >
-        <a class="active" href="index.html">خانه</a>
-        <a href="#experiences">تجربه‌ها</a>
-        <a href="#articles">یادداشت‌ها</a>
-        <a href="#tutorials">آموزش‌ها</a>
-        <a href="about.html">درباره من</a>
+        <a
+          href="{{ '/' | relative_url }}"
+          {% if page.url == "/" %}class="active"{% endif %}
+        >
+          خانه
+        </a>
+
+        <a href="{{ '/#experiences' | relative_url }}">
+          تجربه‌ها
+        </a>
+
+        <a href="{{ '/#articles' | relative_url }}">
+          یادداشت‌ها
+        </a>
+
+        <a href="{{ '/#articles' | relative_url }}">
+          آموزش‌ها
+        </a>
+
+        <a
+          href="{{ '/about/' | relative_url }}"
+          {% if page.url contains "/about" %}class="active"{% endif %}
+        >
+          درباره من
+        </a>
       </nav>
 
       <div class="header-actions">
@@ -125,11 +158,15 @@
   >
     <div class="mobile-menu-header">
 
-      <a class="brand" href="index.html">
+      <a
+        class="brand"
+        href="{{ '/' | relative_url }}"
+        aria-label="صفحه اصلی روایت"
+      >
         <span class="brand-mark" aria-hidden="true">ر</span>
 
         <span class="brand-content">
-          <strong>روایت</strong>
+          <strong>{{ site.title | default: "روایت" }}</strong>
           <small>وبلاگ شخصی</small>
         </span>
       </a>
@@ -146,11 +183,27 @@
     </div>
 
     <nav class="mobile-nav" aria-label="دسترسی موبایل">
-      <a href="index.html">خانه</a>
-      <a href="#experiences">تجربه‌ها</a>
-      <a href="#articles">یادداشت‌ها</a>
-      <a href="#tutorials">آموزش‌ها</a>
-      <a href="about.html">درباره من</a>
+
+      <a href="{{ '/' | relative_url }}">
+        خانه
+      </a>
+
+      <a href="{{ '/#experiences' | relative_url }}">
+        تجربه‌ها
+      </a>
+
+      <a href="{{ '/#articles' | relative_url }}">
+        یادداشت‌ها
+      </a>
+
+      <a href="{{ '/#articles' | relative_url }}">
+        آموزش‌ها
+      </a>
+
+      <a href="{{ '/about/' | relative_url }}">
+        درباره من
+      </a>
+
     </nav>
 
     <div class="mobile-menu-footer">
@@ -161,8 +214,9 @@
       </p>
 
       <div class="social-links">
+
         <a
-          href="https://instagram.com/"
+          href="{{ site.instagram_url | default: 'https://instagram.com/' }}"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="اینستاگرام روایت"
@@ -171,13 +225,14 @@
         </a>
 
         <a
-          href="https://t.me/"
+          href="{{ site.telegram_url | default: 'https://t.me/' }}"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="تلگرام روایت"
         >
           tg
         </a>
+
       </div>
 
     </div>
@@ -204,7 +259,9 @@
 
       <span class="eyebrow">جست‌وجو در روایت</span>
 
-      <h2 id="searchPanelTitle">دنبال چه چیزی می‌گردید؟</h2>
+      <h2 id="searchPanelTitle">
+        دنبال چه چیزی می‌گردید؟
+      </h2>
 
       <p>
         عنوان، موضوع یا واژه موردنظر خود را وارد کنید.
@@ -227,14 +284,29 @@
           autocomplete="off"
         >
 
-        <button type="submit">جست‌وجو</button>
+        <button type="submit">
+          جست‌وجو
+        </button>
       </form>
 
       <div class="search-tags" aria-label="موضوعات پیشنهادی">
-        <button type="button" data-search-term="تجربه">تجربه</button>
-        <button type="button" data-search-term="یادگیری">یادگیری</button>
-        <button type="button" data-search-term="نوشتن">نوشتن</button>
-        <button type="button" data-search-term="تمرکز">تمرکز</button>
+
+        <button type="button" data-search-term="تجربه">
+          تجربه
+        </button>
+
+        <button type="button" data-search-term="یادگیری">
+          یادگیری
+        </button>
+
+        <button type="button" data-search-term="نوشتن">
+          نوشتن
+        </button>
+
+        <button type="button" data-search-term="تمرکز">
+          تمرکز
+        </button>
+
       </div>
 
       <p
@@ -252,296 +324,8 @@
     </div>
   </section>
 
-  <main id="home">
-
-    <section class="hero-section" aria-labelledby="heroTitle">
-      <div class="container">
-
-        <div class="hero-intro">
-
-          <div>
-            <span class="eyebrow">وبلاگی برای ثبت مسیر</span>
-
-            <h1 id="heroTitle">
-              هر تجربه،
-              <span>روایتی برای آموختن</span>
-            </h1>
-          </div>
-
-          <p>
-            اینجا از تجربه‌های واقعی، آموخته‌های شخصی، مسیر ساختن،
-            شکست‌خوردن و دوباره آغازکردن می‌نویسم.
-          </p>
-
-        </div>
-
-        <div class="hero-layout">
-
-          <div id="heroPost"></div>
-
-          <div
-            class="hero-side-list"
-            id="heroSidePosts"
-          ></div>
-
-        </div>
-
-      </div>
-    </section>
-
-    <section
-      class="section featured-section"
-      id="experiences"
-      aria-labelledby="featuredTitle"
-    >
-      <div class="container">
-
-        <div class="section-heading">
-
-          <div>
-            <span class="eyebrow">پیشنهادهای من</span>
-            <h2 id="featuredTitle">انتخاب نویسنده</h2>
-          </div>
-
-          <a class="text-link" href="#articles">
-            مشاهده همه
-            <span aria-hidden="true">←</span>
-          </a>
-
-        </div>
-
-        <div
-          class="featured-grid"
-          id="featuredPosts"
-        ></div>
-
-      </div>
-    </section>
-
-    <section class="quote-section" aria-label="نقل‌قول منتخب">
-      <div class="container">
-        <figure class="quote-card">
-
-          <div class="quote-avatar">
-            <img
-              src="https://i.pravatar.cc/160?img=11"
-              alt="تصویر نویسنده روایت"
-              width="160"
-              height="160"
-              loading="lazy"
-            >
-          </div>
-
-          <div class="quote-content">
-            <span class="quote-mark" aria-hidden="true">“</span>
-
-            <blockquote>
-              <p>
-                نوشتن برای من راهی است برای اینکه تجربه‌های پراکنده
-                را به معنایی روشن‌تر تبدیل کنم.
-              </p>
-            </blockquote>
-
-            <figcaption class="quote-author">
-              <strong>نویسنده روایت</strong>
-              <span>پژوهشگر، نویسنده و یادگیرنده همیشگی</span>
-            </figcaption>
-          </div>
-
-        </figure>
-      </div>
-    </section>
-
-    <section
-      class="section content-section"
-      id="articles"
-      aria-labelledby="articlesTitle"
-    >
-      <div class="container content-layout">
-
-        <div class="articles-column">
-
-          <div class="section-heading compact-heading">
-            <div>
-              <span class="eyebrow">تازه منتشر شده</span>
-              <h2 id="articlesTitle">آخرین نوشته‌ها</h2>
-            </div>
-          </div>
-
-          <div
-            class="article-filters"
-            id="articleFilters"
-            aria-label="فیلتر نوشته‌ها"
-          >
-            <button
-              class="active"
-              type="button"
-              data-filter="all"
-              aria-pressed="true"
-            >
-              همه
-            </button>
-
-            <button
-              type="button"
-              data-filter="experience"
-              aria-pressed="false"
-            >
-              تجربه‌ها
-            </button>
-
-            <button
-              type="button"
-              data-filter="notes"
-              aria-pressed="false"
-            >
-              یادداشت‌ها
-            </button>
-
-            <button
-              type="button"
-              data-filter="tutorial"
-              aria-pressed="false"
-            >
-              آموزش‌ها
-            </button>
-
-            <button
-              type="button"
-              data-filter="learning"
-              aria-pressed="false"
-            >
-              یادگیری
-            </button>
-          </div>
-
-          <div
-            class="article-list"
-            id="articleList"
-          ></div>
-
-          <p
-            class="empty-state"
-            id="articlesEmptyState"
-            hidden
-          >
-            مطلبی در این دسته پیدا نشد.
-          </p>
-
-          <button
-            class="load-more-button"
-            id="loadMoreButton"
-            type="button"
-            aria-controls="articleList"
-          >
-            نمایش مطالب بیشتر
-          </button>
-
-        </div>
-
-        <aside class="sidebar" aria-label="اطلاعات تکمیلی">
-
-          <section class="sidebar-widget about-widget">
-
-            <img
-              class="about-avatar"
-              src="https://i.pravatar.cc/240?img=11"
-              alt="تصویر نویسنده وبلاگ روایت"
-              width="240"
-              height="240"
-              loading="lazy"
-            >
-
-            <span class="eyebrow">درباره نویسنده</span>
-
-            <h3>سلام، من نویسنده روایت هستم</h3>
-
-            <p>
-              اینجا از تجربه‌های شخصی، مسیر یادگیری، ساختن عادت‌های
-              بهتر و پرسش‌هایی می‌نویسم که ذهنم را درگیر می‌کنند.
-            </p>
-
-            <div class="social-links">
-              <a
-                href="https://instagram.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="اینستاگرام نویسنده"
-              >
-                in
-              </a>
-
-              <a
-                href="https://t.me/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="تلگرام نویسنده"
-              >
-                tg
-              </a>
-            </div>
-
-            <a class="text-link" href="about.html">
-              بیشتر درباره من
-              <span aria-hidden="true">←</span>
-            </a>
-
-          </section>
-
-          <section
-            class="sidebar-widget"
-            id="categories"
-            aria-labelledby="categoriesTitle"
-          >
-            <div class="widget-title">
-              <h3 id="categoriesTitle">دسته‌بندی‌ها</h3>
-              <span>موضوعات</span>
-            </div>
-
-            <div
-              class="category-list"
-              id="categoryList"
-            ></div>
-
-          </section>
-
-          <section
-            class="sidebar-widget popular-widget"
-            aria-labelledby="popularTitle"
-          >
-            <div class="widget-title">
-              <h3 id="popularTitle">محبوب‌ترین نوشته‌ها</h3>
-              <span>این ماه</span>
-            </div>
-
-            <div
-              class="popular-list"
-              id="popularPosts"
-            ></div>
-
-          </section>
-
-          <section
-            class="sidebar-widget tags-widget"
-            aria-labelledby="tagsTitle"
-          >
-            <div class="widget-title">
-              <h3 id="tagsTitle">برچسب‌ها</h3>
-            </div>
-
-            <div
-              class="tags"
-              id="tagList"
-            ></div>
-
-          </section>
-
-        </aside>
-
-      </div>
-    </section>
-
-  </main>
+  <!-- محتوای هر صفحه در این قسمت قرار می‌گیرد -->
+  {{ content }}
 
   <footer class="site-footer">
 
@@ -551,13 +335,13 @@
 
         <a
           class="brand footer-logo"
-          href="index.html"
+          href="{{ '/' | relative_url }}"
           aria-label="صفحه اصلی روایت"
         >
           <span class="brand-mark" aria-hidden="true">ر</span>
 
           <span class="brand-content">
-            <strong>روایت</strong>
+            <strong>{{ site.title | default: "روایت" }}</strong>
             <small>تجربه، یادگیری و زندگی</small>
           </span>
         </a>
@@ -568,8 +352,9 @@
         </p>
 
         <div class="social-links">
+
           <a
-            href="https://instagram.com/"
+            href="{{ site.instagram_url | default: 'https://instagram.com/' }}"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="اینستاگرام روایت"
@@ -578,49 +363,103 @@
           </a>
 
           <a
-            href="https://t.me/"
+            href="{{ site.telegram_url | default: 'https://t.me/' }}"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="تلگرام روایت"
           >
             tg
           </a>
+
         </div>
 
       </div>
 
       <div class="footer-column">
+
         <h3>روایت</h3>
-        <a href="#articles">آخرین نوشته‌ها</a>
-        <a href="#experiences">انتخاب نویسنده</a>
-        <a href="#categories">دسته‌بندی‌ها</a>
-        <a href="about.html">درباره من</a>
+
+        <a href="{{ '/#articles' | relative_url }}">
+          آخرین نوشته‌ها
+        </a>
+
+        <a href="{{ '/#experiences' | relative_url }}">
+          انتخاب نویسنده
+        </a>
+
+        <a href="{{ '/#categories' | relative_url }}">
+          دسته‌بندی‌ها
+        </a>
+
+        <a href="{{ '/about/' | relative_url }}">
+          درباره من
+        </a>
+
       </div>
 
       <div class="footer-column">
+
         <h3>موضوعات</h3>
-        <a href="category.html?name=experience">تجربه‌ها</a>
-        <a href="category.html?name=notes">یادداشت‌ها</a>
-        <a href="category.html?name=tutorial">آموزش‌ها</a>
-        <a href="category.html?name=learning">یادگیری</a>
+
+        <a href="{{ '/category/' | relative_url }}?name=experience">
+          تجربه‌ها
+        </a>
+
+        <a href="{{ '/category/' | relative_url }}?name=notes">
+          یادداشت‌ها
+        </a>
+
+        <a href="{{ '/category/' | relative_url }}?name=tutorial">
+          آموزش‌ها
+        </a>
+
+        <a href="{{ '/category/' | relative_url }}?name=learning">
+          یادگیری
+        </a>
+
+        <a href="{{ '/category/' | relative_url }}?name=life">
+          زندگی آگاهانه
+        </a>
+
       </div>
 
       <div class="footer-column">
+
         <h3>دسترسی سریع</h3>
-        <a href="search.html">جست‌وجو</a>
-        <a href="about.html">درباره من</a>
-        <a href="about.html#contact">ارتباط با من</a>
-        <a href="404.html">صفحه ۴۰۴</a>
+
+        <a href="{{ '/search/' | relative_url }}">
+          جست‌وجو
+        </a>
+
+        <a href="{{ '/about/' | relative_url }}">
+          درباره من
+        </a>
+
+        <a href="{{ '/about/#contact' | relative_url }}">
+          ارتباط با من
+        </a>
+
+        <a href="{{ '/404.html' | relative_url }}">
+          صفحه ۴۰۴
+        </a>
+
       </div>
 
     </div>
 
     <div class="container footer-bottom">
+
       <p>
-        © <span id="currentYear">۱۴۰۵</span> روایت — تمام حقوق محفوظ است.
+        ©
+        <span id="currentYear">{{ site.time | date: "%Y" }}</span>
+        {{ site.title | default: "روایت" }}
+        — تمام حقوق محفوظ است.
       </p>
 
-      <p>نوشته‌شده با توجه به سادگی، تجربه و خوانایی</p>
+      <p>
+        نوشته‌شده با توجه به سادگی، تجربه و خوانایی
+      </p>
+
     </div>
 
   </footer>
@@ -635,8 +474,7 @@
     ↑
   </button>
 
-  <script src="./posts.js"></script>
-  <script src="./home-posts.js"></script>
-  <script src="./script.js"></script>
+  <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+
 </body>
 </html>
