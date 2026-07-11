@@ -1,249 +1,527 @@
 ---
 layout: default
 title: "درباره من"
-description: "درباره نویسنده روایت، مسیر شخصی، علایق و راه‌های ارتباطی"
+description: "درباره نویسنده وبلاگ روایت، مسیر کاری، علایق و راه‌های ارتباطی."
 permalink: /about/
+body_class: about-page
 ---
 
 <main class="about-page">
 
-  <section class="about-hero">
+  <!-- =====================================================
+       معرفی اصلی
+       ===================================================== -->
+
+  <section
+    class="about-hero"
+    aria-labelledby="aboutTitle"
+  >
     <div class="container about-hero-grid">
 
       <div class="about-hero-content">
 
         <span class="eyebrow">
-          درباره من
+          درباره نویسنده روایت
         </span>
 
-        <h1>
-          سلام؛ من پشت این روایت‌ها هستم.
+        <h1 id="aboutTitle">
+          سلام، من
+          <span>
+            {{ site.author.name | default: "نویسنده روایت" }}
+          </span>
+          هستم
         </h1>
 
         <p class="about-lead">
-          اینجا درباره تجربه‌ها، آموخته‌ها و چیزهایی می‌نویسم
-          که در مسیر زندگی و یادگیری با آن‌ها روبه‌رو می‌شوم.
+          پژوهشگر، نویسنده و یادگیرنده‌ای هستم که تلاش می‌کنم
+          تجربه‌های پراکنده زندگی را به روایت‌هایی روشن،
+          صادقانه و قابل استفاده تبدیل کنم.
         </p>
 
-        <div class="about-actions">
+        <p class="about-introduction">
+          «روایت» برای من فقط یک وبلاگ نیست؛ فضایی است برای
+          ثبت چیزهایی که در مسیر زندگی، پژوهش، ساختن و
+          یادگرفتن با آن‌ها روبه‌رو می‌شوم.
+        </p>
+
+        <div class="about-hero-actions">
 
           <a
-            class="button button-primary"
-            href="{{ '/' | relative_url }}#articles"
-          >
-            مشاهده نوشته‌ها
-          </a>
-
-          <a
-            class="button button-secondary"
+            class="about-primary-button"
             href="#contact"
           >
             ارتباط با من
           </a>
 
+          <a
+            class="about-secondary-button"
+            href="{{ '/#articles' | relative_url }}"
+          >
+            مشاهده نوشته‌ها
+          </a>
+
+        </div>
+
+        <div
+          class="about-social"
+          aria-label="شبکه‌های اجتماعی"
+        >
+          <span>من را دنبال کنید:</span>
+
+          <div class="social-links">
+
+            {% if site.instagram_url %}
+              <a
+                href="{{ site.instagram_url }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="اینستاگرام"
+                title="اینستاگرام"
+              >
+                in
+              </a>
+            {% endif %}
+
+            {% if site.telegram_url %}
+              <a
+                href="{{ site.telegram_url }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="تلگرام"
+                title="تلگرام"
+              >
+                tg
+              </a>
+            {% endif %}
+
+          </div>
         </div>
 
       </div>
 
-      <figure class="about-portrait">
+      <figure class="about-hero-image">
 
         <img
-          src="{{ '/assets/images/author.jpg' | relative_url }}"
-          alt="تصویر نویسنده وبلاگ روایت"
-          width="700"
-          height="850"
+          src="{{ '/assets/images/about-author.jpg' | relative_url }}"
+          alt="تصویر {{ site.author.name | default: 'نویسنده وبلاگ روایت' }}"
+          width="900"
+          height="1100"
           loading="eager"
+          decoding="async"
         >
 
-        <figcaption>
-          نویسنده و سازنده وبلاگ روایت
+        <figcaption class="about-image-note">
+
+          <span aria-hidden="true">✦</span>
+
+          <div>
+            <strong>در حال یادگیری</strong>
+            <small>هر روز، یک قدم بیشتر</small>
+          </div>
+
         </figcaption>
+
+        <span
+          class="about-image-decoration"
+          aria-hidden="true"
+        ></span>
 
       </figure>
 
     </div>
   </section>
 
-  <section class="about-story">
-    <div class="container about-content-grid">
+  <!-- =====================================================
+       اطلاعات کوتاه
+       ===================================================== -->
 
-      <article class="about-main-content">
+  <section
+    class="about-stats-section"
+    aria-label="اطلاعات کوتاه درباره نویسنده"
+  >
+    <div class="container">
 
-        <span class="eyebrow">
-          داستان این وبلاگ
-        </span>
+      <div class="about-stats">
 
-        <h2>
-          روایت، جایی برای ثبت تجربه‌هاست
-        </h2>
+        <article class="about-stat">
+          <strong>پژوهش</strong>
+          <span>جست‌وجوی پاسخ‌های دقیق</span>
+        </article>
 
-        <p>
-          همیشه بخشی از آموخته‌های ما در میان شتاب زندگی فراموش
-          می‌شوند. این وبلاگ را ساختم تا تجربه‌ها، ایده‌ها و
-          آموخته‌هایی را که برایم ارزشمند هستند ثبت کنم.
-        </p>
+        <article class="about-stat">
+          <strong>نوشتن</strong>
+          <span>تبدیل تجربه به روایت</span>
+        </article>
 
-        <p>
-          مطالب اینجا حاصل تجربه شخصی، مطالعه، آزمون‌وخطا و
-          کنجکاوی‌اند. هدفم ارائه پاسخ قطعی نیست؛ بلکه می‌خواهم
-          مسیر یادگیری و نگاه خودم را با دیگران به اشتراک بگذارم.
-        </p>
+        <article class="about-stat">
+          <strong>یادگیری</strong>
+          <span>ساختن مهارت‌های تازه</span>
+        </article>
 
-        <blockquote>
-          <p>
-            نوشتن برای من راهی است برای دقیق‌تر دیدن،
-            بهتر فهمیدن و فراموش نکردن.
-          </p>
-        </blockquote>
+        <article class="about-stat">
+          <strong>اشتراک</strong>
+          <span>انتقال آموخته‌ها به دیگران</span>
+        </article>
 
-        <h2>
-          درباره چه موضوعاتی می‌نویسم؟
-        </h2>
-
-        <div class="about-topics">
-
-          <article class="about-topic-card">
-            <span aria-hidden="true">۰۱</span>
-
-            <h3>تجربه‌ها</h3>
-
-            <p>
-              روایت مسیرها، تصمیم‌ها، موفقیت‌ها و اشتباه‌هایی
-              که می‌توان از آن‌ها چیزی آموخت.
-            </p>
-          </article>
-
-          <article class="about-topic-card">
-            <span aria-hidden="true">۰۲</span>
-
-            <h3>یادگیری</h3>
-
-            <p>
-              یادداشت‌هایی درباره مطالعه، تمرکز، مهارت‌آموزی
-              و ساختن یک فرایند یادگیری پایدار.
-            </p>
-          </article>
-
-          <article class="about-topic-card">
-            <span aria-hidden="true">۰۳</span>
-
-            <h3>زندگی آگاهانه</h3>
-
-            <p>
-              فکرهایی درباره سادگی، توجه، انتخاب‌های روزمره
-              و داشتن زندگی معنادارتر.
-            </p>
-          </article>
-
-        </div>
-
-      </article>
-
-      <aside class="about-sidebar">
-
-        <div class="about-sidebar-card">
-
-          <span class="eyebrow">
-            خلاصه
-          </span>
-
-          <h2>
-            چند نکته درباره من
-          </h2>
-
-          <ul>
-            <li>
-              علاقه‌مند به یادگیری و تجربه‌کردن
-            </li>
-
-            <li>
-              در حال ثبت مسیر شخصی و حرفه‌ای
-            </li>
-
-            <li>
-              دوستدار نوشتن، تحقیق و ساختن
-            </li>
-
-            <li>
-              معتقد به یادگیری از آزمون‌وخطا
-            </li>
-          </ul>
-
-        </div>
-
-        <div class="about-sidebar-card">
-
-          <span class="eyebrow">
-            شبکه‌های اجتماعی
-          </span>
-
-          <h2>
-            من را دنبال کنید
-          </h2>
-
-          <div class="about-social-links">
-
-            <a
-              href="{{ site.instagram_url | default: 'https://instagram.com/' }}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              اینستاگرام
-              <span aria-hidden="true">←</span>
-            </a>
-
-            <a
-              href="{{ site.telegram_url | default: 'https://t.me/' }}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              تلگرام
-              <span aria-hidden="true">←</span>
-            </a>
-
-          </div>
-
-        </div>
-
-      </aside>
+      </div>
 
     </div>
   </section>
 
-  <section class="contact-section" id="contact">
+  <!-- =====================================================
+       داستان من
+       ===================================================== -->
 
+  <section
+    class="about-section about-story-section"
+    aria-labelledby="storyTitle"
+  >
+    <div class="container about-content-grid">
+
+      <header class="about-section-heading">
+
+        <span class="eyebrow">
+          داستان من
+        </span>
+
+        <h2 id="storyTitle">
+          چرا نوشتن را شروع کردم؟
+        </h2>
+
+      </header>
+
+      <div class="about-prose">
+
+        <p>
+          همیشه برای من یادگرفتن فقط به خواندن کتاب‌ها یا
+          شرکت در دوره‌ها محدود نبوده است. بخش مهمی از یادگیری،
+          از تجربه‌کردن، اشتباه‌کردن، دوباره تلاش‌کردن و
+          فکرکردن درباره مسیر طی‌شده شکل گرفته است.
+        </p>
+
+        <p>
+          نوشتن را شروع کردم تا بتوانم این تجربه‌ها را
+          مرتب کنم. وقتی چیزی را می‌نویسم، مجبور می‌شوم
+          آن را دقیق‌تر ببینم، سؤال‌های بهتری بپرسم و
+          پاسخ‌های روشن‌تری پیدا کنم.
+        </p>
+
+        <blockquote>
+          <p>
+            نوشتن برای من راهی برای نگه‌داشتن پاسخ‌ها نیست؛
+            راهی برای پیداکردن سؤال‌های بهتر است.
+          </p>
+        </blockquote>
+
+        <p>
+          در این وبلاگ درباره تجربه‌های شخصی، مسیر یادگیری،
+          پژوهش، فناوری، نوشتن، بهره‌وری و چیزهایی صحبت می‌کنم
+          که به بهتر دیدن جهان و زندگی کمک می‌کنند.
+        </p>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =====================================================
+       حوزه‌های فعالیت
+       ===================================================== -->
+
+  <section
+    class="about-section about-interests-section"
+    aria-labelledby="interestsTitle"
+  >
     <div class="container">
 
-      <div class="contact-box">
+      <header class="section-heading">
 
         <div>
+          <span class="eyebrow">
+            موضوعات مورد علاقه
+          </span>
+
+          <h2 id="interestsTitle">
+            درباره چه چیزهایی می‌نویسم؟
+          </h2>
+        </div>
+
+      </header>
+
+      <div class="about-interests-grid">
+
+        <article class="about-interest-card">
+
+          <span
+            class="interest-number"
+            aria-hidden="true"
+          >
+            ۰۱
+          </span>
+
+          <h3>پژوهش و علم</h3>
+
+          <p>
+            یادداشت‌هایی درباره پژوهش، تحلیل علمی، فناوری‌های
+            جدید و تجربه‌های دانشگاهی.
+          </p>
+
+        </article>
+
+        <article class="about-interest-card">
+
+          <span
+            class="interest-number"
+            aria-hidden="true"
+          >
+            ۰۲
+          </span>
+
+          <h3>یادگیری و مهارت</h3>
+
+          <p>
+            تجربه‌هایی درباره یادگیری عمیق، توسعه مهارت و
+            ساختن مسیر حرفه‌ای بهتر.
+          </p>
+
+        </article>
+
+        <article class="about-interest-card">
+
+          <span
+            class="interest-number"
+            aria-hidden="true"
+          >
+            ۰۳
+          </span>
+
+          <h3>نوشتن و خلاقیت</h3>
+
+          <p>
+            از فرایند نوشتن، تولید محتوا و تبدیل ایده‌های
+            خام به روایت‌هایی خواندنی.
+          </p>
+
+        </article>
+
+        <article class="about-interest-card">
+
+          <span
+            class="interest-number"
+            aria-hidden="true"
+          >
+            ۰۴
+          </span>
+
+          <h3>تجربه و زندگی</h3>
+
+          <p>
+            روایت‌هایی درباره تصمیم‌ها، شکست‌ها، شروع‌های
+            دوباره و درس‌های مسیر زندگی.
+          </p>
+
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =====================================================
+       ارزش‌های وبلاگ
+       ===================================================== -->
+
+  <section
+    class="about-section about-values-section"
+    aria-labelledby="valuesTitle"
+  >
+    <div class="container about-content-grid">
+
+      <header class="about-section-heading">
+
+        <span class="eyebrow">
+          چیزی که برایم مهم است
+        </span>
+
+        <h2 id="valuesTitle">
+          ارزش‌های این وبلاگ
+        </h2>
+
+      </header>
+
+      <div class="about-values">
+
+        <article class="about-value">
+
+          <span aria-hidden="true">
+            ۰۱
+          </span>
+
+          <div>
+            <h3>صداقت در روایت</h3>
+
+            <p>
+              تلاش می‌کنم تجربه‌ها را بدون اغراق و با تمام
+              پیچیدگی‌ها و ابهام‌هایشان روایت کنم.
+            </p>
+          </div>
+
+        </article>
+
+        <article class="about-value">
+
+          <span aria-hidden="true">
+            ۰۲
+          </span>
+
+          <div>
+            <h3>دقت در محتوا</h3>
+
+            <p>
+              مطالب علمی و آموزشی باید روشن، قابل بررسی و
+              تا حد امکان متکی بر منابع معتبر باشند.
+            </p>
+          </div>
+
+        </article>
+
+        <article class="about-value">
+
+          <span aria-hidden="true">
+            ۰۳
+          </span>
+
+          <div>
+            <h3>کاربردی‌بودن</h3>
+
+            <p>
+              هر نوشته باید ایده، پرسش یا نکته‌ای ارائه کند
+              که خواننده بتواند از آن استفاده کند.
+            </p>
+          </div>
+
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =====================================================
+       ارتباط با من
+       ===================================================== -->
+
+  <section
+    class="about-contact-section"
+    id="contact"
+    aria-labelledby="contactTitle"
+  >
+    <div class="container">
+
+      <div class="about-contact-card">
+
+        <div class="about-contact-content">
 
           <span class="eyebrow">
             ارتباط با من
           </span>
 
-          <h2>
-            پیشنهادی دارید یا می‌خواهید گفت‌وگو کنیم؟
+          <h2 id="contactTitle">
+            خوشحال می‌شوم از شما بشنوم
           </h2>
 
           <p>
-            برای ارسال نظر، پیشنهاد یا شروع یک گفت‌وگو می‌توانید
-            از طریق ایمیل یا شبکه‌های اجتماعی با من در ارتباط باشید.
+            اگر درباره یکی از نوشته‌ها پرسشی دارید، پیشنهادی
+            برای همکاری دارید یا می‌خواهید گفت‌وگویی را شروع
+            کنید، از طریق تلگرام، اینستاگرام یا ایمیل با من
+            در ارتباط باشید.
           </p>
 
         </div>
 
-        <a
-          class="button button-primary"
-          href="mailto:{{ site.email | default: 'hello@example.com' }}"
-        >
-          ارسال ایمیل
-        </a>
+        <div class="about-contact-links">
+
+          {% if site.telegram_url %}
+            <a
+              class="about-contact-link"
+              href="{{ site.telegram_url }}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span
+                class="contact-link-icon"
+                aria-hidden="true"
+              >
+                tg
+              </span>
+
+              <span>
+                <strong>تلگرام</strong>
+
+                <small>
+                  {{ site.telegram_username | default: "ارسال پیام" }}
+                </small>
+              </span>
+
+              <i aria-hidden="true">←</i>
+            </a>
+          {% endif %}
+
+          {% if site.instagram_url %}
+            <a
+              class="about-contact-link"
+              href="{{ site.instagram_url }}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span
+                class="contact-link-icon"
+                aria-hidden="true"
+              >
+                in
+              </span>
+
+              <span>
+                <strong>اینستاگرام</strong>
+
+                <small>
+                  {{ site.instagram_username | default: "مشاهده صفحه" }}
+                </small>
+              </span>
+
+              <i aria-hidden="true">←</i>
+            </a>
+          {% endif %}
+
+          {% if site.email %}
+            <a
+              class="about-contact-link"
+              href="mailto:{{ site.email }}"
+            >
+              <span
+                class="contact-link-icon"
+                aria-hidden="true"
+              >
+                @
+              </span>
+
+              <span>
+                <strong>ایمیل</strong>
+
+                <small>
+                  {{ site.email }}
+                </small>
+              </span>
+
+              <i aria-hidden="true">←</i>
+            </a>
+          {% endif %}
+
+        </div>
 
       </div>
 
     </div>
-
   </section>
 
 </main>
