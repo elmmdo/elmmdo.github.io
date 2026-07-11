@@ -38,9 +38,9 @@ collections:
         field: "featured"
         pattern: "true"
 
-      - label: "نوشته‌های منتشرشده"
+      - label: "پیش‌نویس‌ها"
         field: "published"
-        pattern: "true"
+        pattern: "false"
 
 
     view_groups:
