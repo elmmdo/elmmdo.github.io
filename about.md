@@ -4,9 +4,27 @@ title: "درباره من"
 description: "درباره نویسنده وبلاگ روایت، مسیر کاری، علایق و راه‌های ارتباطی."
 permalink: /about/
 body_class: about-page
+custom_css: "/assets/css/about.css"
 ---
 
-<main class="about-page">
+{% assign author_name = site.author.name | default: "نویسنده روایت" %}
+
+{% assign instagram_link = site.instagram_url %}
+{% if instagram_link == nil or instagram_link == empty %}
+  {% if site.instagram_username %}
+    {% assign instagram_link = "https://www.instagram.com/" | append: site.instagram_username %}
+  {% endif %}
+{% endif %}
+
+{% assign telegram_link = site.telegram_url %}
+{% if telegram_link == nil or telegram_link == empty %}
+  {% if site.telegram_username %}
+    {% assign telegram_username_clean = site.telegram_username | remove_first: "@" %}
+    {% assign telegram_link = "https://t.me/" | append: telegram_username_clean %}
+  {% endif %}
+{% endif %}
+
+<main id="main-content" class="about-content">
 
   <!-- =====================================================
        معرفی اصلی
@@ -26,9 +44,7 @@ body_class: about-page
 
         <h1 id="aboutTitle">
           سلام، من
-          <span>
-            {{ site.author.name | default: "نویسنده روایت" }}
-          </span>
+          <span>{{ author_name }}</span>
           هستم
         </h1>
 
@@ -55,47 +71,49 @@ body_class: about-page
 
           <a
             class="about-secondary-button"
-            href="{{ '/#articles' | relative_url }}"
+            href="{{ '/' | relative_url }}#articles"
           >
             مشاهده نوشته‌ها
           </a>
 
         </div>
 
-        <div
-          class="about-social"
-          aria-label="شبکه‌های اجتماعی"
-        >
-          <span>من را دنبال کنید:</span>
+        {% if instagram_link or telegram_link %}
+          <div
+            class="about-social"
+            aria-label="شبکه‌های اجتماعی"
+          >
+            <span>من را دنبال کنید:</span>
 
-          <div class="social-links">
+            <div class="social-links">
 
-            {% if site.instagram_url %}
-              <a
-                href="{{ site.instagram_url }}"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="اینستاگرام"
-                title="اینستاگرام"
-              >
-                in
-              </a>
-            {% endif %}
+              {% if instagram_link %}
+                <a
+                  href="{{ instagram_link }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="صفحه اینستاگرام {{ author_name }}"
+                  title="اینستاگرام"
+                >
+                  in
+                </a>
+              {% endif %}
 
-            {% if site.telegram_url %}
-              <a
-                href="{{ site.telegram_url }}"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="تلگرام"
-                title="تلگرام"
-              >
-                tg
-              </a>
-            {% endif %}
+              {% if telegram_link %}
+                <a
+                  href="{{ telegram_link }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="حساب تلگرام {{ author_name }}"
+                  title="تلگرام"
+                >
+                  tg
+                </a>
+              {% endif %}
 
+            </div>
           </div>
-        </div>
+        {% endif %}
 
       </div>
 
@@ -103,7 +121,7 @@ body_class: about-page
 
         <img
           src="{{ '/assets/images/about-author.jpg' | relative_url }}"
-          alt="تصویر {{ site.author.name | default: 'نویسنده وبلاگ روایت' }}"
+          alt="تصویر {{ author_name }}"
           width="900"
           height="1100"
           loading="eager"
@@ -439,14 +457,18 @@ body_class: about-page
 
         </div>
 
-        <div class="about-contact-links">
+        <div
+          class="about-contact-links"
+          aria-label="راه‌های ارتباط با نویسنده"
+        >
 
-          {% if site.telegram_url %}
+          {% if telegram_link %}
             <a
               class="about-contact-link"
-              href="{{ site.telegram_url }}"
+              href="{{ telegram_link }}"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="ارتباط با {{ author_name }} از طریق تلگرام"
             >
               <span
                 class="contact-link-icon"
@@ -459,7 +481,11 @@ body_class: about-page
                 <strong>تلگرام</strong>
 
                 <small>
-                  {{ site.telegram_username | default: "ارسال پیام" }}
+                  {% if site.telegram_username %}
+                    {{ site.telegram_username }}
+                  {% else %}
+                    ارسال پیام
+                  {% endif %}
                 </small>
               </span>
 
@@ -467,12 +493,13 @@ body_class: about-page
             </a>
           {% endif %}
 
-          {% if site.instagram_url %}
+          {% if instagram_link %}
             <a
               class="about-contact-link"
-              href="{{ site.instagram_url }}"
+              href="{{ instagram_link }}"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="مشاهده صفحه اینستاگرام {{ author_name }}"
             >
               <span
                 class="contact-link-icon"
@@ -485,7 +512,11 @@ body_class: about-page
                 <strong>اینستاگرام</strong>
 
                 <small>
-                  {{ site.instagram_username | default: "مشاهده صفحه" }}
+                  {% if site.instagram_username %}
+                    {{ site.instagram_username }}
+                  {% else %}
+                    مشاهده صفحه
+                  {% endif %}
                 </small>
               </span>
 
@@ -496,7 +527,8 @@ body_class: about-page
           {% if site.email %}
             <a
               class="about-contact-link"
-              href="mailto:{{ site.email }}"
+              href="mailto:{{ site.email | escape }}"
+              aria-label="ارسال ایمیل به {{ author_name }}"
             >
               <span
                 class="contact-link-icon"
@@ -508,7 +540,7 @@ body_class: about-page
               <span>
                 <strong>ایمیل</strong>
 
-                <small>
+                <small dir="ltr">
                   {{ site.email }}
                 </small>
               </span>
