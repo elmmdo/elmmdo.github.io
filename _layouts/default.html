@@ -3,7 +3,11 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="baseurl" content="{{ site.baseurl }}">
+
+  <meta
+    name="baseurl"
+    content="{{ site.baseurl | default: '' | escape }}"
+  >
 
   <meta
     name="viewport"
@@ -19,33 +23,50 @@
 
   <title>
     {% if page.title %}
-      {{ page.title | escape }}
+      {{ page.title | escape }}{% if site.title %} | {{ site.title | escape }}{% endif %}
     {% else %}
       {{ site.title | default: "روایت" | escape }}
     {% endif %}
   </title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
   <link
     href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet"
   >
 
+  <!-- استایل اصلی سایت -->
   <link
     rel="stylesheet"
     href="{{ '/assets/css/style.css' | relative_url }}"
   >
 
+  <!-- استایل اختصاصی هر صفحه -->
+  {% if page.custom_css %}
+    <link
+      rel="stylesheet"
+      href="{{ page.custom_css | relative_url }}"
+    >
+  {% endif %}
+
   {% feed_meta %}
   {% seo %}
 </head>
 
-<body class="{% if page.layout %}layout-{{ page.layout }}{% endif %}">
+<body
+  class="{% if page.layout %}layout-{{ page.layout | escape }}{% endif %}{% if page.body_class %} {{ page.body_class | escape }}{% endif %}"
+>
 
   <noscript>
-    برای استفاده از جست‌وجو، فیلتر مطالب و تغییر پوسته، JavaScript را فعال کنید.
+    برای استفاده از جست‌وجو، فیلتر مطالب و تغییر پوسته،
+    JavaScript را فعال کنید.
   </noscript>
 
   <div
@@ -60,7 +81,12 @@
     aria-hidden="true"
   ></div>
 
+  <!-- =====================================================
+       سربرگ سایت
+       ===================================================== -->
+
   <header class="site-header" id="siteHeader">
+
     <div class="container header-row">
 
       <a
@@ -71,8 +97,13 @@
         <span class="brand-mark" aria-hidden="true">ر</span>
 
         <span class="brand-content">
-          <strong>{{ site.title | default: "روایت" }}</strong>
-          <small>تجربه، یادگیری و زندگی</small>
+          <strong>
+            {{ site.title | default: "روایت" }}
+          </strong>
+
+          <small>
+            تجربه، یادگیری و زندگی
+          </small>
         </span>
       </a>
 
@@ -81,31 +112,39 @@
         id="mainMenu"
         aria-label="منوی اصلی"
       >
+
         <a
           href="{{ '/' | relative_url }}"
-          {% if page.url == "/" %}class="active"{% endif %}
+          {% if page.url == "/" %}
+            class="active"
+            aria-current="page"
+          {% endif %}
         >
           خانه
         </a>
 
-        <a href="{{ '/#experiences' | relative_url }}">
+        <a href="{{ '/' | relative_url }}#experiences">
           تجربه‌ها
         </a>
 
-        <a href="{{ '/#articles' | relative_url }}">
+        <a href="{{ '/' | relative_url }}#articles">
           یادداشت‌ها
         </a>
 
-        <a href="{{ '/#articles' | relative_url }}">
+        <a href="{{ '/' | relative_url }}#articles">
           آموزش‌ها
         </a>
 
         <a
           href="{{ '/about/' | relative_url }}"
-          {% if page.url contains "/about" %}class="active"{% endif %}
+          {% if page.url contains "/about" %}
+            class="active"
+            aria-current="page"
+          {% endif %}
         >
           درباره من
         </a>
+
       </nav>
 
       <div class="header-actions">
@@ -149,7 +188,12 @@
       </div>
 
     </div>
+
   </header>
+
+  <!-- =====================================================
+       منوی موبایل
+       ===================================================== -->
 
   <aside
     class="mobile-menu"
@@ -157,6 +201,7 @@
     aria-label="منوی موبایل"
     aria-hidden="true"
   >
+
     <div class="mobile-menu-header">
 
       <a
@@ -167,8 +212,13 @@
         <span class="brand-mark" aria-hidden="true">ر</span>
 
         <span class="brand-content">
-          <strong>{{ site.title | default: "روایت" }}</strong>
-          <small>وبلاگ شخصی</small>
+          <strong>
+            {{ site.title | default: "روایت" }}
+          </strong>
+
+          <small>
+            وبلاگ شخصی
+          </small>
         </span>
       </a>
 
@@ -185,23 +235,35 @@
 
     <nav class="mobile-nav" aria-label="دسترسی موبایل">
 
-      <a href="{{ '/' | relative_url }}">
+      <a
+        href="{{ '/' | relative_url }}"
+        {% if page.url == "/" %}
+          class="active"
+          aria-current="page"
+        {% endif %}
+      >
         خانه
       </a>
 
-      <a href="{{ '/#experiences' | relative_url }}">
+      <a href="{{ '/' | relative_url }}#experiences">
         تجربه‌ها
       </a>
 
-      <a href="{{ '/#articles' | relative_url }}">
+      <a href="{{ '/' | relative_url }}#articles">
         یادداشت‌ها
       </a>
 
-      <a href="{{ '/#articles' | relative_url }}">
+      <a href="{{ '/' | relative_url }}#articles">
         آموزش‌ها
       </a>
 
-      <a href="{{ '/about/' | relative_url }}">
+      <a
+        href="{{ '/about/' | relative_url }}"
+        {% if page.url contains "/about" %}
+          class="active"
+          aria-current="page"
+        {% endif %}
+      >
         درباره من
       </a>
 
@@ -214,30 +276,44 @@
         و دوست دارم به خاطر بسپارم.
       </p>
 
-      <div class="social-links">
-
-        <a
-          href="{{ site.instagram_url | default: 'https://instagram.com/' }}"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="اینستاگرام روایت"
+      {% if site.instagram_url or site.telegram_url %}
+        <div
+          class="social-links"
+          aria-label="شبکه‌های اجتماعی روایت"
         >
-          in
-        </a>
 
-        <a
-          href="{{ site.telegram_url | default: 'https://t.me/' }}"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="تلگرام روایت"
-        >
-          tg
-        </a>
+          {% if site.instagram_url %}
+            <a
+              href="{{ site.instagram_url | escape }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="اینستاگرام روایت"
+            >
+              in
+            </a>
+          {% endif %}
 
-      </div>
+          {% if site.telegram_url %}
+            <a
+              href="{{ site.telegram_url | escape }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="تلگرام روایت"
+            >
+              tg
+            </a>
+          {% endif %}
+
+        </div>
+      {% endif %}
 
     </div>
+
   </aside>
+
+  <!-- =====================================================
+       پنل جست‌وجو
+       ===================================================== -->
 
   <section
     class="search-panel"
@@ -247,6 +323,7 @@
     aria-hidden="true"
     aria-labelledby="searchPanelTitle"
   >
+
     <div class="search-dialog">
 
       <button
@@ -258,7 +335,9 @@
         ×
       </button>
 
-      <span class="eyebrow">جست‌وجو در روایت</span>
+      <span class="eyebrow">
+        جست‌وجو در روایت
+      </span>
 
       <h2 id="searchPanelTitle">
         دنبال چه چیزی می‌گردید؟
@@ -273,6 +352,7 @@
         id="searchForm"
         role="search"
       >
+
         <label class="sr-only" for="searchInput">
           عبارت موردنظر
         </label>
@@ -288,9 +368,13 @@
         <button type="submit">
           جست‌وجو
         </button>
+
       </form>
 
-      <div class="search-tags" aria-label="موضوعات پیشنهادی">
+      <div
+        class="search-tags"
+        aria-label="موضوعات پیشنهادی"
+      >
 
         <button type="button" data-search-term="تجربه">
           تجربه
@@ -323,10 +407,18 @@
       ></div>
 
     </div>
+
   </section>
 
-  <!-- محتوای هر صفحه در این قسمت قرار می‌گیرد -->
+  <!-- =====================================================
+       محتوای اصلی صفحه
+       ===================================================== -->
+
   {{ content }}
+
+  <!-- =====================================================
+       فوتر سایت
+       ===================================================== -->
 
   <footer class="site-footer">
 
@@ -342,8 +434,13 @@
           <span class="brand-mark" aria-hidden="true">ر</span>
 
           <span class="brand-content">
-            <strong>{{ site.title | default: "روایت" }}</strong>
-            <small>تجربه، یادگیری و زندگی</small>
+            <strong>
+              {{ site.title | default: "روایت" }}
+            </strong>
+
+            <small>
+              تجربه، یادگیری و زندگی
+            </small>
           </span>
         </a>
 
@@ -352,27 +449,36 @@
           که شاید برای مسیر دیگران نیز مفید باشند.
         </p>
 
-        <div class="social-links">
-
-          <a
-            href="{{ site.instagram_url | default: 'https://instagram.com/' }}"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="اینستاگرام روایت"
+        {% if site.instagram_url or site.telegram_url %}
+          <div
+            class="social-links"
+            aria-label="شبکه‌های اجتماعی روایت"
           >
-            in
-          </a>
 
-          <a
-            href="{{ site.telegram_url | default: 'https://t.me/' }}"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="تلگرام روایت"
-          >
-            tg
-          </a>
+            {% if site.instagram_url %}
+              <a
+                href="{{ site.instagram_url | escape }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="اینستاگرام روایت"
+              >
+                in
+              </a>
+            {% endif %}
 
-        </div>
+            {% if site.telegram_url %}
+              <a
+                href="{{ site.telegram_url | escape }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="تلگرام روایت"
+              >
+                tg
+              </a>
+            {% endif %}
+
+          </div>
+        {% endif %}
 
       </div>
 
@@ -380,15 +486,15 @@
 
         <h3>روایت</h3>
 
-        <a href="{{ '/#articles' | relative_url }}">
+        <a href="{{ '/' | relative_url }}#articles">
           آخرین نوشته‌ها
         </a>
 
-        <a href="{{ '/#experiences' | relative_url }}">
+        <a href="{{ '/' | relative_url }}#experiences">
           انتخاب نویسنده
         </a>
 
-        <a href="{{ '/#categories' | relative_url }}">
+        <a href="{{ '/' | relative_url }}#categories">
           دسته‌بندی‌ها
         </a>
 
@@ -436,7 +542,7 @@
           درباره من
         </a>
 
-        <a href="{{ '/about/#contact' | relative_url }}">
+        <a href="{{ '/about/' | relative_url }}#contact">
           ارتباط با من
         </a>
 
@@ -452,7 +558,10 @@
 
       <p>
         ©
-        <span id="currentYear">{{ site.time | date: "%Y" }}</span>
+        <span id="currentYear">
+          {{ site.time | date: "%Y" }}
+        </span>
+
         {{ site.title | default: "روایت" }}
         — تمام حقوق محفوظ است.
       </p>
@@ -475,7 +584,13 @@
     ↑
   </button>
 
+  <!-- اسکریپت اصلی سایت -->
   <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+
+  <!-- اسکریپت اختصاصی هر صفحه، در صورت نیاز -->
+  {% if page.custom_js %}
+    <script src="{{ page.custom_js | relative_url }}"></script>
+  {% endif %}
 
 </body>
 </html>
