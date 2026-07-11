@@ -1,46 +1,14 @@
 ---
 layout: default
-title: "درباره من"
-description: "درباره نویسنده وبلاگ روایت، مسیر کاری، علایق و راه‌های ارتباطی."
+title: درباره من
+description: درباره نویسنده، زمینه‌های فعالیت، علایق و راه‌های ارتباطی
 permalink: /about/
 body_class: about-page
-custom_css: "/assets/css/about.css"
-author_name: "نام و نام خانوادگی شما"
-author_image: "/assets/images/uploads/about-author.jpg"
+custom_css:
+  - /assets/css/about.css
 ---
 
-{% assign author_name = page.author_name | default: site.author.name | default: "نویسنده روایت" %}
-{% assign author_image = page.author_image | default: site.author.image | default: "/assets/images/uploads/about-author.jpg" %}
-
-{% assign instagram_link = site.instagram_url %}
-
-{% if instagram_link == nil or instagram_link == empty %}
-  {% if site.instagram_username %}
-    {% assign instagram_username_clean = site.instagram_username
-      | remove_first: "@"
-      | strip
-    %}
-    {% assign instagram_link = "https://www.instagram.com/"
-      | append: instagram_username_clean
-    %}
-  {% endif %}
-{% endif %}
-
-{% assign telegram_link = site.telegram_url %}
-
-{% if telegram_link == nil or telegram_link == empty %}
-  {% if site.telegram_username %}
-    {% assign telegram_username_clean = site.telegram_username
-      | remove_first: "@"
-      | strip
-    %}
-    {% assign telegram_link = "https://t.me/"
-      | append: telegram_username_clean
-    %}
-  {% endif %}
-{% endif %}
-
-<main id="main-content" class="about-content">
+<div class="about-content">
 
   <!-- ==========================================
        معرفی اصلی
@@ -48,550 +16,558 @@ author_image: "/assets/images/uploads/about-author.jpg"
 
   <section
     class="about-hero"
-    aria-labelledby="aboutTitle"
+    aria-labelledby="about-title"
   >
-    <div class="container about-hero-grid">
+    <div class="container">
 
-      <div class="about-hero-content">
+      <div class="about-hero__grid">
 
-        <span class="eyebrow">
-          درباره نویسنده روایت
-        </span>
+        <!-- تصویر نویسنده -->
 
-        <h1 id="aboutTitle">
-          سلام، من
-          <span>{{ author_name | escape }}</span>
-          هستم
-        </h1>
+        <div class="about-hero__media">
 
-        <p class="about-lead">
-          پژوهشگر، نویسنده و یادگیرنده‌ای هستم که تلاش می‌کنم
-          تجربه‌های پراکنده زندگی را به روایت‌هایی روشن،
-          صادقانه و قابل استفاده تبدیل کنم.
-        </p>
+          <div class="about-hero__image-wrapper">
 
-        <p class="about-introduction">
-          «روایت» برای من فقط یک وبلاگ نیست؛ فضایی است برای
-          ثبت چیزهایی که در مسیر زندگی، پژوهش، ساختن و
-          یادگرفتن با آن‌ها روبه‌رو می‌شوم.
-        </p>
+            <img
+              class="about-hero__image"
+              src="{{ site.author.image | default: '/assets/images/uploads/about-author.jpg' | relative_url }}"
+              alt="تصویر {{ site.author.name | default: site.title | escape }}"
+              width="640"
+              height="760"
+              loading="eager"
+              decoding="async"
+            >
 
-        <div class="about-hero-actions">
+            <span
+              class="about-hero__image-decoration"
+              aria-hidden="true"
+            ></span>
 
-          <a
-            class="about-primary-button"
-            href="#contact"
-          >
-            ارتباط با من
-          </a>
-
-          <a
-            class="about-secondary-button"
-            href="{{ '/' | relative_url }}#articles"
-          >
-            مشاهده نوشته‌ها
-          </a>
+          </div>
 
         </div>
 
-        {% if instagram_link or telegram_link %}
-          <div
-            class="about-social"
-            aria-label="شبکه‌های اجتماعی نویسنده"
+
+        <!-- متن معرفی -->
+
+        <div class="about-hero__content">
+
+          <p class="eyebrow">
+            درباره من
+          </p>
+
+          <h1
+            id="about-title"
+            class="about-hero__title"
           >
-            <span>من را دنبال کنید:</span>
+            سلام، من
+            <span class="about-hero__name">
+              {{ site.author.name | default: site.title }}
+            </span>
+            هستم.
+          </h1>
 
-            <div class="social-links">
+          <p class="about-hero__lead">
+            پژوهشگر و علاقه‌مند به علم، فناوری، نوشتن و تولید محتوای
+            تخصصی هستم. در این وب‌سایت درباره تجربه‌ها، مطالعات،
+            پروژه‌ها و موضوعاتی که برایم اهمیت دارند می‌نویسم.
+          </p>
 
-              {% if instagram_link %}
-                <a
-                  href="{{ instagram_link | escape }}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="صفحه اینستاگرام {{ author_name | escape }}"
-                  title="اینستاگرام"
-                >
-                  in
-                </a>
-              {% endif %}
+          <p class="about-hero__description">
+            تمرکز اصلی فعالیت‌های من بر پژوهش‌های علمی و میان‌رشته‌ای،
+            فناوری‌های نوین، چاپ سه‌بعدی، هیدروژل‌ها، نانوسلولز و
+            انتقال مفاهیم تخصصی به زبانی روشن و قابل‌فهم است.
+          </p>
 
-              {% if telegram_link %}
-                <a
-                  href="{{ telegram_link | escape }}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="حساب تلگرام {{ author_name | escape }}"
-                  title="تلگرام"
-                >
-                  tg
-                </a>
-              {% endif %}
 
-            </div>
-          </div>
-        {% endif %}
+          <!-- شبکه‌های اجتماعی -->
+
+          <nav
+            class="social-links about-hero__socials"
+            aria-label="راه‌های ارتباطی"
+          >
+
+            {% if site.instagram_url %}
+
+              <a
+                class="social-link"
+                href="{{ site.instagram_url }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="اینستاگرام"
+              >
+                <span aria-hidden="true">Instagram</span>
+              </a>
+
+            {% elsif site.instagram_username %}
+
+              <a
+                class="social-link"
+                href="https://www.instagram.com/{{ site.instagram_username }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="اینستاگرام"
+              >
+                <span aria-hidden="true">Instagram</span>
+              </a>
+
+            {% endif %}
+
+
+            {% if site.telegram_url %}
+
+              <a
+                class="social-link"
+                href="{{ site.telegram_url }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="تلگرام"
+              >
+                <span aria-hidden="true">Telegram</span>
+              </a>
+
+            {% elsif site.telegram_username %}
+
+              <a
+                class="social-link"
+                href="https://t.me/{{ site.telegram_username }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="تلگرام"
+              >
+                <span aria-hidden="true">Telegram</span>
+              </a>
+
+            {% endif %}
+
+
+            {% if site.email %}
+
+              <a
+                class="social-link"
+                href="mailto:{{ site.email }}"
+                aria-label="ارسال ایمیل"
+              >
+                <span aria-hidden="true">Email</span>
+              </a>
+
+            {% elsif site.author.email %}
+
+              <a
+                class="social-link"
+                href="mailto:{{ site.author.email }}"
+                aria-label="ارسال ایمیل"
+              >
+                <span aria-hidden="true">Email</span>
+              </a>
+
+            {% endif %}
+
+          </nav>
+
+        </div>
 
       </div>
 
-      <figure class="about-hero-image">
+    </div>
+  </section>
 
-        <img
-          src="{{ author_image | relative_url }}"
-          alt="تصویر {{ author_name | escape }}"
-          width="900"
-          height="1100"
-          loading="eager"
-          decoding="async"
+
+  <!-- ==========================================
+       داستان و مسیر من
+  =========================================== -->
+
+  <section
+    class="about-section about-story"
+    aria-labelledby="about-story-title"
+  >
+    <div class="container">
+
+      <div class="section-heading">
+
+        <p class="eyebrow">
+          داستان من
+        </p>
+
+        <h2
+          id="about-story-title"
+          class="section-heading__title"
         >
+          پژوهش، یادگیری و روایت تجربه‌ها
+        </h2>
 
-        <figcaption class="about-image-note">
+      </div>
 
-          <span aria-hidden="true">✦</span>
 
-          <div>
-            <strong>در حال یادگیری</strong>
-            <small>هر روز، یک قدم بیشتر</small>
-          </div>
+      <div class="about-story__grid">
 
+        <div class="about-story__intro">
+
+          <p class="about-story__highlight">
+            برای من، پژوهش فقط یافتن پاسخ نیست؛ بلکه فرایندی برای
+            طرح پرسش‌های بهتر، تجربه‌کردن و به‌اشتراک‌گذاشتن دانشی
+            است که در این مسیر به دست می‌آید.
+          </p>
+
+        </div>
+
+
+        <div class="about-story__content">
+
+          <p>
+            علاقه من به علم و فناوری از جایی آغاز شد که متوجه شدم
+            بسیاری از مسائل پیچیده را می‌توان با ترکیب دانش،
+            خلاقیت و تجربه عملی به راه‌حل‌هایی کاربردی تبدیل کرد.
+          </p>
+
+          <p>
+            بخش مهمی از فعالیت‌های من به مطالعه و پژوهش در زمینه
+            مواد پیشرفته، چاپ سه‌بعدی، هیدروژل‌ها و نانوسلولز
+            اختصاص دارد. در کنار آن، به نگارش علمی، ترجمه تخصصی
+            و انتقال روشن مفاهیم پیچیده نیز علاقه‌مندم.
+          </p>
+
+          <p>
+            این وب‌سایت فضایی برای ثبت آموخته‌ها، معرفی پروژه‌ها،
+            انتشار یادداشت‌ها و ارائه محتوایی است که شاید برای
+            پژوهشگران، دانشجویان و دیگر علاقه‌مندان مفید باشد.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       زمینه‌های فعالیت
+  =========================================== -->
+
+  <section
+    class="about-section about-expertise"
+    aria-labelledby="expertise-title"
+  >
+    <div class="container">
+
+      <div class="section-heading">
+
+        <p class="eyebrow">
+          زمینه‌های فعالیت
+        </p>
+
+        <h2
+          id="expertise-title"
+          class="section-heading__title"
+        >
+          موضوعاتی که روی آن‌ها کار می‌کنم
+        </h2>
+
+        <p class="section-heading__description">
+          فعالیت‌ها و مطالعات من مجموعه‌ای از پژوهش علمی،
+          فناوری، نگارش و تولید محتوای تخصصی را شامل می‌شود.
+        </p>
+
+      </div>
+
+
+      <div class="about-expertise__grid">
+
+        <!-- چاپ سه‌بعدی -->
+
+        <article class="expertise-card">
+
+          <span
+            class="expertise-card__number"
+            aria-hidden="true"
+          >
+            01
+          </span>
+
+          <h3 class="expertise-card__title">
+            چاپ سه‌بعدی و DIW
+          </h3>
+
+          <p class="expertise-card__description">
+            مطالعه فرمولاسیون جوهرهای قابل چاپ، رفتار رئولوژیکی
+            مواد و فرایند چاپ سه‌بعدی به روش نوشتن مستقیم جوهر.
+          </p>
+
+        </article>
+
+
+        <!-- هیدروژل -->
+
+        <article class="expertise-card">
+
+          <span
+            class="expertise-card__number"
+            aria-hidden="true"
+          >
+            02
+          </span>
+
+          <h3 class="expertise-card__title">
+            هیدروژل‌ها
+          </h3>
+
+          <p class="expertise-card__description">
+            بررسی ساختار، خواص مکانیکی، شبکه‌ای‌شدن و کاربردهای
+            هیدروژل‌ها در سامانه‌های مهندسی و زیستی.
+          </p>
+
+        </article>
+
+
+        <!-- نانوسلولز -->
+
+        <article class="expertise-card">
+
+          <span
+            class="expertise-card__number"
+            aria-hidden="true"
+          >
+            03
+          </span>
+
+          <h3 class="expertise-card__title">
+            نانوسلولز
+          </h3>
+
+          <p class="expertise-card__description">
+            استفاده از نانوفیبر سلولزی و نانوکریستال سلولزی برای
+            اصلاح خواص رئولوژیکی، مکانیکی و ساختاری مواد.
+          </p>
+
+        </article>
+
+
+        <!-- نگارش علمی -->
+
+        <article class="expertise-card">
+
+          <span
+            class="expertise-card__number"
+            aria-hidden="true"
+          >
+            04
+          </span>
+
+          <h3 class="expertise-card__title">
+            نگارش و ارتباطات علمی
+          </h3>
+
+          <p class="expertise-card__description">
+            نگارش، ترجمه و بازنویسی متون تخصصی با تمرکز بر
+            دقت علمی، ساختار مناسب و انتقال شفاف مفاهیم.
+          </p>
+
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       ارزش‌ها و رویکرد کاری
+  =========================================== -->
+
+  <section
+    class="about-section about-values"
+    aria-labelledby="values-title"
+  >
+    <div class="container">
+
+      <div class="about-values__layout">
+
+        <div class="section-heading">
+
+          <p class="eyebrow">
+            رویکرد من
+          </p>
+
+          <h2
+            id="values-title"
+            class="section-heading__title"
+          >
+            اصولی که در کار دنبال می‌کنم
+          </h2>
+
+          <p class="section-heading__description">
+            کیفیت یک پروژه فقط به نتیجه نهایی وابسته نیست؛
+            بلکه روش رسیدن به آن نتیجه نیز اهمیت دارد.
+          </p>
+
+        </div>
+
+
+        <div class="about-values__list">
+
+          <article class="value-item">
+
+            <span
+              class="value-item__marker"
+              aria-hidden="true"
+            ></span>
+
+            <div class="value-item__content">
+
+              <h3 class="value-item__title">
+                دقت علمی
+              </h3>
+
+              <p class="value-item__description">
+                استفاده از منابع معتبر، بررسی دقیق داده‌ها و
+                پرهیز از ساده‌سازی‌هایی که معنای علمی را تغییر می‌دهند.
+              </p>
+
+            </div>
+
+          </article>
+
+
+          <article class="value-item">
+
+            <span
+              class="value-item__marker"
+              aria-hidden="true"
+            ></span>
+
+            <div class="value-item__content">
+
+              <h3 class="value-item__title">
+                یادگیری مستمر
+              </h3>
+
+              <p class="value-item__description">
+                به‌روزماندن، پرسیدن، آزمایش‌کردن و پذیرفتن اینکه
+                همیشه موضوع تازه‌ای برای آموختن وجود دارد.
+              </p>
+
+            </div>
+
+          </article>
+
+
+          <article class="value-item">
+
+            <span
+              class="value-item__marker"
+              aria-hidden="true"
+            ></span>
+
+            <div class="value-item__content">
+
+              <h3 class="value-item__title">
+                بیان روشن
+              </h3>
+
+              <p class="value-item__description">
+                تبدیل مطالب تخصصی و پیچیده به محتوایی منظم،
+                دقیق و قابل‌فهم، بدون از دست‌رفتن مفهوم اصلی.
+              </p>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       نقل‌قول
+  =========================================== -->
+
+  <section
+    class="about-section about-quote"
+    aria-label="دیدگاه شخصی"
+  >
+    <div class="container">
+
+      <figure class="about-quote__box">
+
+        <blockquote class="about-quote__text">
+          <p>
+            «دانش زمانی ارزش بیشتری پیدا می‌کند که بتوان آن را
+            با دقت آموخت، با تجربه آزمود و به زبانی روشن با
+            دیگران به اشتراک گذاشت.»
+          </p>
+        </blockquote>
+
+        <figcaption class="about-quote__caption">
+          {{ site.author.name | default: site.title }}
         </figcaption>
-
-        <span
-          class="about-image-decoration"
-          aria-hidden="true"
-        ></span>
 
       </figure>
 
     </div>
   </section>
 
+
   <!-- ==========================================
-       اطلاعات کوتاه
+       دعوت به ارتباط
   =========================================== -->
 
   <section
-    class="about-stats-section"
-    aria-label="اطلاعات کوتاه درباره نویسنده"
+    class="about-section about-contact"
+    aria-labelledby="contact-title"
   >
     <div class="container">
 
-      <div class="about-stats">
+      <div class="about-contact__box">
 
-        <article class="about-stat">
-          <strong>پژوهش</strong>
-          <span>جست‌وجوی پاسخ‌های دقیق</span>
-        </article>
+        <div class="about-contact__content">
 
-        <article class="about-stat">
-          <strong>نوشتن</strong>
-          <span>تبدیل تجربه به روایت</span>
-        </article>
-
-        <article class="about-stat">
-          <strong>یادگیری</strong>
-          <span>ساختن مهارت‌های تازه</span>
-        </article>
-
-        <article class="about-stat">
-          <strong>اشتراک</strong>
-          <span>انتقال آموخته‌ها به دیگران</span>
-        </article>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ==========================================
-       داستان من
-  =========================================== -->
-
-  <section
-    class="about-section about-story-section"
-    aria-labelledby="storyTitle"
-  >
-    <div class="container about-content-grid">
-
-      <header class="about-section-heading">
-
-        <span class="eyebrow">
-          داستان من
-        </span>
-
-        <h2 id="storyTitle">
-          چرا نوشتن را شروع کردم؟
-        </h2>
-
-      </header>
-
-      <div class="about-prose">
-
-        <p>
-          همیشه برای من یادگرفتن فقط به خواندن کتاب‌ها یا
-          شرکت در دوره‌ها محدود نبوده است. بخش مهمی از یادگیری،
-          از تجربه‌کردن، اشتباه‌کردن، دوباره تلاش‌کردن و
-          فکرکردن درباره مسیر طی‌شده شکل گرفته است.
-        </p>
-
-        <p>
-          نوشتن را شروع کردم تا بتوانم این تجربه‌ها را
-          مرتب کنم. وقتی چیزی را می‌نویسم، مجبور می‌شوم
-          آن را دقیق‌تر ببینم، سؤال‌های بهتری بپرسم و
-          پاسخ‌های روشن‌تری پیدا کنم.
-        </p>
-
-        <blockquote>
-          <p>
-            نوشتن برای من راهی برای نگه‌داشتن پاسخ‌ها نیست؛
-            راهی برای پیداکردن سؤال‌های بهتر است.
-          </p>
-        </blockquote>
-
-        <p>
-          در این وبلاگ درباره تجربه‌های شخصی، مسیر یادگیری،
-          پژوهش، فناوری، نوشتن، بهره‌وری و چیزهایی صحبت می‌کنم
-          که به بهتر دیدن جهان و زندگی کمک می‌کنند.
-        </p>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ==========================================
-       موضوعات مورد علاقه
-  =========================================== -->
-
-  <section
-    class="about-section about-interests-section"
-    aria-labelledby="interestsTitle"
-  >
-    <div class="container">
-
-      <header class="section-heading">
-
-        <div>
-
-          <span class="eyebrow">
-            موضوعات مورد علاقه
-          </span>
-
-          <h2 id="interestsTitle">
-            درباره چه چیزهایی می‌نویسم؟
-          </h2>
-
-        </div>
-
-      </header>
-
-      <div class="about-interests-grid">
-
-        <article class="about-interest-card">
-
-          <span
-            class="interest-number"
-            aria-hidden="true"
-          >
-            ۰۱
-          </span>
-
-          <h3>پژوهش و علم</h3>
-
-          <p>
-            یادداشت‌هایی درباره پژوهش، تحلیل علمی،
-            فناوری‌های جدید و تجربه‌های دانشگاهی.
-          </p>
-
-        </article>
-
-        <article class="about-interest-card">
-
-          <span
-            class="interest-number"
-            aria-hidden="true"
-          >
-            ۰۲
-          </span>
-
-          <h3>یادگیری و مهارت</h3>
-
-          <p>
-            تجربه‌هایی درباره یادگیری عمیق، توسعه مهارت
-            و ساختن مسیر حرفه‌ای بهتر.
-          </p>
-
-        </article>
-
-        <article class="about-interest-card">
-
-          <span
-            class="interest-number"
-            aria-hidden="true"
-          >
-            ۰۳
-          </span>
-
-          <h3>نوشتن و خلاقیت</h3>
-
-          <p>
-            از فرایند نوشتن، تولید محتوا و تبدیل ایده‌های
-            خام به روایت‌هایی خواندنی.
-          </p>
-
-        </article>
-
-        <article class="about-interest-card">
-
-          <span
-            class="interest-number"
-            aria-hidden="true"
-          >
-            ۰۴
-          </span>
-
-          <h3>تجربه و زندگی</h3>
-
-          <p>
-            روایت‌هایی درباره تصمیم‌ها، شکست‌ها، شروع‌های
-            دوباره و درس‌های مسیر زندگی.
-          </p>
-
-        </article>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ==========================================
-       ارزش‌های وبلاگ
-  =========================================== -->
-
-  <section
-    class="about-section about-values-section"
-    aria-labelledby="valuesTitle"
-  >
-    <div class="container about-content-grid">
-
-      <header class="about-section-heading">
-
-        <span class="eyebrow">
-          چیزی که برایم مهم است
-        </span>
-
-        <h2 id="valuesTitle">
-          ارزش‌های این وبلاگ
-        </h2>
-
-      </header>
-
-      <div class="about-values">
-
-        <article class="about-value">
-
-          <span aria-hidden="true">
-            ۰۱
-          </span>
-
-          <div>
-
-            <h3>صداقت در روایت</h3>
-
-            <p>
-              تلاش می‌کنم تجربه‌ها را بدون اغراق و با تمام
-              پیچیدگی‌ها و ابهام‌هایشان روایت کنم.
-            </p>
-
-          </div>
-
-        </article>
-
-        <article class="about-value">
-
-          <span aria-hidden="true">
-            ۰۲
-          </span>
-
-          <div>
-
-            <h3>دقت در محتوا</h3>
-
-            <p>
-              مطالب علمی و آموزشی باید روشن، قابل بررسی و
-              تا حد امکان متکی بر منابع معتبر باشند.
-            </p>
-
-          </div>
-
-        </article>
-
-        <article class="about-value">
-
-          <span aria-hidden="true">
-            ۰۳
-          </span>
-
-          <div>
-
-            <h3>کاربردی‌بودن</h3>
-
-            <p>
-              هر نوشته باید ایده، پرسش یا نکته‌ای ارائه کند
-              که خواننده بتواند از آن استفاده کند.
-            </p>
-
-          </div>
-
-        </article>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ==========================================
-       ارتباط با من
-  =========================================== -->
-
-  <section
-    class="about-contact-section"
-    id="contact"
-    aria-labelledby="contactTitle"
-  >
-    <div class="container">
-
-      <div class="about-contact-card">
-
-        <div class="about-contact-content">
-
-          <span class="eyebrow">
+          <p class="eyebrow">
             ارتباط با من
-          </span>
+          </p>
 
-          <h2 id="contactTitle">
-            خوشحال می‌شوم از شما بشنوم
+          <h2
+            id="contact-title"
+            class="about-contact__title"
+          >
+            درباره یک ایده یا پروژه صحبت کنیم
           </h2>
 
-          <p>
-            اگر درباره یکی از نوشته‌ها پرسشی دارید، پیشنهادی
-            برای همکاری دارید یا می‌خواهید گفت‌وگویی را شروع
-            کنید، از طریق تلگرام، اینستاگرام یا ایمیل با من
-            در ارتباط باشید.
+          <p class="about-contact__description">
+            اگر درباره موضوعات پژوهشی، همکاری علمی، نگارش تخصصی
+            یا محتوای این وب‌سایت پرسشی دارید، می‌توانید از طریق
+            ایمیل یا شبکه‌های اجتماعی با من در ارتباط باشید.
           </p>
 
         </div>
 
-        <div
-          class="about-contact-links"
-          aria-label="راه‌های ارتباط با نویسنده"
-        >
 
-          {% if telegram_link %}
+        <div class="about-contact__actions">
+
+          {% assign contact_email = site.email | default: site.author.email %}
+
+          {% if contact_email %}
+
             <a
-              class="about-contact-link"
-              href="{{ telegram_link | escape }}"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="ارتباط با {{ author_name | escape }} از طریق تلگرام"
+              class="about-button about-button--primary"
+              href="mailto:{{ contact_email }}"
             >
-
-              <span
-                class="contact-link-icon"
-                aria-hidden="true"
-              >
-                tg
-              </span>
-
-              <span>
-
-                <strong>تلگرام</strong>
-
-                <small dir="ltr">
-                  {% if site.telegram_username %}
-                    {{ site.telegram_username
-                      | remove_first: "@"
-                      | prepend: "@"
-                      | escape
-                    }}
-                  {% else %}
-                    ارسال پیام
-                  {% endif %}
-                </small>
-
-              </span>
-
-              <i aria-hidden="true">←</i>
-
+              ارسال ایمیل
             </a>
+
           {% endif %}
 
-          {% if instagram_link %}
-            <a
-              class="about-contact-link"
-              href="{{ instagram_link | escape }}"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="مشاهده صفحه اینستاگرام {{ author_name | escape }}"
-            >
 
-              <span
-                class="contact-link-icon"
-                aria-hidden="true"
-              >
-                in
-              </span>
-
-              <span>
-
-                <strong>اینستاگرام</strong>
-
-                <small dir="ltr">
-                  {% if site.instagram_username %}
-                    {{ site.instagram_username
-                      | remove_first: "@"
-                      | prepend: "@"
-                      | escape
-                    }}
-                  {% else %}
-                    مشاهده صفحه
-                  {% endif %}
-                </small>
-
-              </span>
-
-              <i aria-hidden="true">←</i>
-
-            </a>
-          {% endif %}
-
-          {% if site.email %}
-            <a
-              class="about-contact-link"
-              href="mailto:{{ site.email | strip | escape }}"
-              aria-label="ارسال ایمیل به {{ author_name | escape }}"
-            >
-
-              <span
-                class="contact-link-icon"
-                aria-hidden="true"
-              >
-                @
-              </span>
-
-              <span>
-
-                <strong>ایمیل</strong>
-
-                <small dir="ltr">
-                  {{ site.email | strip | escape }}
-                </small>
-
-              </span>
-
-              <i aria-hidden="true">←</i>
-
-            </a>
-          {% endif %}
+          <a
+            class="about-button about-button--secondary"
+            href="{{ '/' | relative_url }}"
+          >
+            بازگشت به صفحه اصلی
+          </a>
 
         </div>
 
@@ -600,4 +576,4 @@ author_image: "/assets/images/uploads/about-author.jpg"
     </div>
   </section>
 
-</main>
+</div>
