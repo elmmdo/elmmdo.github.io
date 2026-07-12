@@ -10,28 +10,66 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const siteHeader = document.getElementById("siteHeader");
 
-  const themeButton = document.getElementById("themeButton");
-  const themeIcon = document.getElementById("themeIcon");
-
   const menuButton = document.getElementById("menuButton");
-  const closeMenuButton = document.getElementById("closeMenuButton");
+  const closeMenuButton =
+    document.getElementById("closeMenuButton");
   const mobileMenu = document.getElementById("mobileMenu");
 
-  const searchButton = document.getElementById("searchButton");
-  const closeSearchButton = document.getElementById("closeSearchButton");
-  const searchPanel = document.getElementById("searchPanel");
-  const searchForm = document.getElementById("searchForm");
-  const searchInput = document.getElementById("searchInput");
-  const searchMessage = document.getElementById("searchMessage");
-  const searchResults = document.getElementById("searchResults");
-  const searchTagButtons = document.querySelectorAll("[data-search-term]");
+  const searchButton =
+    document.getElementById("searchButton");
+  const closeSearchButton =
+    document.getElementById("closeSearchButton");
+  const searchPanel =
+    document.getElementById("searchPanel");
+  const searchForm =
+    document.getElementById("searchForm");
+  const searchInput =
+    document.getElementById("searchInput");
+  const searchMessage =
+    document.getElementById("searchMessage");
+  const searchResults =
+    document.getElementById("searchResults");
+  const searchTagButtons =
+    document.querySelectorAll("[data-search-term]");
 
-  const pageOverlay = document.getElementById("pageOverlay");
-  const readingProgress = document.getElementById("readingProgress");
-  const postContent = document.querySelector(".post-content");
+  const pageOverlay =
+    document.getElementById("pageOverlay");
+  const readingProgress =
+    document.getElementById("readingProgress");
+  const postContent =
+    document.querySelector(".post-content");
 
-  const backToTop = document.getElementById("backToTop");
-  const currentYear = document.getElementById("currentYear");
+  const backToTop =
+    document.getElementById("backToTop");
+  const currentYear =
+    document.getElementById("currentYear");
+
+  /* =======================================================
+     Force light mode
+  ======================================================= */
+
+  root.dataset.theme = "light";
+  root.style.colorScheme = "light";
+
+  body.classList.remove(
+    "dark",
+    "dark-mode",
+    "night",
+    "night-mode"
+  );
+
+  try {
+    localStorage.removeItem("site-theme");
+    localStorage.removeItem("theme");
+    localStorage.removeItem("dark-mode");
+    localStorage.removeItem("darkMode");
+    localStorage.removeItem("color-theme");
+  } catch (error) {
+    /*
+     * localStorage ممکن است در حالت خصوصی مرورگر
+     * یا به‌دلیل تنظیمات امنیتی در دسترس نباشد.
+     */
+  }
 
   /* =======================================================
      Small utilities
@@ -54,7 +92,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function escapeHTML(value = "") {
-    const temporaryElement = document.createElement("div");
+    const temporaryElement =
+      document.createElement("div");
 
     temporaryElement.textContent = String(value);
 
@@ -64,16 +103,24 @@ document.addEventListener("DOMContentLoaded", () => {
   function prefersReducedMotion() {
     return Boolean(
       window.matchMedia &&
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches
     );
   }
 
   function isMobileMenuOpen() {
-    return mobileMenu?.classList.contains("is-open") ?? false;
+    return (
+      mobileMenu?.classList.contains("is-open") ??
+      false
+    );
   }
 
   function isSearchOpen() {
-    return searchPanel?.classList.contains("is-open") ?? false;
+    return (
+      searchPanel?.classList.contains("is-open") ??
+      false
+    );
   }
 
   function updateOverlay() {
@@ -96,124 +143,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =======================================================
-     Theme
-  ======================================================= */
-
-  const THEME_STORAGE_KEY = "site-theme";
-
-  function getSavedTheme() {
-    try {
-      return localStorage.getItem(THEME_STORAGE_KEY);
-    } catch (error) {
-      return null;
-    }
-  }
-
-  function saveTheme(theme) {
-    try {
-      localStorage.setItem(THEME_STORAGE_KEY, theme);
-    } catch (error) {
-      // Local storage may be unavailable in privacy mode.
-    }
-  }
-
-  function getSystemTheme() {
-    if (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
-      return "dark";
-    }
-
-    return "light";
-  }
-
-  function getPreferredTheme() {
-    const savedTheme = getSavedTheme();
-
-    if (savedTheme === "light" || savedTheme === "dark") {
-      return savedTheme;
-    }
-
-    return getSystemTheme();
-  }
-
-  function applyTheme(theme, persist = true) {
-    const isDark = theme === "dark";
-    const normalizedTheme = isDark ? "dark" : "light";
-
-    root.dataset.theme = normalizedTheme;
-    root.style.colorScheme = normalizedTheme;
-
-    if (themeButton) {
-      themeButton.setAttribute(
-        "aria-label",
-        isDark
-          ? "فعال‌کردن حالت روشن"
-          : "فعال‌کردن حالت تاریک"
-      );
-
-      themeButton.setAttribute(
-        "aria-pressed",
-        isDark ? "true" : "false"
-      );
-
-      themeButton.title = isDark
-        ? "حالت روشن"
-        : "حالت تاریک";
-    }
-
-    if (themeIcon) {
-      themeIcon.textContent = isDark ? "☀" : "☾";
-    }
-
-    if (persist) {
-      saveTheme(normalizedTheme);
-    }
-  }
-
-  applyTheme(getPreferredTheme(), false);
-
-  themeButton?.addEventListener("click", () => {
-    const nextTheme =
-      root.dataset.theme === "dark"
-        ? "light"
-        : "dark";
-
-    applyTheme(nextTheme);
-  });
-
-  /*
-   * If the user has not selected a theme manually,
-   * keep the website synchronized with the operating system.
-   */
-
-  const systemThemeMedia = window.matchMedia
-    ? window.matchMedia("(prefers-color-scheme: dark)")
-    : null;
-
-  function handleSystemThemeChange(event) {
-    const savedTheme = getSavedTheme();
-
-    if (savedTheme === "light" || savedTheme === "dark") {
-      return;
-    }
-
-    applyTheme(event.matches ? "dark" : "light", false);
-  }
-
-  if (systemThemeMedia) {
-    if (typeof systemThemeMedia.addEventListener === "function") {
-      systemThemeMedia.addEventListener(
-        "change",
-        handleSystemThemeChange
-      );
-    } else if (typeof systemThemeMedia.addListener === "function") {
-      systemThemeMedia.addListener(handleSystemThemeChange);
-    }
-  }
-
-  /* =======================================================
      Mobile menu
   ======================================================= */
 
@@ -226,7 +155,10 @@ document.addEventListener("DOMContentLoaded", () => {
     mobileMenu.setAttribute("aria-hidden", "false");
 
     menuButton.classList.add("is-active");
-    menuButton.setAttribute("aria-expanded", "true");
+    menuButton.setAttribute(
+      "aria-expanded",
+      "true"
+    );
     menuButton.setAttribute(
       "aria-label",
       "بستن منوی اصلی"
@@ -234,9 +166,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updateOverlay();
 
-    const firstFocusableElement = mobileMenu.querySelector(
-      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
-    );
+    const firstFocusableElement =
+      mobileMenu.querySelector(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
 
     window.setTimeout(() => {
       firstFocusableElement?.focus();
@@ -252,7 +185,10 @@ document.addEventListener("DOMContentLoaded", () => {
     mobileMenu.setAttribute("aria-hidden", "true");
 
     menuButton.classList.remove("is-active");
-    menuButton.setAttribute("aria-expanded", "false");
+    menuButton.setAttribute(
+      "aria-expanded",
+      "false"
+    );
     menuButton.setAttribute(
       "aria-label",
       "بازکردن منوی اصلی"
@@ -273,15 +209,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  closeMenuButton?.addEventListener("click", () => {
-    closeMobileMenu();
-  });
+  closeMenuButton?.addEventListener(
+    "click",
+    () => {
+      closeMobileMenu();
+    }
+  );
 
-  mobileMenu?.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      closeMobileMenu(false);
+  mobileMenu
+    ?.querySelectorAll("a")
+    .forEach((link) => {
+      link.addEventListener("click", () => {
+        closeMobileMenu(false);
+      });
     });
-  });
 
   /* =======================================================
      Search panel
@@ -293,9 +234,15 @@ document.addEventListener("DOMContentLoaded", () => {
     closeMobileMenu(false);
 
     searchPanel.classList.add("is-open");
-    searchPanel.setAttribute("aria-hidden", "false");
+    searchPanel.setAttribute(
+      "aria-hidden",
+      "false"
+    );
 
-    searchButton.setAttribute("aria-expanded", "true");
+    searchButton.setAttribute(
+      "aria-expanded",
+      "true"
+    );
     searchButton.setAttribute(
       "aria-label",
       "بستن جست‌وجو"
@@ -314,9 +261,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const wasOpen = isSearchOpen();
 
     searchPanel.classList.remove("is-open");
-    searchPanel.setAttribute("aria-hidden", "true");
+    searchPanel.setAttribute(
+      "aria-hidden",
+      "true"
+    );
 
-    searchButton.setAttribute("aria-expanded", "false");
+    searchButton.setAttribute(
+      "aria-expanded",
+      "false"
+    );
     searchButton.setAttribute(
       "aria-label",
       "بازکردن جست‌وجو"
@@ -337,9 +290,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  closeSearchButton?.addEventListener("click", () => {
-    closeSearchPanel();
-  });
+  closeSearchButton?.addEventListener(
+    "click",
+    () => {
+      closeSearchPanel();
+    }
+  );
 
   pageOverlay?.addEventListener("click", () => {
     closeMobileMenu(false);
@@ -365,7 +321,9 @@ document.addEventListener("DOMContentLoaded", () => {
         ?.getAttribute("content")
         ?.trim() || "";
 
-    return `${baseUrl.replace(/\/$/, "")}/search.json`;
+    return `${
+      baseUrl.replace(/\/$/, "")
+    }/search.json`;
   }
 
   function createSearchableItem(item = {}) {
@@ -402,28 +360,46 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     const elements = Array.from(
-      document.querySelectorAll(selectors.join(","))
+      document.querySelector(
+        selectors.join(",")
+      )
     );
 
-    const uniqueElements = [...new Set(elements)];
+    const allElements = Array.from(
+      document.querySelectorAll(
+        selectors.join(",")
+      )
+    );
+
+    const uniqueElements = [
+      ...new Set(
+        elements.length
+          ? elements
+          : allElements
+      )
+    ];
 
     return uniqueElements
       .map((element) => {
-        const titleElement = element.querySelector(
-          "[data-search-title], h2, h3, .post-title, .card-title"
-        );
+        const titleElement =
+          element.querySelector(
+            "[data-search-title], h2, h3, .post-title, .card-title"
+          );
 
-        const descriptionElement = element.querySelector(
-          "[data-search-description], .post-excerpt, .card-excerpt, p"
-        );
+        const descriptionElement =
+          element.querySelector(
+            "[data-search-description], .post-excerpt, .card-excerpt, p"
+          );
 
-        const categoryElement = element.querySelector(
-          "[data-search-category], .post-category, .card-category"
-        );
+        const categoryElement =
+          element.querySelector(
+            "[data-search-category], .post-category, .card-category"
+          );
 
-        const linkElement = element.matches("a[href]")
-          ? element
-          : element.querySelector("a[href]");
+        const linkElement =
+          element.matches("a[href]")
+            ? element
+            : element.querySelector("a[href]");
 
         return createSearchableItem({
           title:
@@ -433,12 +409,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
           description:
             element.dataset.searchDescription ||
-            descriptionElement?.textContent?.trim() ||
+            descriptionElement
+              ?.textContent
+              ?.trim() ||
             "",
 
           category:
             element.dataset.searchCategory ||
-            categoryElement?.textContent?.trim() ||
+            categoryElement
+              ?.textContent
+              ?.trim() ||
             "",
 
           url:
@@ -447,7 +427,9 @@ document.addEventListener("DOMContentLoaded", () => {
             ""
         });
       })
-      .filter((item) => item.title && item.url);
+      .filter(
+        (item) => item.title && item.url
+      );
   }
 
   async function loadSearchIndex() {
@@ -455,7 +437,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return searchItems;
     }
 
-    if (searchIndexLoading && searchIndexPromise) {
+    if (
+      searchIndexLoading &&
+      searchIndexPromise
+    ) {
       return searchIndexPromise;
     }
 
@@ -463,11 +448,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     searchIndexPromise = (async () => {
       try {
-        const response = await fetch(getSearchIndexUrl(), {
-          headers: {
-            Accept: "application/json"
+        const response = await fetch(
+          getSearchIndexUrl(),
+          {
+            headers: {
+              Accept: "application/json"
+            }
           }
-        });
+        );
 
         if (!response.ok) {
           throw new Error(
@@ -480,7 +468,10 @@ document.addEventListener("DOMContentLoaded", () => {
         searchItems = Array.isArray(data)
           ? data
               .map(createSearchableItem)
-              .filter((item) => item.title && item.url)
+              .filter(
+                (item) =>
+                  item.title && item.url
+              )
           : [];
 
         searchIndexLoaded = true;
@@ -488,11 +479,14 @@ document.addEventListener("DOMContentLoaded", () => {
         return searchItems;
       } catch (error) {
         /*
-         * Fallback keeps search usable on pages that
-         * already render post cards.
+         * اگر فایل search.json در دسترس نبود،
+         * اطلاعات از کارت‌های موجود در صفحه
+         * جمع‌آوری می‌شوند.
          */
 
-        searchItems = collectSearchItemsFromPage();
+        searchItems =
+          collectSearchItemsFromPage();
+
         searchIndexLoaded = true;
 
         return searchItems;
@@ -520,28 +514,40 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderSearchResultItems(results) {
     if (!searchResults) return;
 
-    const resultList = document.createElement("div");
-    resultList.className = "search-results-list";
+    const resultList =
+      document.createElement("div");
+
+    resultList.className =
+      "search-results-list";
 
     results.forEach((item) => {
-      const result = document.createElement("a");
+      const result =
+        document.createElement("a");
 
-      result.className = "search-result-item";
+      result.className =
+        "search-result-item";
+
       result.href = item.url;
 
       result.innerHTML = `
         <span class="search-result-content">
           ${
             item.category
-              ? `<small>${escapeHTML(item.category)}</small>`
+              ? `<small>${escapeHTML(
+                  item.category
+                )}</small>`
               : ""
           }
 
-          <strong>${escapeHTML(item.title)}</strong>
+          <strong>
+            ${escapeHTML(item.title)}
+          </strong>
 
           ${
             item.description
-              ? `<span>${escapeHTML(item.description)}</span>`
+              ? `<span>${escapeHTML(
+                  item.description
+                )}</span>`
               : ""
           }
         </span>
@@ -561,10 +567,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function renderSearchResults(query) {
-    if (!searchResults || !searchMessage) return;
+    if (!searchResults || !searchMessage) {
+      return;
+    }
 
-    const requestId = ++latestSearchRequest;
-    const normalizedQuery = normalizePersianText(query);
+    const requestId =
+      ++latestSearchRequest;
+
+    const normalizedQuery =
+      normalizePersianText(query);
 
     searchResults.innerHTML = "";
 
@@ -575,16 +586,19 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    searchMessage.textContent = "در حال جست‌وجو...";
+    searchMessage.textContent =
+      "در حال جست‌وجو...";
 
     const items = await loadSearchIndex();
 
     /*
-     * Ignore an old asynchronous response if a newer
-     * search has already started.
+     * اگر جست‌وجوی جدیدتری شروع شده باشد،
+     * نتیجه درخواست قدیمی نادیده گرفته می‌شود.
      */
 
-    if (requestId !== latestSearchRequest) {
+    if (
+      requestId !== latestSearchRequest
+    ) {
       return;
     }
 
@@ -615,34 +629,51 @@ document.addEventListener("DOMContentLoaded", () => {
     renderSearchResultItems(results);
   }
 
-  searchForm?.addEventListener("submit", (event) => {
-    event.preventDefault();
+  searchForm?.addEventListener(
+    "submit",
+    (event) => {
+      event.preventDefault();
 
-    window.clearTimeout(searchInputTimeout);
+      window.clearTimeout(
+        searchInputTimeout
+      );
 
-    renderSearchResults(searchInput?.value || "");
-  });
-
-  searchInput?.addEventListener("input", () => {
-    const query = searchInput.value.trim();
-
-    window.clearTimeout(searchInputTimeout);
-
-    if (!query) {
-      clearSearchResults();
-      return;
+      renderSearchResults(
+        searchInput?.value || ""
+      );
     }
+  );
 
-    searchInputTimeout = window.setTimeout(() => {
-      renderSearchResults(query);
-    }, 180);
-  });
+  searchInput?.addEventListener(
+    "input",
+    () => {
+      const query =
+        searchInput.value.trim();
+
+      window.clearTimeout(
+        searchInputTimeout
+      );
+
+      if (!query) {
+        clearSearchResults();
+        return;
+      }
+
+      searchInputTimeout =
+        window.setTimeout(() => {
+          renderSearchResults(query);
+        }, 180);
+    }
+  );
 
   searchTagButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      const term = button.dataset.searchTerm || "";
+      const term =
+        button.dataset.searchTerm || "";
 
-      window.clearTimeout(searchInputTimeout);
+      window.clearTimeout(
+        searchInputTimeout
+      );
 
       if (searchInput) {
         searchInput.value = term;
@@ -661,32 +692,44 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!readingProgress) return;
 
     if (!postContent) {
-      readingProgress.style.transform = "scaleX(0)";
+      readingProgress.style.transform =
+        "scaleX(0)";
+
       readingProgress.hidden = true;
+
       return;
     }
 
     readingProgress.hidden = false;
 
-    const contentRect = postContent.getBoundingClientRect();
-    const contentTop = window.scrollY + contentRect.top;
-    const contentHeight = postContent.offsetHeight;
+    const contentRect =
+      postContent.getBoundingClientRect();
+
+    const contentTop =
+      window.scrollY + contentRect.top;
+
+    const contentHeight =
+      postContent.offsetHeight;
 
     const viewportReferenceOffset =
       window.innerHeight * 0.35;
 
     const viewportReference =
-      window.scrollY + viewportReferenceOffset;
+      window.scrollY +
+      viewportReferenceOffset;
 
     const readableDistance = Math.max(
-      contentHeight - viewportReferenceOffset,
+      contentHeight -
+        viewportReferenceOffset,
       1
     );
 
     const progress = Math.min(
       Math.max(
-        (viewportReference - contentTop) /
-          readableDistance,
+        (
+          viewportReference -
+          contentTop
+        ) / readableDistance,
         0
       ),
       1
@@ -704,7 +747,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const scrollPosition = window.scrollY;
 
     if (backToTop) {
-      const shouldShowButton = scrollPosition > 600;
+      const shouldShowButton =
+        scrollPosition > 600;
 
       backToTop.classList.toggle(
         "is-visible",
@@ -713,10 +757,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       backToTop.setAttribute(
         "aria-hidden",
-        shouldShowButton ? "false" : "true"
+        shouldShowButton
+          ? "false"
+          : "true"
       );
 
-      backToTop.tabIndex = shouldShowButton ? 0 : -1;
+      backToTop.tabIndex =
+        shouldShowButton ? 0 : -1;
     }
 
     if (siteHeader) {
@@ -729,14 +776,17 @@ document.addEventListener("DOMContentLoaded", () => {
     updateReadingProgress();
   }
 
-  backToTop?.addEventListener("click", () => {
-    window.scrollTo({
-      top: 0,
-      behavior: prefersReducedMotion()
-        ? "auto"
-        : "smooth"
-    });
-  });
+  backToTop?.addEventListener(
+    "click",
+    () => {
+      window.scrollTo({
+        top: 0,
+        behavior: prefersReducedMotion()
+          ? "auto"
+          : "smooth"
+      });
+    }
+  );
 
   let scrollFrameRequested = false;
 
@@ -749,66 +799,78 @@ document.addEventListener("DOMContentLoaded", () => {
 
       window.requestAnimationFrame(() => {
         updateScrollInterface();
+
         scrollFrameRequested = false;
       });
     },
-    { passive: true }
+    {
+      passive: true
+    }
   );
 
-  window.addEventListener("resize", () => {
-    updateScrollInterface();
+  window.addEventListener(
+    "resize",
+    () => {
+      updateScrollInterface();
 
-    /*
-     * Close the mobile menu automatically when the
-     * viewport becomes wide enough for desktop navigation.
-     */
+      /*
+       * اگر عرض صفحه از حالت موبایل بزرگ‌تر شد،
+       * منوی موبایل به‌صورت خودکار بسته می‌شود.
+       */
 
-    if (
-      window.innerWidth > 900 &&
-      isMobileMenuOpen()
-    ) {
-      closeMobileMenu(false);
+      if (
+        window.innerWidth > 900 &&
+        isMobileMenuOpen()
+      ) {
+        closeMobileMenu(false);
+      }
     }
-  });
+  );
 
   /* =======================================================
      Keyboard interactions
   ======================================================= */
 
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      if (isSearchOpen()) {
-        closeSearchPanel();
+  document.addEventListener(
+    "keydown",
+    (event) => {
+      if (event.key === "Escape") {
+        if (isSearchOpen()) {
+          closeSearchPanel();
+          return;
+        }
+
+        if (isMobileMenuOpen()) {
+          closeMobileMenu();
+        }
+
         return;
       }
 
-      if (isMobileMenuOpen()) {
-        closeMobileMenu();
+      const activeElement =
+        document.activeElement;
+
+      const activeTag =
+        activeElement?.tagName;
+
+      const isTyping =
+        activeTag === "INPUT" ||
+        activeTag === "TEXTAREA" ||
+        activeTag === "SELECT" ||
+        activeElement?.isContentEditable;
+
+      if (
+        event.key === "/" &&
+        !isTyping &&
+        !event.ctrlKey &&
+        !event.metaKey &&
+        !event.altKey
+      ) {
+        event.preventDefault();
+        openSearchPanel();
       }
-
-      return;
     }
-
-    const activeElement = document.activeElement;
-    const activeTag = activeElement?.tagName;
-
-    const isTyping =
-      activeTag === "INPUT" ||
-      activeTag === "TEXTAREA" ||
-      activeTag === "SELECT" ||
-      activeElement?.isContentEditable;
-
-    if (
-      event.key === "/" &&
-      !isTyping &&
-      !event.ctrlKey &&
-      !event.metaKey &&
-      !event.altKey
-    ) {
-      event.preventDefault();
-      openSearchPanel();
-    }
-  });
+  );
 
   /* =======================================================
      Footer year
@@ -816,9 +878,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (currentYear) {
     currentYear.textContent =
-      new Intl.DateTimeFormat("fa-IR", {
-        year: "numeric"
-      }).format(new Date());
+      new Intl.DateTimeFormat(
+        "fa-IR",
+        {
+          year: "numeric"
+        }
+      ).format(new Date());
   }
 
   /* =======================================================
