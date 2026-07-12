@@ -17,7 +17,7 @@ permalink: /about/
 
         <h1>
           سلام، من
-          <span> امیر </span>
+          <span> امیر بصری </span>
           هستم
         </h1>
 
@@ -36,7 +36,10 @@ permalink: /about/
             خواندن نوشته‌ها
           </a>
 
-          <a class="about-secondary-btn" href="#about-contact">
+          <a class="about-secondary-btn" href="{{ '/' | relative_url }}">
+  بازگشت به خانه
+</a>
+
             ارتباط با من
           </a>
         </div>
