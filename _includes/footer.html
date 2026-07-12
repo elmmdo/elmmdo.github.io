@@ -1,0 +1,35 @@
+<footer class="site-footer" role="contentinfo">
+  <div class="site-footer__inner">
+    <p class="site-footer__copyright">
+      &copy; {{ site.time | date: "%Y" }}
+      <a href="{{ '/' | relative_url }}">
+        {{ site.title | default: site.github.repository_name | escape }}
+      </a>
+    </p>
+
+    <nav class="site-footer__nav" aria-label="پیوندهای پایین صفحه">
+      <a href="{{ '/' | relative_url }}">خانه</a>
+      <a href="{{ '/about/' | relative_url }}">درباره من</a>
+
+      {% if site.instagram_username %}
+        <a
+          href="https://www.instagram.com/{{ site.instagram_username | escape }}/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          اینستاگرام
+        </a>
+      {% endif %}
+
+      {% if site.telegram_username %}
+        <a
+          href="https://t.me/{{ site.telegram_username | escape }}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          تلگرام
+        </a>
+      {% endif %}
+    </nav>
+  </div>
+</footer>
