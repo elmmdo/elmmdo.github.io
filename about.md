@@ -17,7 +17,7 @@ permalink: /about/
 
         <h1>
           سلام، من
-          <span> امیر بصری </span>
+          <span> امیرحسین بصری </span>
           هستم
         </h1>
 
@@ -27,7 +27,7 @@ permalink: /about/
 
         <p>
           اینجا جایی است برای نوشتن، فکر کردن و ثبت چیزهایی که ارزش ماندن دارند. 
-          من در این وبلاگ درباره موضوعاتی می‌نویسم که برایم مهم‌اند؛ از علم و فناوری 
+          من در این وبلاگ درباره موضوعاتی می‌نویسم که برایم مهم‌اند؛ از فلسفه و روانشناسی
           گرفته تا تجربه‌های شخصی، یادداشت‌های تحلیلی و مسیر یادگیری.
         </p>
 
@@ -50,10 +50,7 @@ permalink: /about/
           >
         </div>
 
-        <div class="about-floating-card">
-          <strong>یادداشت شخصی</strong>
-          <span>نوشتن برای من یعنی دقیق‌تر دیدن جهان.</span>
-        </div>
+        
       </div>
 
     </div>
@@ -71,7 +68,7 @@ permalink: /about/
 
       <div class="about-text">
         <p>
-          من این وبلاگ را ساختم تا جایی برای ثبت فکرها، آموخته‌ها و تجربه‌هایم داشته باشم.
+          من این وبلاگ را ساختم تا جایی برای ثبت افکار، آموخته‌ها و تجربیاتم داشته باشم.
           برای من نوشتن فقط انتقال اطلاعات نیست؛ نوعی تمرین برای دقیق‌تر دیدن، بهتر فهمیدن 
           و منظم‌تر فکر کردن است.
         </p>
@@ -104,7 +101,7 @@ permalink: /about/
         <h2>درباره چه چیزهایی می‌نویسم؟</h2>
         <p>
           موضوعات این وبلاگ ممکن است متنوع باشند، اما همه آن‌ها یک نقطه مشترک دارند:
-          تلاش برای فهم عمیق‌تر.
+          لمس بهتر زندگی.
         </p>
       </div>
 
@@ -114,7 +111,7 @@ permalink: /about/
           <span class="about-card-number">01</span>
           <h3>یادداشت‌های شخصی</h3>
           <p>
-            روایت‌هایی از تجربه‌ها، مسیر یادگیری، مشاهده‌ها و چیزهایی که در زندگی روزمره 
+            روایت‌هایی از تجربه‌ها، دل نوشته ها مشاهده‌ها و چیزهایی که در زندگی روزمره 
             ارزش فکر کردن دارند.
           </p>
         </article>
@@ -186,9 +183,9 @@ permalink: /about/
         <div class="about-value-item">
           <span>03</span>
           <div>
-            <h3>یادگیری مداوم</h3>
+            <h3>به قلم اوردن زندگی</h3>
             <p>
-              این وبلاگ یک مقصد نهایی نیست؛ بخشی از مسیر یادگیری و فکر کردن است.
+              این وبلاگ یک مقصد نهایی نیست؛ بخشی از فرایند لمس مسیر زندگی است.
             </p>
           </div>
         </div>
@@ -213,21 +210,28 @@ permalink: /about/
         </div>
 
         <div class="about-contact-links">
-          <a href="https://instagram.com/USERNAME" target="_blank" rel="noopener">
-            <span>Instagram</span>
-            <strong>@USERNAME</strong>
-          </a>
 
-          <a href="https://t.me/USERNAME" target="_blank" rel="noopener">
-            <span>Telegram</span>
-            <strong>@USERNAME</strong>
-          </a>
+        <a href="https://instagram.com/amirhoseinbasari"
+           target="_blank"
+           rel="noopener noreferrer">
+          <span>Instagram</span>
+          <strong>@amirhoseinbasari</strong>
+        </a>
+      
+        <a href="https://t.me/Robekamal"
+           target="_blank"
+           rel="noopener noreferrer">
+          <span>Telegram</span>
+          <strong>@Robekamal</strong>
+        </a>
+      
+        <a href="mailto:20ahbm@gmail.com">
+          <span>Email</span>
+          <strong>20ahbm@gmail.com</strong>
+        </a>
 
-          <a href="mailto:yourmail@example.com">
-            <span>Email</span>
-            <strong>yourmail@example.com</strong>
-          </a>
-        </div>
+</div>
+
       </div>
 
     </div>
