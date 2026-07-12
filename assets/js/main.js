@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("searchMessage");
   const searchResults =
     document.getElementById("searchResults");
+
   const searchTagButtons =
     document.querySelectorAll("[data-search-term]");
 
@@ -45,31 +46,98 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("currentYear");
 
   /* =======================================================
-     Force light mode
+     Permanent light mode
   ======================================================= */
 
-  root.dataset.theme = "light";
-  root.style.colorScheme = "light";
+  function forceLightMode() {
+    root.setAttribute("data-theme", "light");
+    root.style.colorScheme = "light";
 
-  body.classList.remove(
-    "dark",
-    "dark-mode",
-    "night",
-    "night-mode"
-  );
+    root.classList.remove(
+      "dark",
+      "dark-mode",
+      "night",
+      "night-mode",
+      "theme-dark"
+    );
 
-  try {
-    localStorage.removeItem("site-theme");
-    localStorage.removeItem("theme");
-    localStorage.removeItem("dark-mode");
-    localStorage.removeItem("darkMode");
-    localStorage.removeItem("color-theme");
-  } catch (error) {
-    /*
-     * localStorage ممکن است در حالت خصوصی مرورگر
-     * یا به‌دلیل تنظیمات امنیتی در دسترس نباشد.
-     */
+    body.classList.remove(
+      "dark",
+      "dark-mode",
+      "night",
+      "night-mode",
+      "theme-dark"
+    );
+
+    body.classList.add("light-mode");
+
+    body.removeAttribute("data-theme");
+    body.setAttribute("data-theme", "light");
+
+    try {
+      localStorage.removeItem("site-theme");
+      localStorage.removeItem("dark-mode");
+      localStorage.removeItem("darkMode");
+      localStorage.removeItem("color-theme");
+      localStorage.removeItem("night-mode");
+
+      localStorage.setItem("theme", "light");
+      localStorage.setItem("site-theme", "light");
+    } catch (error) {
+      /*
+       * در صورت غیرفعال‌بودن localStorage،
+       * ظاهر روشن همچنان از طریق HTML حفظ می‌شود.
+       */
+    }
   }
+
+  forceLightMode();
+
+  /*
+   * اگر اسکریپت دیگری بعداً تلاش کند حالت تاریک
+   * را فعال کند، دوباره حالت روشن اعمال می‌شود.
+   */
+
+  const themeObserver = new MutationObserver(() => {
+    const rootHasDarkClass =
+      root.classList.contains("dark") ||
+      root.classList.contains("dark-mode") ||
+      root.classList.contains("night") ||
+      root.classList.contains("night-mode") ||
+      root.classList.contains("theme-dark");
+
+    const bodyHasDarkClass =
+      body.classList.contains("dark") ||
+      body.classList.contains("dark-mode") ||
+      body.classList.contains("night") ||
+      body.classList.contains("night-mode") ||
+      body.classList.contains("theme-dark");
+
+    const rootTheme =
+      root.getAttribute("data-theme");
+
+    const bodyTheme =
+      body.getAttribute("data-theme");
+
+    if (
+      rootHasDarkClass ||
+      bodyHasDarkClass ||
+      rootTheme !== "light" ||
+      bodyTheme !== "light"
+    ) {
+      forceLightMode();
+    }
+  });
+
+  themeObserver.observe(root, {
+    attributes: true,
+    attributeFilter: ["class", "data-theme"]
+  });
+
+  themeObserver.observe(body, {
+    attributes: true,
+    attributeFilter: ["class", "data-theme"]
+  });
 
   /* =======================================================
      Small utilities
@@ -110,16 +178,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function isMobileMenuOpen() {
-    return (
-      mobileMenu?.classList.contains("is-open") ??
-      false
+    return Boolean(
+      mobileMenu?.classList.contains("is-open")
     );
   }
 
   function isSearchOpen() {
-    return (
-      searchPanel?.classList.contains("is-open") ??
-      false
+    return Boolean(
+      searchPanel?.classList.contains("is-open")
     );
   }
 
@@ -155,10 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
     mobileMenu.setAttribute("aria-hidden", "false");
 
     menuButton.classList.add("is-active");
-    menuButton.setAttribute(
-      "aria-expanded",
-      "true"
-    );
+    menuButton.setAttribute("aria-expanded", "true");
     menuButton.setAttribute(
       "aria-label",
       "بستن منوی اصلی"
@@ -185,10 +248,7 @@ document.addEventListener("DOMContentLoaded", () => {
     mobileMenu.setAttribute("aria-hidden", "true");
 
     menuButton.classList.remove("is-active");
-    menuButton.setAttribute(
-      "aria-expanded",
-      "false"
-    );
+    menuButton.setAttribute("aria-expanded", "false");
     menuButton.setAttribute(
       "aria-label",
       "بازکردن منوی اصلی"
@@ -209,12 +269,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  closeMenuButton?.addEventListener(
-    "click",
-    () => {
-      closeMobileMenu();
-    }
-  );
+  closeMenuButton?.addEventListener("click", () => {
+    closeMobileMenu();
+  });
 
   mobileMenu
     ?.querySelectorAll("a")
@@ -234,15 +291,9 @@ document.addEventListener("DOMContentLoaded", () => {
     closeMobileMenu(false);
 
     searchPanel.classList.add("is-open");
-    searchPanel.setAttribute(
-      "aria-hidden",
-      "false"
-    );
+    searchPanel.setAttribute("aria-hidden", "false");
 
-    searchButton.setAttribute(
-      "aria-expanded",
-      "true"
-    );
+    searchButton.setAttribute("aria-expanded", "true");
     searchButton.setAttribute(
       "aria-label",
       "بستن جست‌وجو"
@@ -261,15 +312,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const wasOpen = isSearchOpen();
 
     searchPanel.classList.remove("is-open");
-    searchPanel.setAttribute(
-      "aria-hidden",
-      "true"
-    );
+    searchPanel.setAttribute("aria-hidden", "true");
 
-    searchButton.setAttribute(
-      "aria-expanded",
-      "false"
-    );
+    searchButton.setAttribute("aria-expanded", "false");
     searchButton.setAttribute(
       "aria-label",
       "بازکردن جست‌وجو"
@@ -290,12 +335,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  closeSearchButton?.addEventListener(
-    "click",
-    () => {
-      closeSearchPanel();
-    }
-  );
+  closeSearchButton?.addEventListener("click", () => {
+    closeSearchPanel();
+  });
 
   pageOverlay?.addEventListener("click", () => {
     closeMobileMenu(false);
@@ -321,9 +363,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ?.getAttribute("content")
         ?.trim() || "";
 
-    return `${
-      baseUrl.replace(/\/$/, "")
-    }/search.json`;
+    return `${baseUrl.replace(/\/$/, "")}/search.json`;
   }
 
   function createSearchableItem(item = {}) {
@@ -333,7 +373,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const itemTags = Array.isArray(item.tags)
       ? item.tags
-      : [];
+      : typeof item.tags === "string"
+        ? item.tags
+            .split(",")
+            .map((tag) => tag.trim())
+            .filter(Boolean)
+        : [];
 
     const searchableTags = itemTags.join(" ");
 
@@ -350,56 +395,58 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
+  /*
+   * نسخه اصلاح‌شده:
+   * querySelectorAll تمام کارت‌های صفحه را برمی‌گرداند.
+   */
+
   function collectSearchItemsFromPage() {
     const selectors = [
       "[data-search-item]",
       ".post-card",
       ".article-card",
       ".featured-card",
-      "article.post-preview"
+      "article.post-preview",
+      "[data-journal-card]"
     ];
 
     const elements = Array.from(
-      document.querySelector(
-        selectors.join(",")
-      )
-    );
-
-    const allElements = Array.from(
       document.querySelectorAll(
         selectors.join(",")
       )
     );
 
     const uniqueElements = [
-      ...new Set(
-        elements.length
-          ? elements
-          : allElements
-      )
+      ...new Set(elements)
     ];
 
     return uniqueElements
       .map((element) => {
         const titleElement =
           element.querySelector(
-            "[data-search-title], h2, h3, .post-title, .card-title"
+            "[data-search-title], h1, h2, h3, .post-title, .card-title, .journal-card-title"
           );
 
         const descriptionElement =
           element.querySelector(
-            "[data-search-description], .post-excerpt, .card-excerpt, p"
+            "[data-search-description], .post-excerpt, .card-excerpt, .journal-card-excerpt, p"
           );
 
         const categoryElement =
           element.querySelector(
-            "[data-search-category], .post-category, .card-category"
+            "[data-search-category], .post-category, .card-category, .journal-card-category"
           );
 
         const linkElement =
           element.matches("a[href]")
             ? element
             : element.querySelector("a[href]");
+
+        const tags =
+          element.dataset.searchTags
+            ?.split(",")
+            .map((tag) => tag.trim())
+            .filter(Boolean) || [];
 
         return createSearchableItem({
           title:
@@ -409,17 +456,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
           description:
             element.dataset.searchDescription ||
-            descriptionElement
-              ?.textContent
-              ?.trim() ||
+            descriptionElement?.textContent?.trim() ||
             "",
 
           category:
             element.dataset.searchCategory ||
-            categoryElement
-              ?.textContent
-              ?.trim() ||
+            element.dataset.category ||
+            categoryElement?.textContent?.trim() ||
             "",
+
+          tags,
 
           url:
             element.dataset.searchUrl ||
@@ -427,9 +473,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ""
         });
       })
-      .filter(
-        (item) => item.title && item.url
-      );
+      .filter((item) => item.title && item.url);
   }
 
   async function loadSearchIndex() {
@@ -437,10 +481,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return searchItems;
     }
 
-    if (
-      searchIndexLoading &&
-      searchIndexPromise
-    ) {
+    if (searchIndexLoading && searchIndexPromise) {
       return searchIndexPromise;
     }
 
@@ -453,7 +494,8 @@ document.addEventListener("DOMContentLoaded", () => {
           {
             headers: {
               Accept: "application/json"
-            }
+            },
+            cache: "no-cache"
           }
         );
 
@@ -469,21 +511,24 @@ document.addEventListener("DOMContentLoaded", () => {
           ? data
               .map(createSearchableItem)
               .filter(
-                (item) =>
-                  item.title && item.url
+                (item) => item.title && item.url
               )
           : [];
+
+        /*
+         * اگر search.json خالی بود، اطلاعات
+         * از کارت‌های صفحه دریافت می‌شود.
+         */
+
+        if (searchItems.length === 0) {
+          searchItems =
+            collectSearchItemsFromPage();
+        }
 
         searchIndexLoaded = true;
 
         return searchItems;
       } catch (error) {
-        /*
-         * اگر فایل search.json در دسترس نبود،
-         * اطلاعات از کارت‌های موجود در صفحه
-         * جمع‌آوری می‌شوند.
-         */
-
         searchItems =
           collectSearchItemsFromPage();
 
@@ -591,14 +636,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const items = await loadSearchIndex();
 
-    /*
-     * اگر جست‌وجوی جدیدتری شروع شده باشد،
-     * نتیجه درخواست قدیمی نادیده گرفته می‌شود.
-     */
-
-    if (
-      requestId !== latestSearchRequest
-    ) {
+    if (requestId !== latestSearchRequest) {
       return;
     }
 
@@ -634,9 +672,7 @@ document.addEventListener("DOMContentLoaded", () => {
     (event) => {
       event.preventDefault();
 
-      window.clearTimeout(
-        searchInputTimeout
-      );
+      window.clearTimeout(searchInputTimeout);
 
       renderSearchResults(
         searchInput?.value || ""
@@ -650,9 +686,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const query =
         searchInput.value.trim();
 
-      window.clearTimeout(
-        searchInputTimeout
-      );
+      window.clearTimeout(searchInputTimeout);
 
       if (!query) {
         clearSearchResults();
@@ -671,9 +705,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const term =
         button.dataset.searchTerm || "";
 
-      window.clearTimeout(
-        searchInputTimeout
-      );
+      window.clearTimeout(searchInputTimeout);
 
       if (searchInput) {
         searchInput.value = term;
@@ -696,7 +728,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "scaleX(0)";
 
       readingProgress.hidden = true;
-
       return;
     }
 
@@ -715,12 +746,10 @@ document.addEventListener("DOMContentLoaded", () => {
       window.innerHeight * 0.35;
 
     const viewportReference =
-      window.scrollY +
-      viewportReferenceOffset;
+      window.scrollY + viewportReferenceOffset;
 
     const readableDistance = Math.max(
-      contentHeight -
-        viewportReferenceOffset,
+      contentHeight - viewportReferenceOffset,
       1
     );
 
@@ -799,7 +828,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       window.requestAnimationFrame(() => {
         updateScrollInterface();
-
         scrollFrameRequested = false;
       });
     },
@@ -808,24 +836,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
-  window.addEventListener(
-    "resize",
-    () => {
-      updateScrollInterface();
+  window.addEventListener("resize", () => {
+    updateScrollInterface();
 
-      /*
-       * اگر عرض صفحه از حالت موبایل بزرگ‌تر شد،
-       * منوی موبایل به‌صورت خودکار بسته می‌شود.
-       */
-
-      if (
-        window.innerWidth > 900 &&
-        isMobileMenuOpen()
-      ) {
-        closeMobileMenu(false);
-      }
+    if (
+      window.innerWidth > 900 &&
+      isMobileMenuOpen()
+    ) {
+      closeMobileMenu(false);
     }
-  );
+  });
 
   /* =======================================================
      Keyboard interactions
@@ -887,143 +907,446 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =======================================================
-     Initial state
+     Modern journal section
   ======================================================= */
 
-  clearSearchResults();
-  updateOverlay();
-  updateScrollInterface();
-  /* =======================================================
-   Modern journal section
-======================================================= */
+  const journalSection =
+    document.querySelector(".journal-section");
 
-const journalSection =
-  document.querySelector(".journal-section");
+  const journalGrid =
+    document.getElementById("articleList");
 
-const journalGrid =
-  document.getElementById("articleList");
+  const journalCards = Array.from(
+    document.querySelectorAll(
+      "[data-journal-card]"
+    )
+  );
 
-const journalCards = Array.from(
-  document.querySelectorAll("[data-journal-card]")
-);
+  const journalFilterButtons = Array.from(
+    document.querySelectorAll(
+      ".journal-filter"
+    )
+  );
 
-const journalFilterButtons = Array.from(
-  document.querySelectorAll(".journal-filter")
-);
+  const journalLoadMoreButton =
+    document.getElementById("loadMoreButton");
 
-const journalLoadMoreButton =
-  document.getElementById("loadMoreButton");
-
-const journalEmptyState =
-  document.getElementById("articlesEmptyState");
-
-const journalReducedMotion =
-  window.matchMedia &&
-  window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
-
-let journalActiveFilter = "all";
-let journalVisibleLimit = 7;
-
-/* =======================================================
-   Scroll reveal animation
-======================================================= */
-
-function revealJournalCard(card, delay = 0) {
-  if (!card || card.hidden) return;
-
-  if (journalReducedMotion) {
-    card.classList.add("is-revealed");
-    return;
-  }
-
-  window.setTimeout(() => {
-    card.classList.add("is-revealed");
-  }, delay);
-}
-
-if (
-  "IntersectionObserver" in window &&
-  !journalReducedMotion
-) {
-  const journalObserver =
-    new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-
-          const visibleCards =
-            journalCards.filter(
-              (card) =>
-                !card.hidden &&
-                !card.classList.contains(
-                  "is-revealed"
-                )
-            );
-
-          const cardIndex =
-            visibleCards.indexOf(entry.target);
-
-          const delay =
-            Math.max(cardIndex, 0) * 80;
-
-          revealJournalCard(
-            entry.target,
-            Math.min(delay, 320)
-          );
-
-          observer.unobserve(entry.target);
-        });
-      },
-      {
-        threshold: 0.14,
-        rootMargin: "0px 0px -45px 0px"
-      }
+  const journalEmptyState =
+    document.getElementById(
+      "articlesEmptyState"
     );
 
-  journalCards.forEach((card) => {
-    if (!card.hidden) {
-      journalObserver.observe(card);
+  const journalReducedMotion =
+    prefersReducedMotion();
+
+  const journalInitialLimit = 7;
+  const journalLoadStep = 6;
+
+  let journalActiveFilter = "all";
+  let journalVisibleLimit =
+    journalInitialLimit;
+
+  /* =======================================================
+     Journal helpers
+  ======================================================= */
+
+  function getJournalCardCategories(card) {
+    const rawCategories =
+      card.dataset.category ||
+      card.dataset.categories ||
+      card.dataset.filter ||
+      "all";
+
+    return normalizePersianText(rawCategories)
+      .split(/[,،|]/)
+      .map((category) => category.trim())
+      .filter(Boolean);
+  }
+
+  function journalCardMatchesFilter(card) {
+    if (journalActiveFilter === "all") {
+      return true;
     }
-  });
 
-  const journalHeader =
-    document.querySelector(".journal-header");
+    const categories =
+      getJournalCardCategories(card);
 
-  if (journalHeader) {
-    journalHeader.style.opacity = "0";
-    journalHeader.style.transform =
-      "translateY(25px)";
+    return categories.includes(
+      normalizePersianText(
+        journalActiveFilter
+      )
+    );
+  }
 
-    journalHeader.style.transition =
-      "opacity 700ms ease, transform 700ms ease";
+  function revealJournalCard(
+    card,
+    delay = 0
+  ) {
+    if (!card || card.hidden) return;
 
-    const headerObserver =
+    if (journalReducedMotion) {
+      card.classList.add("is-revealed");
+      return;
+    }
+
+    window.setTimeout(() => {
+      if (!card.hidden) {
+        card.classList.add(
+          "is-revealed"
+        );
+      }
+    }, delay);
+  }
+
+  /* =======================================================
+     Journal IntersectionObserver
+  ======================================================= */
+
+  let journalObserver = null;
+
+  if (
+    "IntersectionObserver" in window &&
+    !journalReducedMotion
+  ) {
+    journalObserver =
       new IntersectionObserver(
-        (entries, observer) => {
+        (entries) => {
           entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
+            if (!entry.isIntersecting) {
+              return;
+            }
 
-            entry.target.style.opacity = "1";
-            entry.target.style.transform =
-              "translateY(0)";
+            revealJournalCard(
+              entry.target
+            );
 
-            observer.unobserve(entry.target);
+            journalObserver?.unobserve(
+              entry.target
+            );
           });
         },
         {
-          threshold: 0.2
+          threshold: 0.12,
+          rootMargin:
+            "0px 0px -35px 0px"
+        }
+      );
+  }
+
+  function observeVisibleJournalCards() {
+    const visibleCards =
+      journalCards.filter(
+        (card) => !card.hidden
+      );
+
+    visibleCards.forEach(
+      (card, index) => {
+        if (
+          journalReducedMotion ||
+          !journalObserver
+        ) {
+          revealJournalCard(
+            card,
+            Math.min(index * 60, 300)
+          );
+
+          return;
+        }
+
+        journalObserver.unobserve(card);
+        journalObserver.observe(card);
+      }
+    );
+  }
+
+  /* =======================================================
+     Render journal cards
+  ======================================================= */
+
+  function renderJournalCards() {
+    if (
+      !journalSection ||
+      journalCards.length === 0
+    ) {
+      return;
+    }
+
+    const matchingCards =
+      journalCards.filter(
+        journalCardMatchesFilter
+      );
+
+    journalCards.forEach((card) => {
+      card.hidden = true;
+      card.classList.remove(
+        "is-visible"
+      );
+    });
+
+    matchingCards.forEach(
+      (card, index) => {
+        const shouldShow =
+          index < journalVisibleLimit;
+
+        card.hidden = !shouldShow;
+
+        card.classList.toggle(
+          "is-visible",
+          shouldShow
+        );
+
+        if (!shouldShow) {
+          card.classList.remove(
+            "is-revealed"
+          );
+        }
+      }
+    );
+
+    const visibleCards =
+      matchingCards.slice(
+        0,
+        journalVisibleLimit
+      );
+
+    if (journalEmptyState) {
+      const isEmpty =
+        matchingCards.length === 0;
+
+      journalEmptyState.hidden =
+        !isEmpty;
+
+      journalEmptyState.setAttribute(
+        "aria-hidden",
+        isEmpty ? "false" : "true"
+      );
+    }
+
+    if (journalLoadMoreButton) {
+      const hasMore =
+        matchingCards.length >
+        journalVisibleLimit;
+
+      journalLoadMoreButton.hidden =
+        !hasMore;
+
+      journalLoadMoreButton.setAttribute(
+        "aria-hidden",
+        hasMore ? "false" : "true"
+      );
+
+      journalLoadMoreButton.disabled =
+        !hasMore;
+    }
+
+    if (journalGrid) {
+      journalGrid.classList.toggle(
+        "is-empty",
+        matchingCards.length === 0
+      );
+
+      journalGrid.setAttribute(
+        "aria-live",
+        "polite"
+      );
+    }
+
+    visibleCards.forEach(
+      (card, index) => {
+        if (card.classList.contains(
+          "is-revealed"
+        )) {
+          return;
+        }
+
+        if (
+          journalReducedMotion ||
+          !journalObserver
+        ) {
+          revealJournalCard(
+            card,
+            Math.min(index * 60, 300)
+          );
+        }
+      }
+    );
+
+    observeVisibleJournalCards();
+  }
+
+  /* =======================================================
+     Journal category filters
+  ======================================================= */
+
+  journalFilterButtons.forEach(
+    (button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          const selectedFilter =
+            button.dataset.filter ||
+            button.dataset.category ||
+            "all";
+
+          journalActiveFilter =
+            normalizePersianText(
+              selectedFilter
+            ) || "all";
+
+          journalVisibleLimit =
+            journalInitialLimit;
+
+          journalFilterButtons.forEach(
+            (filterButton) => {
+              const isActive =
+                filterButton === button;
+
+              filterButton.classList.toggle(
+                "is-active",
+                isActive
+              );
+
+              filterButton.setAttribute(
+                "aria-pressed",
+                isActive
+                  ? "true"
+                  : "false"
+              );
+            }
+          );
+
+          renderJournalCards();
+        }
+      );
+    }
+  );
+
+  /* =======================================================
+     Journal load more
+  ======================================================= */
+
+  journalLoadMoreButton?.addEventListener(
+    "click",
+    () => {
+      const previousVisibleLimit =
+        journalVisibleLimit;
+
+      journalVisibleLimit +=
+        journalLoadStep;
+
+      renderJournalCards();
+
+      const matchingCards =
+        journalCards.filter(
+          journalCardMatchesFilter
+        );
+
+      const firstNewCard =
+        matchingCards[
+          previousVisibleLimit
+        ];
+
+      if (firstNewCard) {
+        window.setTimeout(() => {
+          firstNewCard.scrollIntoView({
+            behavior:
+              journalReducedMotion
+                ? "auto"
+                : "smooth",
+            block: "center"
+          });
+        }, 120);
+      }
+    }
+  );
+
+  /* =======================================================
+     Journal card mouse tilt
+  ======================================================= */
+
+  function resetJournalCardTilt(card) {
+    card.style.removeProperty(
+      "--journal-rotate-x"
+    );
+
+    card.style.removeProperty(
+      "--journal-rotate-y"
+    );
+
+    card.style.removeProperty(
+      "--journal-pointer-x"
+    );
+
+    card.style.removeProperty(
+      "--journal-pointer-y"
+    );
+
+    card.classList.remove(
+      "is-tilting"
+    );
+  }
+
+  if (
+    !journalReducedMotion &&
+    window.matchMedia(
+      "(hover: hover) and (pointer: fine)"
+    ).matches
+  ) {
+    journalCards.forEach((card) => {
+      card.addEventListener(
+        "pointermove",
+        (event) => {
+          if (card.hidden) return;
+
+          const rect =
+            card.getBoundingClientRect();
+
+          const pointerX =
+            event.clientX - rect.left;
+
+          const pointerY =
+            event.clientY - rect.top;
+
+          const normalizedX =
+            pointerX / rect.width;
+
+          const normalizedY =
+            pointerY / rect.height;
+
+          const rotateY =
+            (normalizedX - 0.5) * 4;
+
+          const rotateX =
+            (0.5 - normalizedY) * 4;
+
+          card.style.setProperty(
+            "--journal-rotate-x",
+            `${rotateX.toFixed(2)}deg`
+          );
+
+          card.style.setProperty(
+            "--journal-rotate-y",
+            `${rotateY.toFixed(2)}deg`
+          );
+
+          card.style.setProperty(
+            "--journal-pointer-x",
+            `${(normalizedX * 100).toFixed(
+              1
+            )}%`
+          );
+
+          card.style.setProperty(
+            "--journal-pointer-y",
+            `${(normalizedY * 100).toFixed(
+              1
+            )}%`
+          );
+
+          card.classList.add(
+            "is-tilting"
+          );
         }
       );
 
-    headerObserver.observe(journalHeader);
-  }
-} else {
-  journalCards.forEach((card) => {
-    card.classList.add("is-revealed");
-  });
-}
-
-/* ============================
-});
+      card.addEventL
