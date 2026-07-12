@@ -1,12 +1,43 @@
 ---
 layout: default
-title: درباره من
-description: درباره نویسنده، زمینه‌های فعالیت، علایق و راه‌های ارتباطی
+title: "درباره من"
+description: "درباره نویسنده، زمینه‌های فعالیت، علایق و راه‌های ارتباطی"
 permalink: /about/
 body_class: about-page
+
 custom_css:
   - /assets/css/about.css
 ---
+
+{% assign author_name = site.author.name | default: site.title %}
+{% assign author_image = site.author.image | default: "/assets/images/uploads/about-author.jpg" %}
+{% assign contact_email = site.email | default: site.author.email %}
+
+{% assign instagram_link = site.instagram_url %}
+{% if instagram_link == nil or instagram_link == empty %}
+  {% if site.instagram_username %}
+    {% assign instagram_username = site.instagram_username
+      | remove_first: "@"
+      | strip
+    %}
+    {% assign instagram_link = "https://www.instagram.com/"
+      | append: instagram_username
+    %}
+  {% endif %}
+{% endif %}
+
+{% assign telegram_link = site.telegram_url %}
+{% if telegram_link == nil or telegram_link == empty %}
+  {% if site.telegram_username %}
+    {% assign telegram_username = site.telegram_username
+      | remove_first: "@"
+      | strip
+    %}
+    {% assign telegram_link = "https://t.me/"
+      | append: telegram_username
+    %}
+  {% endif %}
+{% endif %}
 
 <div class="about-content">
 
@@ -30,8 +61,8 @@ custom_css:
 
             <img
               class="about-hero__image"
-              src="{{ site.author.image | default: '/assets/images/uploads/about-author.jpg' | relative_url }}"
-              alt="تصویر {{ site.author.name | default: site.title | escape }}"
+              src="{{ author_image | relative_url }}"
+              alt="تصویر {{ author_name | escape }}"
               width="640"
               height="760"
               loading="eager"
@@ -47,7 +78,6 @@ custom_css:
 
         </div>
 
-
         <!-- متن معرفی -->
 
         <div class="about-hero__content">
@@ -62,7 +92,7 @@ custom_css:
           >
             سلام، من
             <span class="about-hero__name">
-              {{ site.author.name | default: site.title }}
+              {{ author_name | escape }}
             </span>
             هستم.
           </h1>
@@ -79,91 +109,67 @@ custom_css:
             انتقال مفاهیم تخصصی به زبانی روشن و قابل‌فهم است.
           </p>
 
-
           <!-- شبکه‌های اجتماعی -->
 
-          <nav
-            class="social-links about-hero__socials"
-            aria-label="راه‌های ارتباطی"
-          >
+          {% if instagram_link or telegram_link or contact_email %}
 
-            {% if site.instagram_url %}
+            <nav
+              class="social-links about-hero__socials"
+              aria-label="راه‌های ارتباطی"
+            >
 
-              <a
-                class="social-link"
-                href="{{ site.instagram_url }}"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="اینستاگرام"
-              >
-                <span aria-hidden="true">Instagram</span>
-              </a>
+              {% if instagram_link %}
 
-            {% elsif site.instagram_username %}
+                <a
+                  class="social-link"
+                  href="{{ instagram_link | escape }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="مشاهده صفحه اینستاگرام {{ author_name | escape }}"
+                  title="اینستاگرام"
+                >
+                  <span aria-hidden="true">
+                    Instagram
+                  </span>
+                </a>
 
-              <a
-                class="social-link"
-                href="https://www.instagram.com/{{ site.instagram_username }}"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="اینستاگرام"
-              >
-                <span aria-hidden="true">Instagram</span>
-              </a>
+              {% endif %}
 
-            {% endif %}
+              {% if telegram_link %}
 
+                <a
+                  class="social-link"
+                  href="{{ telegram_link | escape }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="ارتباط با {{ author_name | escape }} در تلگرام"
+                  title="تلگرام"
+                >
+                  <span aria-hidden="true">
+                    Telegram
+                  </span>
+                </a>
 
-            {% if site.telegram_url %}
+              {% endif %}
 
-              <a
-                class="social-link"
-                href="{{ site.telegram_url }}"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="تلگرام"
-              >
-                <span aria-hidden="true">Telegram</span>
-              </a>
+              {% if contact_email %}
 
-            {% elsif site.telegram_username %}
+                <a
+                  class="social-link"
+                  href="mailto:{{ contact_email | strip | escape }}"
+                  aria-label="ارسال ایمیل به {{ author_name | escape }}"
+                  title="ایمیل"
+                >
+                  <span aria-hidden="true">
+                    Email
+                  </span>
+                </a>
 
-              <a
-                class="social-link"
-                href="https://t.me/{{ site.telegram_username }}"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="تلگرام"
-              >
-                <span aria-hidden="true">Telegram</span>
-              </a>
+              {% endif %}
 
-            {% endif %}
+            </nav>
 
-
-            {% if site.email %}
-
-              <a
-                class="social-link"
-                href="mailto:{{ site.email }}"
-                aria-label="ارسال ایمیل"
-              >
-                <span aria-hidden="true">Email</span>
-              </a>
-
-            {% elsif site.author.email %}
-
-              <a
-                class="social-link"
-                href="mailto:{{ site.author.email }}"
-                aria-label="ارسال ایمیل"
-              >
-                <span aria-hidden="true">Email</span>
-              </a>
-
-            {% endif %}
-
-          </nav>
+          {% endif %}
 
         </div>
 
@@ -171,7 +177,6 @@ custom_css:
 
     </div>
   </section>
-
 
   <!-- ==========================================
        داستان و مسیر من
@@ -183,7 +188,7 @@ custom_css:
   >
     <div class="container">
 
-      <div class="section-heading">
+      <header class="section-heading">
 
         <p class="eyebrow">
           داستان من
@@ -196,8 +201,7 @@ custom_css:
           پژوهش، یادگیری و روایت تجربه‌ها
         </h2>
 
-      </div>
-
+      </header>
 
       <div class="about-story__grid">
 
@@ -210,7 +214,6 @@ custom_css:
           </p>
 
         </div>
-
 
         <div class="about-story__content">
 
@@ -240,7 +243,6 @@ custom_css:
     </div>
   </section>
 
-
   <!-- ==========================================
        زمینه‌های فعالیت
   =========================================== -->
@@ -251,7 +253,7 @@ custom_css:
   >
     <div class="container">
 
-      <div class="section-heading">
+      <header class="section-heading">
 
         <p class="eyebrow">
           زمینه‌های فعالیت
@@ -269,8 +271,7 @@ custom_css:
           فناوری، نگارش و تولید محتوای تخصصی را شامل می‌شود.
         </p>
 
-      </div>
-
+      </header>
 
       <div class="about-expertise__grid">
 
@@ -282,7 +283,7 @@ custom_css:
             class="expertise-card__number"
             aria-hidden="true"
           >
-            01
+            ۰۱
           </span>
 
           <h3 class="expertise-card__title">
@@ -296,7 +297,6 @@ custom_css:
 
         </article>
 
-
         <!-- هیدروژل -->
 
         <article class="expertise-card">
@@ -305,7 +305,7 @@ custom_css:
             class="expertise-card__number"
             aria-hidden="true"
           >
-            02
+            ۰۲
           </span>
 
           <h3 class="expertise-card__title">
@@ -319,7 +319,6 @@ custom_css:
 
         </article>
 
-
         <!-- نانوسلولز -->
 
         <article class="expertise-card">
@@ -328,7 +327,7 @@ custom_css:
             class="expertise-card__number"
             aria-hidden="true"
           >
-            03
+            ۰۳
           </span>
 
           <h3 class="expertise-card__title">
@@ -342,7 +341,6 @@ custom_css:
 
         </article>
 
-
         <!-- نگارش علمی -->
 
         <article class="expertise-card">
@@ -351,7 +349,7 @@ custom_css:
             class="expertise-card__number"
             aria-hidden="true"
           >
-            04
+            ۰۴
           </span>
 
           <h3 class="expertise-card__title">
@@ -370,7 +368,6 @@ custom_css:
     </div>
   </section>
 
-
   <!-- ==========================================
        ارزش‌ها و رویکرد کاری
   =========================================== -->
@@ -383,7 +380,7 @@ custom_css:
 
       <div class="about-values__layout">
 
-        <div class="section-heading">
+        <header class="section-heading">
 
           <p class="eyebrow">
             رویکرد من
@@ -401,8 +398,7 @@ custom_css:
             بلکه روش رسیدن به آن نتیجه نیز اهمیت دارد.
           </p>
 
-        </div>
-
+        </header>
 
         <div class="about-values__list">
 
@@ -428,7 +424,6 @@ custom_css:
 
           </article>
 
-
           <article class="value-item">
 
             <span
@@ -450,7 +445,6 @@ custom_css:
             </div>
 
           </article>
-
 
           <article class="value-item">
 
@@ -481,7 +475,6 @@ custom_css:
     </div>
   </section>
 
-
   <!-- ==========================================
        نقل‌قول
   =========================================== -->
@@ -495,15 +488,17 @@ custom_css:
       <figure class="about-quote__box">
 
         <blockquote class="about-quote__text">
+
           <p>
             «دانش زمانی ارزش بیشتری پیدا می‌کند که بتوان آن را
             با دقت آموخت، با تجربه آزمود و به زبانی روشن با
             دیگران به اشتراک گذاشت.»
           </p>
+
         </blockquote>
 
         <figcaption class="about-quote__caption">
-          {{ site.author.name | default: site.title }}
+          {{ author_name | escape }}
         </figcaption>
 
       </figure>
@@ -511,12 +506,12 @@ custom_css:
     </div>
   </section>
 
-
   <!-- ==========================================
        دعوت به ارتباط
   =========================================== -->
 
   <section
+    id="contact"
     class="about-section about-contact"
     aria-labelledby="contact-title"
   >
@@ -545,22 +540,31 @@ custom_css:
 
         </div>
 
-
         <div class="about-contact__actions">
-
-          {% assign contact_email = site.email | default: site.author.email %}
 
           {% if contact_email %}
 
             <a
               class="about-button about-button--primary"
-              href="mailto:{{ contact_email }}"
+              href="mailto:{{ contact_email | strip | escape }}"
             >
               ارسال ایمیل
             </a>
 
           {% endif %}
 
+          {% if telegram_link %}
+
+            <a
+              class="about-button about-button--secondary"
+              href="{{ telegram_link | escape }}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ارتباط در تلگرام
+            </a>
+
+          {% endif %}
 
           <a
             class="about-button about-button--secondary"
