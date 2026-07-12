@@ -1,0 +1,53 @@
+<footer class="site-footer">
+  <div class="container footer-inner">
+
+    <div class="footer-about">
+      <a class="footer-logo" href="{{ '/' | relative_url }}">
+        {{ site.title | default: "وبلاگ من" }}
+      </a>
+
+      <p class="footer-description">
+        یادداشت‌ها، مقاله‌ها و مطالبی درباره علم، فرهنگ و زندگی.
+      </p>
+    </div>
+
+    <nav class="footer-nav" aria-label="پیوندهای فوتر">
+      <a href="{{ '/' | relative_url }}">خانه</a>
+      <a href="{{ '/archive/' | relative_url }}">آرشیو</a>
+      <a href="{{ '/about/' | relative_url }}">درباره من</a>
+    </nav>
+
+    <div class="footer-social">
+      {% if site.instagram_username %}
+        <a
+          href="https://instagram.com/{{ site.instagram_username }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="اینستاگرام"
+        >
+          اینستاگرام
+        </a>
+      {% endif %}
+
+      {% if site.telegram_username %}
+        <a
+          href="https://t.me/{{ site.telegram_username }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="تلگرام"
+        >
+          تلگرام
+        </a>
+      {% endif %}
+    </div>
+
+  </div>
+
+  <div class="container footer-bottom">
+    <p>
+      &copy; {{ 'now' | date: '%Y' }}
+      {{ site.title | default: "وبلاگ من" }}.
+      تمامی حقوق محفوظ است.
+    </p>
+  </div>
+</footer>
