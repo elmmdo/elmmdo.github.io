@@ -1,13 +1,206 @@
-<header class="site-header">
-  <div class="container">
-    <a class="site-logo" href="{{ '/' | relative_url }}">
-      {{ site.title | default: "وبلاگ من" }}
+<header class="site-header" id="siteHeader">
+  <div class="container header-row">
+
+    <a
+      class="brand header-brand"
+      href="{{ '/' | relative_url }}"
+      aria-label="صفحه اصلی {{ site.title | default: 'روایت' }}"
+    >
+      <span class="brand-mark" aria-hidden="true">ر</span>
+
+      <span class="brand-content">
+        <strong>{{ site.title | default: "روایت" }}</strong>
+        <small>{{ site.tagline | default: "تجربه، یادگیری و زندگی" }}</small>
+      </span>
     </a>
 
-    <nav class="site-nav" aria-label="منوی اصلی">
+    <nav
+      class="desktop-nav"
+      id="mainMenu"
+      aria-label="منوی اصلی"
+    >
       <a href="{{ '/' | relative_url }}">خانه</a>
       <a href="{{ '/archive/' | relative_url }}">آرشیو</a>
+      <a href="{{ '/categories/' | relative_url }}">دسته‌بندی‌ها</a>
+      <a href="{{ '/tags/' | relative_url }}">برچسب‌ها</a>
       <a href="{{ '/about/' | relative_url }}">درباره من</a>
     </nav>
+
+    <div class="header-actions">
+
+      <button
+        class="icon-button theme-toggle"
+        id="themeButton"
+        type="button"
+        aria-label="فعال‌کردن حالت تاریک"
+        aria-pressed="false"
+        title="تغییر پوسته"
+      >
+        <span id="themeIcon" aria-hidden="true">☾</span>
+      </button>
+
+      <button
+        class="icon-button search-button"
+        id="searchButton"
+        type="button"
+        aria-label="بازکردن جست‌وجو"
+        aria-expanded="false"
+        aria-controls="searchPanel"
+        title="جست‌وجو"
+      >
+        <span aria-hidden="true">⌕</span>
+      </button>
+
+      <button
+        class="menu-button"
+        id="menuButton"
+        type="button"
+        aria-label="بازکردن منوی اصلی"
+        aria-expanded="false"
+        aria-controls="mobileMenu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </div>
+
   </div>
 </header>
+
+<div
+  class="page-overlay"
+  id="pageOverlay"
+  aria-hidden="true"
+></div>
+
+<aside
+  class="mobile-menu"
+  id="mobileMenu"
+  aria-label="منوی موبایل"
+  aria-hidden="true"
+>
+  <div class="mobile-menu-header">
+
+    <a
+      class="brand"
+      href="{{ '/' | relative_url }}"
+      aria-label="صفحه اصلی {{ site.title | default: 'روایت' }}"
+    >
+      <span class="brand-mark" aria-hidden="true">ر</span>
+
+      <span class="brand-content">
+        <strong>{{ site.title | default: "روایت" }}</strong>
+        <small>{{ site.tagline | default: "وبلاگ شخصی" }}</small>
+      </span>
+    </a>
+
+    <button
+      class="close-button"
+      id="closeMenuButton"
+      type="button"
+      aria-label="بستن منو"
+    >
+      ×
+    </button>
+
+  </div>
+
+  <nav class="mobile-nav" aria-label="دسترسی موبایل">
+    <a href="{{ '/' | relative_url }}">خانه</a>
+    <a href="{{ '/archive/' | relative_url }}">آرشیو</a>
+    <a href="{{ '/categories/' | relative_url }}">دسته‌بندی‌ها</a>
+    <a href="{{ '/tags/' | relative_url }}">برچسب‌ها</a>
+    <a href="{{ '/about/' | relative_url }}">درباره من</a>
+  </nav>
+
+  <div class="mobile-menu-footer">
+    <p>
+      {{ site.description | default: "یادداشت‌هایی درباره چیزهایی که تجربه می‌کنم، می‌آموزم و دوست دارم به خاطر بسپارم." }}
+    </p>
+
+    <div class="social-links">
+      {% if site.instagram_username %}
+        <a
+          href="https://instagram.com/{{ site.instagram_username }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="اینستاگرام {{ site.title | default: 'روایت' }}"
+        >
+          in
+        </a>
+      {% endif %}
+
+      {% if site.telegram_username %}
+        <a
+          href="https://t.me/{{ site.telegram_username }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="تلگرام {{ site.title | default: 'روایت' }}"
+        >
+          tg
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</aside>
+
+<section
+  class="search-panel"
+  id="searchPanel"
+  role="dialog"
+  aria-modal="true"
+  aria-hidden="true"
+  aria-labelledby="searchPanelTitle"
+>
+  <div class="search-dialog">
+
+    <button
+      class="close-button search-close"
+      id="closeSearchButton"
+      type="button"
+      aria-label="بستن جست‌وجو"
+    >
+      ×
+    </button>
+
+    <span class="eyebrow">جست‌وجو در {{ site.title | default: "روایت" }}</span>
+
+    <h2 id="searchPanelTitle">دنبال چه چیزی می‌گردید؟</h2>
+
+    <p>عنوان، موضوع یا واژه موردنظر خود را وارد کنید.</p>
+
+    <form
+      class="search-form"
+      id="searchForm"
+      role="search"
+    >
+      <label class="sr-only" for="searchInput">عبارت موردنظر</label>
+
+      <input
+        id="searchInput"
+        name="query"
+        type="search"
+        placeholder="مثلاً نوشتن، تمرکز یا یادگیری..."
+        autocomplete="off"
+      >
+
+      <button type="submit">جست‌وجو</button>
+    </form>
+
+    <p
+      class="search-message"
+      id="searchMessage"
+      aria-live="polite"
+    ></p>
+
+    <div
+      class="search-results"
+      id="searchResults"
+      aria-live="polite"
+    ></div>
+
+  </div>
+</section>
+
