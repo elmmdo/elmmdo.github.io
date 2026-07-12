@@ -17,7 +17,7 @@ permalink: /about/
 
         <h1>
           سلام، من
-          <span>نام شما</span>
+          <span> امیر </span>
           هستم
         </h1>
 
