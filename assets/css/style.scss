@@ -3935,3 +3935,21 @@ body.dark-theme .about-social-links a:hover {
   }
 }
 
+.skip-link {
+  position: fixed;
+  top: 0;
+  right: 1rem;
+  z-index: 9999;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  background: #123f35;
+  border-radius: 0 0 8px 8px;
+
+  transform: translateY(-120%);
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
