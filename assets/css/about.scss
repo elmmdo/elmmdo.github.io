@@ -1,1196 +1,630 @@
-/* =========================================================
-   ABOUT PAGE
-   File: assets/css/about.css
-   ========================================================= */
+---
+---
 
-
-/* =========================================================
-   1. متغیرهای اختصاصی صفحه
-   ========================================================= */
+/* ==========================================
+   About Page - Light Mode Only
+   Path: assets/css/about.scss
+========================================== */
 
 .about-page {
-  --about-bg: var(--color-background, #f7f4ee);
-  --about-surface: var(--color-surface, #ffffff);
-  --about-surface-soft: var(--color-surface-soft, #f0ebe2);
+  --about-bg: #ffffff;
+  --about-soft-bg: #f6f8f5;
+  --about-text: #23342d;
+  --about-muted: #66746d;
+  --about-heading: #172c24;
+  --about-primary: #1f6b55;
+  --about-primary-dark: #163f33;
+  --about-accent: #d8a24f;
+  --about-border: #e1e8e3;
+  --about-card: #ffffff;
 
-  --about-text: var(--color-text, #1c1b19);
-  --about-text-soft: var(--color-text-secondary, #68645e);
-  --about-heading: var(--color-heading, #12110f);
-
-  --about-primary: var(--color-primary, #d75f3f);
-  --about-primary-dark: var(--color-primary-dark, #b84429);
-  --about-primary-soft: rgba(215, 95, 63, 0.12);
-
-  --about-border: var(--color-border, rgba(28, 27, 25, 0.13));
-  --about-border-strong: rgba(28, 27, 25, 0.22);
-
-  --about-shadow-small:
-    0 12px 30px rgba(31, 27, 22, 0.07);
-
-  --about-shadow-large:
-    0 24px 65px rgba(31, 27, 22, 0.13);
-
-  --about-radius-small: 12px;
-  --about-radius-medium: 20px;
-  --about-radius-large: 32px;
-
-  --about-transition:
-    220ms cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-
-
-/* =========================================================
-   2. تنظیمات عمومی صفحه
-   ========================================================= */
-.about-content {
   direction: rtl;
-  text-align: right;
-}
-
-.about-page #main-content {
-  overflow: hidden;
-}
-
-.about-content {
-  width: 100%;
+  background: var(--about-bg);
   color: var(--about-text);
-  background-color: var(--about-bg);
+  overflow-x: hidden;
 }
 
-.about-content,
-.about-content *,
-.about-content *::before,
-.about-content *::after {
+.about-page * {
   box-sizing: border-box;
 }
 
-.about-content img {
-  display: block;
-  max-width: 100%;
-}
-
-.about-content a {
-  color: inherit;
-}
-
-.about-content p {
-  margin-top: 0;
-}
-
-.about-content .container {
-  width: min(100% - 40px, 1200px);
+.about-container {
+  width: min(1120px, calc(100% - 40px));
   margin-inline: auto;
 }
 
-.about-section {
-  position: relative;
-  padding-block: clamp(72px, 9vw, 132px);
-}
-
-
-/* =========================================================
-   3. عنوان کوچک بالای بخش‌ها
-   ========================================================= */
-
-.about-content .eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  margin: 0 0 18px;
-
-  color: var(--about-primary);
-
-  font-size: 0.78rem;
-  font-weight: 800;
-  line-height: 1.5;
-  letter-spacing: 0.08em;
-}
-
-.about-content .eyebrow::before {
-  width: 32px;
-  height: 2px;
-  flex: 0 0 auto;
-
-  background-color: currentColor;
-  border-radius: 999px;
-
-  content: "";
-}
-
-
-/* =========================================================
-   4. عنوان عمومی بخش‌ها
-   ========================================================= */
-
-.about-content .section-heading {
-  max-width: 720px;
-  margin-bottom: clamp(38px, 6vw, 70px);
-}
-
-.about-content .section-heading__title {
-  max-width: 680px;
-  margin: 0;
-
-  color: var(--about-heading);
-
-  font-size: clamp(2rem, 4.8vw, 4.25rem);
-  font-weight: 800;
-  line-height: 1.13;
-  letter-spacing: -0.035em;
-}
-
-.about-content .section-heading__description {
-  max-width: 620px;
-  margin: 22px 0 0;
-
-  color: var(--about-text-soft);
-
-  font-size: clamp(1rem, 1.4vw, 1.16rem);
-  line-height: 2;
-}
-
-
-/* =========================================================
-   5. بخش معرفی اصلی
-   ========================================================= */
+/* Hero */
 
 .about-hero {
   position: relative;
-  isolation: isolate;
-  padding-block: clamp(65px, 9vw, 125px);
+  padding: 90px 0 85px;
+  overflow: hidden;
+}
 
-  background:
-    radial-gradient(
-      circle at 10% 10%,
-      var(--about-primary-soft),
-      transparent 36%
-    ),
-    var(--about-bg);
+.about-hero::before {
+  content: "";
+  position: absolute;
+  top: -170px;
+  right: -170px;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: rgba(31, 107, 85, 0.08);
 }
 
 .about-hero::after {
-  position: absolute;
-  z-index: -1;
-  top: 12%;
-  inset-inline-end: -130px;
-
-  width: 330px;
-  height: 330px;
-
-  border: 1px solid var(--about-border);
-  border-radius: 50%;
-
   content: "";
-  pointer-events: none;
+  position: absolute;
+  bottom: -230px;
+  left: -190px;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: rgba(216, 162, 79, 0.12);
 }
 
-.about-hero__grid {
+.about-hero-grid {
+  position: relative;
+  z-index: 1;
   display: grid;
-  grid-template-columns: minmax(280px, 0.9fr) minmax(420px, 1.1fr);
-  gap: clamp(50px, 8vw, 110px);
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.75fr);
   align-items: center;
+  gap: 80px;
 }
 
-
-/* تصویر */
-
-.about-hero__media {
-  position: relative;
+.about-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--about-accent);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0;
 }
 
-.about-hero__image-wrapper {
-  position: relative;
-  isolation: isolate;
-  max-width: 510px;
-  margin-inline: auto;
-}
-
-.about-hero__image-wrapper::before {
-  position: absolute;
-  z-index: -2;
-  top: -24px;
-  inset-inline-start: -24px;
-
-  width: 58%;
-  height: 46%;
-
-  background:
-    repeating-linear-gradient(
-      -45deg,
-      transparent 0,
-      transparent 8px,
-      var(--about-primary) 8px,
-      var(--about-primary) 10px
-    );
-
-  border-radius: var(--about-radius-large);
-
+.about-eyebrow::before {
   content: "";
-  opacity: 0.38;
+  width: 34px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
 }
 
-.about-hero__image {
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-  object-position: center;
-
-  background-color: var(--about-surface-soft);
-  border-radius:
-    var(--about-radius-large)
-    var(--about-radius-large)
-    120px
-    var(--about-radius-large);
-
-  box-shadow: var(--about-shadow-large);
-}
-
-.about-hero__image-decoration {
-  position: absolute;
-  z-index: -1;
-  right: auto;
-  bottom: -25px;
-  inset-inline-end: -30px;
-
-  width: 48%;
-  aspect-ratio: 1;
-
-  background-color: var(--about-primary);
-  border-radius: 50%;
-
-  opacity: 0.92;
-}
-
-
-/* محتوای معرفی */
-
-.about-hero__content {
-  position: relative;
-}
-
-.about-hero__title {
-  max-width: 760px;
-  margin: 0;
-
+.about-hero-content h1 {
+  margin: 18px 0 22px;
   color: var(--about-heading);
-
-  font-size: clamp(2.65rem, 6vw, 6.15rem);
-  font-weight: 850;
-  line-height: 1.08;
+  font-size: clamp(2.4rem, 5vw, 4.8rem);
+  font-weight: 900;
+  line-height: 1.35;
   letter-spacing: -0.05em;
 }
 
-.about-hero__name {
+.about-hero-content h1 span {
   position: relative;
-  display: inline;
   color: var(--about-primary);
+  white-space: nowrap;
 }
 
-.about-hero__name::after {
-  position: absolute;
-  z-index: -1;
-  right: 0;
-  bottom: 0.06em;
-  left: 0;
-
-  height: 0.2em;
-
-  background-color: var(--about-primary-soft);
-  border-radius: 999px;
-
+.about-hero-content h1 span::after {
   content: "";
+  position: absolute;
+  right: 0;
+  bottom: 3px;
+  z-index: -1;
+  width: 100%;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(216, 162, 79, 0.38);
 }
 
-.about-hero__lead {
-  max-width: 700px;
-  margin: clamp(28px, 4vw, 42px) 0 0;
-
-  color: var(--about-text);
-
-  font-size: clamp(1.13rem, 1.7vw, 1.42rem);
-  font-weight: 600;
-  line-height: 1.95;
-}
-
-.about-hero__description {
-  max-width: 680px;
-  margin: 18px 0 0;
-
-  color: var(--about-text-soft);
-
-  font-size: clamp(0.98rem, 1.35vw, 1.1rem);
+.about-lead {
+  margin: 0 0 18px;
+  color: var(--about-heading);
+  font-size: 1.12rem;
+  font-weight: 700;
   line-height: 2;
 }
 
+.about-hero-content p:not(.about-lead) {
+  max-width: 680px;
+  margin: 0;
+  color: var(--about-muted);
+  font-size: 1rem;
+  line-height: 2.1;
+}
 
-/* =========================================================
-   6. شبکه‌های اجتماعی
-   ========================================================= */
-
-.about-hero__socials {
+.about-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 34px;
+  margin-top: 32px;
 }
 
-.about-hero__socials .social-link {
+.about-primary-btn,
+.about-secondary-btn {
   display: inline-flex;
-  min-height: 46px;
+  min-height: 50px;
   align-items: center;
   justify-content: center;
-  padding: 10px 17px;
-
-  color: var(--about-heading);
-  background-color: var(--about-surface);
-
-  border: 1px solid var(--about-border);
-  border-radius: 999px;
-
-  font-size: 0.82rem;
-  font-weight: 750;
-  line-height: 1;
+  padding: 12px 24px;
+  border-radius: 15px;
+  font-size: 0.92rem;
+  font-weight: 800;
   text-decoration: none;
-
-  box-shadow: var(--about-shadow-small);
-
-  transition:
-    color var(--about-transition),
-    background-color var(--about-transition),
-    border-color var(--about-transition),
-    transform var(--about-transition),
-    box-shadow var(--about-transition);
+  transition: 0.2s ease;
 }
 
-.about-hero__socials .social-link:hover {
+.about-primary-btn {
   color: #ffffff;
-  background-color: var(--about-primary);
+  background: var(--about-primary-dark);
+  box-shadow: 0 16px 34px rgba(22, 63, 51, 0.18);
+}
+
+.about-primary-btn:hover {
+  color: #ffffff;
+  background: var(--about-primary);
+  transform: translateY(-2px);
+}
+
+.about-secondary-btn {
+  color: var(--about-primary-dark);
+  border: 1px solid var(--about-border);
+  background: #ffffff;
+}
+
+.about-secondary-btn:hover {
+  color: var(--about-primary-dark);
   border-color: var(--about-primary);
-
-  box-shadow:
-    0 12px 28px rgba(215, 95, 63, 0.24);
-
-  transform: translateY(-3px);
+  transform: translateY(-2px);
 }
 
-.about-hero__socials .social-link:focus-visible {
-  outline: 3px solid var(--about-primary-soft);
-  outline-offset: 3px;
+/* Image */
+
+.about-hero-image {
+  position: relative;
+  justify-self: end;
+  width: min(100%, 430px);
 }
 
-
-/* =========================================================
-   7. بخش داستان من
-   ========================================================= */
-
-.about-story {
-  background-color: var(--about-surface);
+.about-image-frame {
+  position: relative;
+  border-radius: 32px 32px 95px 32px;
+  padding: 10px;
+  background: #ffffff;
+  box-shadow: 0 26px 65px rgba(22, 63, 51, 0.15);
 }
 
-.about-story__grid {
+.about-image-frame::before {
+  content: "";
+  position: absolute;
+  inset: -20px 24px 24px -20px;
+  z-index: -1;
+  border: 2px solid rgba(31, 107, 85, 0.18);
+  border-radius: 32px;
+}
+
+.about-image-frame img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 0.82;
+  object-fit: cover;
+  border-radius: 24px 24px 82px 24px;
+}
+
+.about-floating-card {
+  position: absolute;
+  right: -42px;
+  bottom: 42px;
+  width: 235px;
+  padding: 17px 18px;
+  border: 1px solid rgba(225, 232, 227, 0.95);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 18px 42px rgba(22, 63, 51, 0.14);
+  backdrop-filter: blur(12px);
+}
+
+.about-floating-card strong {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--about-heading);
+  font-size: 0.92rem;
+}
+
+.about-floating-card span {
+  display: block;
+  color: var(--about-muted);
+  font-size: 0.78rem;
+  line-height: 1.8;
+}
+
+/* Sections */
+
+.about-section {
+  padding: 90px 0;
+}
+
+.about-soft-section {
+  background: var(--about-soft-bg);
+}
+
+.about-two-columns {
   display: grid;
-  grid-template-columns: minmax(280px, 0.85fr) minmax(400px, 1.15fr);
-  gap: clamp(42px, 8vw, 105px);
+  grid-template-columns: minmax(240px, 0.55fr) minmax(0, 1.45fr);
+  gap: 80px;
   align-items: start;
 }
 
-.about-story__intro {
-  position: relative;
-  padding-inline-start: 30px;
+.about-section-title {
+  position: sticky;
+  top: 90px;
 }
 
-.about-story__intro::before {
-  position: absolute;
-  top: 7px;
-  bottom: 7px;
-  inset-inline-start: 0;
-
-  width: 4px;
-
-  background-color: var(--about-primary);
-  border-radius: 999px;
-
-  content: "";
-}
-
-.about-story__highlight {
-  margin: 0;
-
+.about-section-title h2,
+.about-centered-heading h2 {
+  margin: 14px 0 0;
   color: var(--about-heading);
-
-  font-size: clamp(1.4rem, 2.6vw, 2.15rem);
-  font-weight: 750;
-  line-height: 1.7;
-  letter-spacing: -0.025em;
+  font-size: clamp(2rem, 3.5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.45;
+  letter-spacing: -0.04em;
 }
 
-.about-story__content {
-  color: var(--about-text-soft);
-  font-size: clamp(1rem, 1.35vw, 1.12rem);
+.about-text {
+  color: var(--about-muted);
+  font-size: 1rem;
   line-height: 2.15;
 }
 
-.about-story__content p {
-  margin-bottom: 24px;
+.about-text p {
+  margin: 0 0 23px;
 }
 
-.about-story__content p:last-child {
-  margin-bottom: 0;
-}
-
-
-/* =========================================================
-   8. کارت‌های زمینه فعالیت
-   ========================================================= */
-
-.about-expertise {
-  background-color: var(--about-bg);
-}
-
-.about-expertise__grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 22px;
-}
-
-.expertise-card {
+.about-text blockquote {
   position: relative;
-  overflow: hidden;
-  min-height: 310px;
-  padding: clamp(28px, 4vw, 48px);
-
-  background-color: var(--about-surface);
-  border: 1px solid var(--about-border);
-  border-radius: var(--about-radius-medium);
-
-  box-shadow: var(--about-shadow-small);
-
-  transition:
-    border-color var(--about-transition),
-    transform var(--about-transition),
-    box-shadow var(--about-transition);
-}
-
-.expertise-card::after {
-  position: absolute;
-  right: auto;
-  bottom: -70px;
-  inset-inline-end: -70px;
-
-  width: 175px;
-  height: 175px;
-
-  background-color: var(--about-primary-soft);
-  border-radius: 50%;
-
-  content: "";
-  transition: transform 450ms ease;
-}
-
-.expertise-card:hover {
-  border-color: rgba(215, 95, 63, 0.38);
-
-  box-shadow: var(--about-shadow-large);
-  transform: translateY(-7px);
-}
-
-.expertise-card:hover::after {
-  transform: scale(1.25);
-}
-
-.expertise-card__number {
-  display: inline-flex;
-  margin-bottom: clamp(45px, 7vw, 78px);
-
-  color: var(--about-primary);
-
-  font-size: 0.9rem;
+  margin: 36px 0;
+  padding: 26px 30px 26px 24px;
+  border-right: 4px solid var(--about-accent);
+  border-radius: 18px 0 0 18px;
+  color: #27483d;
+  background: #f4f8f5;
+  font-size: 1.1rem;
   font-weight: 800;
-  line-height: 1;
-  letter-spacing: 0.09em;
-}
-
-.expertise-card__title {
-  position: relative;
-  z-index: 1;
-  margin: 0 0 16px;
-
-  color: var(--about-heading);
-
-  font-size: clamp(1.35rem, 2vw, 1.75rem);
-  font-weight: 800;
-  line-height: 1.4;
-}
-
-.expertise-card__description {
-  position: relative;
-  z-index: 1;
-  max-width: 490px;
-  margin: 0;
-
-  color: var(--about-text-soft);
-
-  font-size: 1rem;
   line-height: 2;
 }
 
+.about-centered-heading {
+  max-width: 760px;
+  margin: 0 auto 44px;
+  text-align: center;
+}
 
-/* =========================================================
-   9. ارزش‌ها و رویکرد کاری
-   ========================================================= */
+.about-centered-heading .about-eyebrow {
+  justify-content: center;
+}
+
+.about-centered-heading p {
+  margin: 16px auto 0;
+  color: var(--about-muted);
+  line-height: 2;
+}
+
+/* Cards */
+
+.about-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.about-card {
+  position: relative;
+  min-height: 285px;
+  padding: 30px 25px;
+  border: 1px solid var(--about-border);
+  border-radius: 24px;
+  background: var(--about-card);
+  overflow: hidden;
+  transition: 0.2s ease;
+}
+
+.about-card:hover {
+  border-color: rgba(31, 107, 85, 0.35);
+  box-shadow: 0 18px 42px rgba(22, 63, 51, 0.08);
+  transform: translateY(-5px);
+}
+
+.about-card::after {
+  content: "";
+  position: absolute;
+  right: -42px;
+  bottom: -55px;
+  width: 135px;
+  height: 135px;
+  border: 18px solid rgba(31, 107, 85, 0.045);
+  border-radius: 50%;
+}
+
+.about-card-number {
+  display: inline-flex;
+  margin-bottom: 46px;
+  color: var(--about-accent);
+  font-size: 0.84rem;
+  font-weight: 900;
+}
+
+.about-card h3 {
+  margin: 0 0 12px;
+  color: var(--about-heading);
+  font-size: 1.08rem;
+  font-weight: 900;
+}
+
+.about-card p {
+  margin: 0;
+  color: var(--about-muted);
+  font-size: 0.9rem;
+  line-height: 1.95;
+}
+
+/* Values */
 
 .about-values {
-  color: #ffffff;
-  background-color: #171614;
-}
-
-.about-values__layout {
-  display: grid;
-  grid-template-columns: minmax(280px, 0.85fr) minmax(400px, 1.15fr);
-  gap: clamp(50px, 9vw, 120px);
-  align-items: start;
-}
-
-.about-values .section-heading {
-  position: sticky;
-  top: 120px;
-  margin-bottom: 0;
-}
-
-.about-values .section-heading__title {
-  color: #ffffff;
-}
-
-.about-values .section-heading__description {
-  color: rgba(255, 255, 255, 0.64);
-}
-
-.about-values__list {
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
-}
-
-.value-item {
-  display: grid;
-  grid-template-columns: 22px minmax(0, 1fr);
-  gap: 24px;
-  padding-block: clamp(30px, 5vw, 48px);
-
-  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
-}
-
-.value-item__marker {
-  width: 11px;
-  height: 11px;
-  margin-top: 10px;
-
-  background-color: var(--about-primary);
-  border-radius: 50%;
-
-  box-shadow:
-    0 0 0 7px rgba(215, 95, 63, 0.13);
-}
-
-.value-item__title {
-  margin: 0 0 13px;
-
-  color: #ffffff;
-
-  font-size: clamp(1.3rem, 2vw, 1.75rem);
-  font-weight: 800;
-  line-height: 1.4;
-}
-
-.value-item__description {
-  max-width: 590px;
-  margin: 0;
-
-  color: rgba(255, 255, 255, 0.65);
-
-  font-size: 1rem;
-  line-height: 2;
-}
-
-
-/* =========================================================
-   10. نقل‌قول
-   ========================================================= */
-
-.about-quote {
-  background-color: var(--about-surface);
-}
-
-.about-quote__box {
-  position: relative;
-  max-width: 990px;
-  margin: 0 auto;
-  padding: clamp(45px, 8vw, 95px);
-
-  text-align: center;
-
-  background-color: var(--about-bg);
-  border: 1px solid var(--about-border);
-  border-radius: var(--about-radius-large);
-}
-
-.about-quote__box::before {
-  display: block;
-  margin-bottom: 16px;
-
-  color: var(--about-primary);
-
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(5rem, 10vw, 8rem);
-  line-height: 0.55;
-
-  content: "“";
-}
-
-.about-quote__text {
-  margin: 0;
-}
-
-.about-quote__text p {
-  max-width: 830px;
-  margin: 0 auto;
-
-  color: var(--about-heading);
-
-  font-size: clamp(1.45rem, 3.15vw, 2.65rem);
-  font-weight: 720;
-  line-height: 1.75;
-  letter-spacing: -0.025em;
-}
-
-.about-quote__caption {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 11px;
-  margin-top: 30px;
-
-  color: var(--about-text-soft);
-
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-.about-quote__caption::before {
-  width: 25px;
-  height: 2px;
-
-  background-color: var(--about-primary);
-  border-radius: 999px;
-
-  content: "";
-}
-
-
-/* =========================================================
-   11. بخش ارتباط
-   ========================================================= */
-
-.about-contact {
-  padding-top: 0;
-  background-color: var(--about-surface);
-}
-
-.about-contact__box {
-  position: relative;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 45px;
-  align-items: center;
-  padding: clamp(38px, 7vw, 80px);
-
-  color: #ffffff;
-  background:
-    linear-gradient(
-      135deg,
-      #292522 0%,
-      #171614 100%
-    );
-
-  border-radius: var(--about-radius-large);
-}
-
-.about-contact__box::after {
-  position: absolute;
-  right: auto;
-  top: -100px;
-  inset-inline-end: -80px;
-
-  width: 310px;
-  height: 310px;
-
-  border: 65px solid rgba(215, 95, 63, 0.2);
-  border-radius: 50%;
-
-  content: "";
-  pointer-events: none;
-}
-
-.about-contact__content,
-.about-contact__actions {
-  position: relative;
-  z-index: 1;
-}
-
-.about-contact__title {
-  max-width: 740px;
-  margin: 0;
-
-  color: #ffffff;
-
-  font-size: clamp(2rem, 4.6vw, 4.15rem);
-  font-weight: 820;
-  line-height: 1.25;
-  letter-spacing: -0.035em;
-}
-
-.about-contact__description {
-  max-width: 720px;
-  margin: 22px 0 0;
-
-  color: rgba(255, 255, 255, 0.67);
-
-  font-size: clamp(0.98rem, 1.35vw, 1.1rem);
-  line-height: 2;
-}
-
-.about-contact__actions {
-  display: flex;
-  min-width: max-content;
   flex-direction: column;
-  gap: 13px;
 }
 
+.about-value-item {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 18px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--about-border);
+}
 
-/* دکمه‌ها */
+.about-value-item:first-child {
+  padding-top: 0;
+}
 
-.about-button {
-  display: inline-flex;
-  min-width: 165px;
-  min-height: 52px;
+.about-value-item > span {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--about-primary);
+  background: #edf5f1;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.about-value-item h3 {
+  margin: 0 0 9px;
+  color: var(--about-heading);
+  font-size: 1.1rem;
+  font-weight: 900;
+}
+
+.about-value-item p {
+  margin: 0;
+  color: var(--about-muted);
+  font-size: 0.94rem;
+  line-height: 2;
+}
+
+/* Contact */
+
+.about-contact-section {
+  padding: 25px 0 100px;
+}
+
+.about-contact-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.68fr);
+  gap: 60px;
   align-items: center;
-  justify-content: center;
-  padding: 13px 23px;
+  padding: 58px;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(255, 255, 255, 0.12), transparent 35%),
+    var(--about-primary-dark);
+  color: #ffffff;
+  overflow: hidden;
+}
 
-  border: 1px solid transparent;
-  border-radius: 999px;
+.about-contact-card .about-eyebrow {
+  color: #e8bd75;
+}
 
-  font-size: 0.9rem;
-  font-weight: 800;
-  line-height: 1.2;
+.about-contact-card h2 {
+  margin: 14px 0 16px;
+  color: #ffffff;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 900;
+  line-height: 1.45;
+}
+
+.about-contact-card p {
+  max-width: 640px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 2;
+}
+
+.about-contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.about-contact-links a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 17px;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.07);
   text-decoration: none;
-
-  transition:
-    color var(--about-transition),
-    background-color var(--about-transition),
-    border-color var(--about-transition),
-    transform var(--about-transition);
+  transition: 0.2s ease;
 }
 
-.about-button:hover {
-  transform: translateY(-3px);
-}
-
-.about-button:focus-visible {
-  outline: 3px solid rgba(255, 255, 255, 0.32);
-  outline-offset: 4px;
-}
-
-.about-button--primary {
+.about-contact-links a:hover {
   color: #ffffff;
-  background-color: var(--about-primary);
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateX(-4px);
 }
 
-.about-button--primary:hover {
-  color: #ffffff;
-  background-color: var(--about-primary-dark);
+.about-contact-links span {
+  font-size: 0.8rem;
+  opacity: 0.65;
 }
 
-.about-button--secondary {
-  color: #ffffff;
-  background-color: transparent;
-  border-color: rgba(255, 255, 255, 0.26);
+.about-contact-links strong {
+  font-size: 0.92rem;
+  direction: ltr;
 }
 
-.about-button--secondary:hover {
-  color: #171614;
-  background-color: #ffffff;
-  border-color: #ffffff;
-}
+/* Responsive */
 
-
-/* =========================================================
-   12. حالت تاریک با data-theme
-   ========================================================= */
-
-html[data-theme="dark"] .about-page {
-  --about-bg: #11100f;
-  --about-surface: #191816;
-  --about-surface-soft: #24211e;
-
-  --about-text: #e9e5df;
-  --about-text-soft: #aaa49c;
-  --about-heading: #faf8f3;
-
-  --about-primary: #ef7957;
-  --about-primary-dark: #dc6242;
-  --about-primary-soft: rgba(239, 121, 87, 0.14);
-
-  --about-border: rgba(255, 255, 255, 0.1);
-  --about-border-strong: rgba(255, 255, 255, 0.17);
-
-  --about-shadow-small:
-    0 14px 34px rgba(0, 0, 0, 0.18);
-
-  --about-shadow-large:
-    0 25px 70px rgba(0, 0, 0, 0.32);
-}
-
-html[data-theme="dark"] .about-hero {
-  background:
-    radial-gradient(
-      circle at 10% 10%,
-      rgba(239, 121, 87, 0.12),
-      transparent 36%
-    ),
-    var(--about-bg);
-}
-
-html[data-theme="dark"] .about-values {
-  background-color: #090909;
-}
-
-html[data-theme="dark"] .about-contact__box {
-  background:
-    linear-gradient(
-      135deg,
-      #201e1b 0%,
-      #090909 100%
-    );
-}
-
-
-/* =========================================================
-   13. پشتیبانی موقت از پروژه‌هایی که dark-mode دارند
-   ========================================================= */
-
-body.dark-mode.about-page {
-  --about-bg: #11100f;
-  --about-surface: #191816;
-  --about-surface-soft: #24211e;
-
-  --about-text: #e9e5df;
-  --about-text-soft: #aaa49c;
-  --about-heading: #faf8f3;
-
-  --about-primary: #ef7957;
-  --about-primary-dark: #dc6242;
-  --about-primary-soft: rgba(239, 121, 87, 0.14);
-
-  --about-border: rgba(255, 255, 255, 0.1);
-  --about-border-strong: rgba(255, 255, 255, 0.17);
-
-  --about-shadow-small:
-    0 14px 34px rgba(0, 0, 0, 0.18);
-
-  --about-shadow-large:
-    0 25px 70px rgba(0, 0, 0, 0.32);
-}
-
-
-/* =========================================================
-   14. نمایشگرهای متوسط
-   ========================================================= */
-
-@media (max-width: 1024px) {
-  .about-hero__grid {
-    grid-template-columns: minmax(260px, 0.85fr) minmax(350px, 1.15fr);
-    gap: 55px;
-  }
-
-  .about-hero__title {
-    font-size: clamp(2.7rem, 6.7vw, 4.8rem);
-  }
-
-  .about-story__grid,
-  .about-values__layout {
-    gap: 55px;
-  }
-
-  .about-contact__box {
-    grid-template-columns: 1fr;
-  }
-
-  .about-contact__actions {
-    min-width: 0;
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-}
-
-
-/* =========================================================
-   15. تبلت و موبایل
-   ========================================================= */
-
-@media (max-width: 800px) {
-  .about-content .container {
-    width: min(100% - 32px, 1200px);
-  }
-
-  .about-section {
-    padding-block: 75px;
-  }
-
-  .about-hero {
-    padding-block: 58px 82px;
-  }
-
-  .about-hero__grid,
-  .about-story__grid,
-  .about-values__layout {
-    grid-template-columns: 1fr;
-  }
-
-  .about-hero__grid {
-    gap: 62px;
-  }
-
-  .about-hero__media {
-    max-width: 540px;
-    margin-inline: auto;
-  }
-
-  .about-hero__content {
-    max-width: 700px;
-  }
-
-  .about-story__grid {
-    gap: 36px;
-  }
-
-  .about-expertise__grid {
-    grid-template-columns: 1fr;
-  }
-
-  .expertise-card {
-    min-height: 270px;
-  }
-
-  .about-values .section-heading {
-    position: static;
-  }
-
-  .about-values__layout {
-    gap: 50px;
-  }
-
-  .about-contact__box {
-    padding: 45px 32px;
-  }
-}
-
-
-/* =========================================================
-   16. موبایل کوچک
-   ========================================================= */
-
-@media (max-width: 560px) {
-  .about-content .container {
-    width: min(100% - 24px, 1200px);
-  }
-
-  .about-section {
-    padding-block: 62px;
-  }
-
-  .about-content .section-heading {
-    margin-bottom: 38px;
-  }
-
-  .about-content .section-heading__title {
-    font-size: clamp(1.8rem, 9vw, 2.55rem);
-  }
-
-  .about-hero {
-    padding-block: 42px 68px;
-  }
-
-  .about-hero__grid {
+@media (max-width: 1050px) {
+  .about-hero-grid {
     gap: 48px;
   }
 
-  .about-hero__image-wrapper {
-    width: calc(100% - 15px);
+  .about-cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .about-hero__image-wrapper::before {
-    top: -14px;
-    inset-inline-start: -14px;
+  .about-floating-card {
+    right: -15px;
+  }
+}
+
+@media (max-width: 850px) {
+  .about-hero {
+    padding: 65px 0 70px;
   }
 
-  .about-hero__image {
-    border-radius:
-      22px
-      22px
-      70px
-      22px;
+  .about-hero-grid,
+  .about-two-columns,
+  .about-contact-card {
+    grid-template-columns: 1fr;
   }
 
-  .about-hero__image-decoration {
-    bottom: -17px;
-    inset-inline-end: -15px;
+  .about-hero-image {
+    justify-self: center;
   }
 
-  .about-hero__title {
-    font-size: clamp(2.35rem, 13vw, 3.6rem);
-    line-height: 1.15;
+  .about-section-title {
+    position: static;
   }
 
-  .about-hero__lead {
-    font-size: 1.08rem;
-    line-height: 1.9;
+  .about-two-columns {
+    gap: 38px;
   }
 
-  .about-hero__socials {
-    gap: 9px;
+  .about-contact-card {
+    padding: 42px;
+  }
+}
+
+@media (max-width: 620px) {
+  .about-container {
+    width: min(100% - 28px, 1120px);
   }
 
-  .about-hero__socials .social-link {
-    min-height: 43px;
-    padding-inline: 14px;
+  .about-hero {
+    padding: 46px 0 60px;
   }
 
-  .about-story__intro {
-    padding-inline-start: 21px;
+  .about-hero-content h1 {
+    font-size: 2.35rem;
   }
 
-  .about-story__highlight {
-    font-size: 1.35rem;
+  .about-hero-content h1 span {
+    white-space: normal;
   }
 
-  .expertise-card {
-    min-height: auto;
-    padding: 29px 24px;
+  .about-actions {
+    flex-direction: column;
   }
 
-  .expertise-card__number {
-    margin-bottom: 47px;
+  .about-primary-btn,
+  .about-secondary-btn {
+    width: 100%;
   }
 
-  .value-item {
-    grid-template-columns: 16px minmax(0, 1fr);
-    gap: 16px;
+  .about-image-frame {
+    border-radius: 25px 25px 74px 25px;
   }
 
-  .about-quote__box {
-    padding: 44px 23px;
-    border-radius: 22px;
+  .about-image-frame img {
+    border-radius: 18px 18px 62px 18px;
   }
 
-  .about-quote__text p {
-    font-size: 1.35rem;
-    line-height: 1.8;
+  .about-floating-card {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    margin-top: 14px;
   }
 
-  .about-contact {
-    padding-top: 0;
+  .about-section {
+    padding: 65px 0;
   }
 
-  .about-contact__box {
-    padding: 38px 23px;
-    border-radius: 22px;
-  }
-
-  .about-contact__title {
+  .about-section-title h2,
+  .about-centered-heading h2 {
     font-size: 2rem;
   }
 
-  .about-contact__actions {
-    display: grid;
+  .about-text {
+    font-size: 0.96rem;
+  }
+
+  .about-text blockquote {
+    padding: 22px;
+    font-size: 1rem;
+  }
+
+  .about-cards-grid {
     grid-template-columns: 1fr;
-    width: 100%;
   }
 
-  .about-button {
-    width: 100%;
-  }
-}
-
-
-/* =========================================================
-   17. دسترس‌پذیری و کاهش حرکت
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  .about-content *,
-  .about-content *::before,
-  .about-content *::after {
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-  }
-}
-
-
-/* =========================================================
-   18. حالت چاپ
-   ========================================================= */
-
-@media print {
-  .about-content {
-    color: #000000;
-    background: #ffffff;
+  .about-card {
+    min-height: 235px;
   }
 
-  .about-hero,
-  .about-section,
-  .about-story,
-  .about-expertise,
-  .about-quote {
-    color: #000000;
-    background: #ffffff;
+  .about-value-item {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 14px;
   }
 
-  .about-hero::after,
-  .about-hero__image-wrapper::before,
-  .about-hero__image-decoration,
-  .expertise-card::after,
-  .about-contact,
-  .about-hero__socials {
-    display: none;
+  .about-value-item > span {
+    width: 42px;
+    height: 42px;
   }
 
-  .about-values {
-    color: #000000;
-    background: #ffffff;
+  .about-contact-section {
+    padding-bottom: 72px;
   }
 
-  .about-values .section-heading__title,
-  .value-item__title {
-    color: #000000;
+  .about-contact-card {
+    padding: 32px 22px;
+    border-radius: 23px;
   }
 
-  .about-values .section-heading__description,
-  .value-item__description {
-    color: #333333;
+  .about-contact-card h2 {
+    font-size: 2rem;
   }
 
-  .expertise-card,
-  .about-quote__box {
-    box-shadow: none;
-    break-inside: avoid;
+  .about-contact-links a {
+    align-items: flex-start;
+    flex-direction: column;
   }
-}
-body.about-page {
-  background: red !important;
-}
-
-body.about-page .about-content {
-  outline: 10px solid blue !important;
 }
