@@ -21,16 +21,17 @@
     >
       <a href="{{ '/' | relative_url }}">خانه</a>
       <a href="{{ '/about/' | relative_url }}">درباره من</a>
-      <a href="{{ '/search/' | relative_url }}">جست‌وجو</a>
     </nav>
 
     <div class="header-actions">
 
-      <a
+      <button
         class="icon-button search-button"
         id="searchButton"
-        href="{{ '/search/' | relative_url }}"
-        aria-label="جست‌وجو در سایت"
+        type="button"
+        aria-label="بازکردن جست‌وجو"
+        aria-expanded="false"
+        aria-controls="searchPanel"
         title="جست‌وجو"
       >
         <svg
@@ -54,7 +55,7 @@
             stroke-linecap="round"
           />
         </svg>
-      </a>
+      </button>
 
       <button
         class="menu-button"
@@ -115,7 +116,14 @@
   <nav class="mobile-nav" aria-label="دسترسی موبایل">
     <a href="{{ '/' | relative_url }}">خانه</a>
     <a href="{{ '/about/' | relative_url }}">درباره من</a>
-    <a href="{{ '/search/' | relative_url }}">جست‌وجو</a>
+
+    <button
+      class="mobile-search-button"
+      id="mobileSearchButton"
+      type="button"
+    >
+      جست‌وجو
+    </button>
   </nav>
 
   <div class="mobile-menu-footer">
@@ -148,3 +156,13 @@
     </div>
   </div>
 </aside>
+
+<section
+  class="search-panel"
+  id="searchPanel"
+  role="dialog"
+  aria-modal="true"
+  aria-hidden="true"
+  aria-labelledby="searchPanelTitle"
+>
+  <div 
