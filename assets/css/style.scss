@@ -941,99 +941,607 @@ img {
   border-radius: 50%;
 }
 
-/* =========================
-   نقل‌قول
-========================= */
+/* =========================================================
+   Automatic Quote Slider
+   ========================================================= */
+
+.quote-section {
+  --quote-text: #18221c;
+  --quote-muted: #747d77;
+  --quote-accent: #235b43;
+  --quote-surface: #fffef9;
+  --quote-border: rgba(35, 91, 67, 0.12);
+
+  position: relative;
+  padding: 5.5rem 0;
+}
+
+.quote-section *,
+.quote-section *::before,
+.quote-section *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   Slider wrapper
+   ========================================================= */
+
+.quote-slider {
+  position: relative;
+  width: min(100%, 1080px);
+  margin-inline: auto;
+}
+
+/* =========================================================
+   Viewport
+   قرارگرفتن تمام نقل‌قول‌ها روی یکدیگر
+   ========================================================= */
+
+.quote-slider__viewport {
+  position: relative;
+  display: grid;
+  width: 100%;
+}
+
+/* =========================================================
+   Quote card
+   ========================================================= */
 
 .quote-card {
   position: relative;
-  width: min(100%, 900px);
-  margin: 0 auto;
-  padding: 42px 55px;
+  grid-area: 1 / 1;
+
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4.5rem);
+
+  width: 100%;
+  min-height: 350px;
+  margin: 0;
+  padding: clamp(2rem, 5vw, 4rem);
+
   overflow: hidden;
+  border: 1px solid var(--quote-border);
   border-radius: 28px;
+
   background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.035),
-      transparent 45%
+    radial-gradient(
+      circle at 8% 15%,
+      rgba(35, 91, 67, 0.11),
+      transparent 19rem
     ),
-    var(--surface-dark);
-  color: #fff;
-  text-align: center;
+    radial-gradient(
+      circle at 95% 100%,
+      rgba(35, 91, 67, 0.055),
+      transparent 23rem
+    ),
+    var(--quote-surface);
+
+  box-shadow:
+    0 8px 24px rgba(22, 40, 30, 0.04),
+    0 22px 55px rgba(22, 40, 30, 0.065);
+
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(16px) scale(0.99);
+
+  transition:
+    opacity 600ms ease,
+    transform 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 600ms ease;
 }
 
-/* قاب دایره‌ای عکس */
+/* تزئین پس‌زمینه */
+
+.quote-card::before {
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  width: 240px;
+  height: 240px;
+  border: 1px solid rgba(35, 91, 67, 0.08);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.quote-card::after {
+  position: absolute;
+  right: -70px;
+  bottom: -90px;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: rgba(35, 91, 67, 0.035);
+  content: "";
+  pointer-events: none;
+}
+
+/* کارت فعال */
+
+.quote-card.is-active {
+  z-index: 2;
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+/* =========================================================
+   Avatar
+   ========================================================= */
+
 .quote-avatar {
   position: relative;
   z-index: 2;
-  width: 88px;
-  height: 88px;
-  margin: 0 auto 10px;
-  padding: 4px;
-  overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.65);
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+  display: grid;
+  place-items: center;
+  width: 180px;
+  height: 180px;
 }
 
-/* خود عکس */
+/* حلقه تزئینی دور تصویر */
+
+.quote-avatar::before {
+  position: absolute;
+  inset: -12px;
+  border: 1px solid rgba(35, 91, 67, 0.17);
+  border-radius: 50%;
+  content: "";
+}
+
+.quote-avatar::after {
+  position: absolute;
+  right: -18px;
+  bottom: 7px;
+  width: 48px;
+  height: 48px;
+  border: 7px solid var(--quote-surface);
+  border-radius: 50%;
+  background: var(--quote-accent);
+  content: "";
+  box-shadow: 0 6px 18px rgba(35, 91, 67, 0.22);
+}
+
 .quote-avatar img {
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 160px;
+  height: 160px;
+  border: 5px solid #ffffff;
   border-radius: 50%;
   object-fit: cover;
   object-position: center;
+
+  box-shadow:
+    0 0 0 1px rgba(35, 91, 67, 0.1),
+    0 14px 32px rgba(22, 40, 30, 0.14);
 }
+
+/* انیمیشن تصویر هنگام فعال‌شدن */
+
+.quote-card.is-active .quote-avatar {
+  animation: quoteAvatarReveal 650ms 100ms ease both;
+}
+
+@keyframes quoteAvatarReveal {
+  from {
+    opacity: 0;
+    transform: translateX(14px) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* =========================================================
+   Quote content
+   ========================================================= */
 
 .quote-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  min-width: 0;
+  padding-top: 1rem;
 }
+
+.quote-card.is-active .quote-content {
+  animation: quoteContentReveal 650ms 160ms ease both;
+}
+
+@keyframes quoteContentReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   Quote mark
+   ========================================================= */
 
 .quote-mark {
+  position: absolute;
+  top: -2.5rem;
+  right: -0.2rem;
+
   display: block;
-  height: 38px;
-  margin-bottom: 8px;
-  color: var(--primary);
+  height: 85px;
+
+  color: rgba(35, 91, 67, 0.13);
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 58px;
-  font-weight: 700;
-  line-height: 0.95;
-  opacity: 0.9;
+  font-size: 8rem;
+  font-weight: 900;
+  line-height: 1;
+
+  user-select: none;
+  pointer-events: none;
 }
 
-.quote-card blockquote {
-  margin: 0 auto 18px;
-  max-width: 720px;
-}
+/* =========================================================
+   Quote text
+   ========================================================= */
 
-.quote-card blockquote p {
+.quote-content blockquote {
+  position: relative;
+  z-index: 2;
   margin: 0;
-  font-size: clamp(21px, 2.6vw, 30px);
-  font-weight: 800;
-  line-height: 1.8;
 }
+
+.quote-content blockquote p {
+  max-width: 700px;
+  margin: 0;
+
+  color: var(--quote-text);
+  font-size: clamp(1.25rem, 2.3vw, 1.8rem);
+  font-weight: 850;
+  line-height: 2;
+  letter-spacing: -0.025em;
+
+  text-wrap: balance;
+}
+
+/* =========================================================
+   Author
+   ========================================================= */
 
 .quote-author {
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-wrap: wrap;
-  gap: 6px;
-  color: #c5d0c9;
-  font-size: 13px;
+  gap: 0.35rem 0.8rem;
+  margin-top: 1.65rem;
+}
+
+.quote-author::before {
+  display: block;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--quote-accent);
+  content: "";
 }
 
 .quote-author strong {
-  color: #fff;
+  color: var(--quote-accent);
+  font-size: 0.9rem;
+  font-weight: 900;
 }
 
-.quote-author span::before {
+.quote-author span {
+  color: var(--quote-muted);
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+
+.quote-author span:not(:empty)::before {
+  margin-left: 0.65rem;
+  color: #a6ada8;
   content: "—";
-  margin-inline: 3px;
+}
+
+/* =========================================================
+   Slider controls
+   ========================================================= */
+
+.quote-slider__controls {
+  position: relative;
+  z-index: 5;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+
+  margin-top: 1.4rem;
+}
+
+.quote-slider__arrow {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+
+  width: 42px;
+  height: 42px;
+  padding: 0;
+
+  border: 1px solid var(--quote-border);
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--quote-text);
+
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+
+  box-shadow: 0 5px 16px rgba(22, 40, 30, 0.05);
+
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.quote-slider__arrow:hover {
+  color: #ffffff;
+  border-color: var(--quote-accent);
+  background: var(--quote-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(35, 91, 67, 0.18);
+}
+
+.quote-slider__arrow:focus-visible,
+.quote-slider__dot:focus-visible {
+  outline: 3px solid rgba(35, 91, 67, 0.22);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   Dots
+   ========================================================= */
+
+.quote-slider__dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-width: 72px;
+}
+
+.quote-slider__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+
+  border: 0;
+  border-radius: 999px;
+  background: rgba(35, 91, 67, 0.22);
+
+  cursor: pointer;
+
+  transition:
+    width 220ms ease,
+    background-color 220ms ease,
+    transform 220ms ease;
+}
+
+.quote-slider__dot:hover {
+  background: rgba(35, 91, 67, 0.55);
+  transform: scale(1.15);
+}
+
+.quote-slider__dot.is-active {
+  width: 27px;
+  background: var(--quote-accent);
+}
+
+/* =========================================================
+   Progress bar
+   ========================================================= */
+
+.quote-slider__progress {
+  width: min(220px, 70%);
+  height: 3px;
+  margin: 1rem auto 0;
+  overflow: hidden;
+
+  border-radius: 999px;
+  background: rgba(35, 91, 67, 0.1);
+}
+
+.quote-slider__progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  border-radius: inherit;
+  background: var(--quote-accent);
+
+  transform: scaleX(0);
+  transform-origin: right center;
+}
+
+.quote-slider.is-playing .quote-slider__progress span {
+  animation: quoteSliderProgress
+    var(--quote-duration, 6000ms)
+    linear forwards;
+}
+
+@keyframes quoteSliderProgress {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* =========================================================
+   Tablet
+   ========================================================= */
+
+@media (max-width: 800px) {
+  .quote-section {
+    padding: 4.5rem 0;
+  }
+
+  .quote-card {
+    grid-template-columns: 135px minmax(0, 1fr);
+    gap: 2rem;
+    min-height: 320px;
+    padding: 2.5rem 2rem;
+    border-radius: 23px;
+  }
+
+  .quote-avatar {
+    width: 135px;
+    height: 135px;
+  }
+
+  .quote-avatar img {
+    width: 125px;
+    height: 125px;
+  }
+
+  .quote-avatar::after {
+    right: -12px;
+    width: 40px;
+    height: 40px;
+    border-width: 6px;
+  }
+}
+
+/* =========================================================
+   Mobile
+   ========================================================= */
+
+@media (max-width: 620px) {
+  .quote-section {
+    padding: 3.5rem 0;
+  }
+
+  .quote-card {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 1.4rem;
+
+    min-height: 520px;
+    padding: 2.25rem 1.25rem 2rem;
+    border-radius: 20px;
+  }
+
+  .quote-avatar {
+    width: 125px;
+    height: 125px;
+  }
+
+  .quote-avatar img {
+    width: 115px;
+    height: 115px;
+    border-width: 4px;
+  }
+
+  .quote-avatar::before {
+    inset: -9px;
+  }
+
+  .quote-avatar::after {
+    right: -10px;
+    bottom: 2px;
+    width: 36px;
+    height: 36px;
+    border-width: 5px;
+  }
+
+  .quote-content {
+    width: 100%;
+    padding-top: 0.75rem;
+    text-align: center;
+  }
+
+  .quote-mark {
+    top: -2rem;
+    right: 50%;
+    font-size: 6rem;
+    transform: translateX(50%);
+  }
+
+  .quote-content blockquote p {
+    max-width: 430px;
+    margin-inline: auto;
+    font-size: 1.12rem;
+    line-height: 2;
+  }
+
+  .quote-author {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.3rem;
+    margin-top: 1.35rem;
+  }
+
+  .quote-author::before {
+    width: 25px;
+    margin-bottom: 0.25rem;
+  }
+
+  .quote-author span:not(:empty)::before {
+    display: none;
+  }
+}
+
+/* =========================================================
+   Small mobile
+   ========================================================= */
+
+@media (max-width: 420px) {
+  .quote-card {
+    min-height: 500px;
+    padding: 2rem 1rem 1.75rem;
+  }
+
+  .quote-content blockquote p {
+    font-size: 1.03rem;
+    line-height: 1.95;
+  }
+
+  .quote-slider__arrow {
+    width: 39px;
+    height: 39px;
+  }
+}
+
+/* =========================================================
+   Reduced motion
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .quote-card,
+  .quote-card.is-active .quote-avatar,
+  .quote-card.is-active .quote-content,
+  .quote-slider__arrow,
+  .quote-slider__dot,
+  .quote-slider__progress span {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .quote-slider__progress {
+    display: none;
+  }
 }
 
 
