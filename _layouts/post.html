@@ -27,39 +27,28 @@ layout: default
           {{ page.title | escape }}
         </h1>
 
-        {% if page.excerpt %}
-          <p class="post-excerpt" itemprop="description">
-            {{ page.excerpt | strip_html | strip_newlines }}
-          </p>
-        {% elsif page.description %}
-          <p class="post-excerpt" itemprop="description">
-            {{ page.description }}
-          </p>
-        {% endif %}
-
         <div class="post-meta">
 
-  {% if page.date %}
-    <time
-      datetime="{{ page.date | date_to_xmlschema }}"
-      itemprop="datePublished"
-    >
-      {{ page.date | date: "%Y/%m/%d" }}
-    </time>
-  {% endif %}
+          {% if page.date %}
+            <time
+              datetime="{{ page.date | date_to_xmlschema }}"
+              itemprop="datePublished"
+            >
+              {{ page.date | date: "%Y/%m/%d" }}
+            </time>
+          {% endif %}
 
-  {% if page.date and page.reading_time %}
-    <span aria-hidden="true">•</span>
-  {% endif %}
+          {% if page.date and page.reading_time %}
+            <span aria-hidden="true">•</span>
+          {% endif %}
 
-  {% if page.reading_time %}
-    <span>
-      {{ page.reading_time }} دقیقه مطالعه
-    </span>
-  {% endif %}
+          {% if page.reading_time %}
+            <span>
+              {{ page.reading_time }} دقیقه مطالعه
+            </span>
+          {% endif %}
 
-</div>
-
+        </div>
 
       </div>
 
@@ -85,7 +74,7 @@ layout: default
       </figure>
     {% endif %}
 
-    <div class="container post-layout">
+    <div class="container post-layout post-layout-single">
 
       <div class="post-main">
 
@@ -136,46 +125,6 @@ layout: default
         </nav>
 
       </div>
-
-      <aside class="post-sidebar" aria-label="اطلاعات نوشته">
-
-        <div class="post-sidebar-card">
-
-          <h2>درباره این نوشته</h2>
-
-          {% if page.description %}
-            <p>
-              {{ page.description }}
-            </p>
-          {% else %}
-            <p>
-              یادداشتی از مجموعه نوشته‌ها و پژوهش‌های این وبلاگ.
-            </p>
-          {% endif %}
-
-          <a class="post-sidebar-link" href="{{ '/' | relative_url }}">
-            بازگشت به صفحه اصلی
-          </a>
-
-        </div>
-
-        {% if page.tags and page.tags.size > 0 %}
-          <div class="post-sidebar-card">
-
-            <h2>موضوعات</h2>
-
-            <div class="post-sidebar-tags">
-              {% for tag in page.tags %}
-                <span>
-                  {{ tag }}
-                </span>
-              {% endfor %}
-            </div>
-
-          </div>
-        {% endif %}
-
-      </aside>
 
     </div>
 
