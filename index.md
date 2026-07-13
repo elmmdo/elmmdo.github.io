@@ -110,7 +110,7 @@ permalink: /
                   </a>
 
                   <span>
-                    {{ hero_post.reading_time | default: "۵ دقیقه مطالعه" }}
+                    {% include reading-time.html content=hero_post.content %}
                   </span>
                 </div>
 
@@ -238,7 +238,7 @@ permalink: /
                     </a>
 
                     <span>
-                      {{ post.reading_time | default: "۵ دقیقه" }}
+                      {% include reading-time.html content=post.content %}
                     </span>
                   </div>
 
@@ -360,7 +360,7 @@ permalink: /
                     </a>
 
                     <span>
-                      {{ post.reading_time | default: "۵ دقیقه مطالعه" }}
+                      {% include reading-time.html content=post.content %}
                     </span>
                   </div>
 
@@ -480,7 +480,7 @@ permalink: /
                   </a>
 
                   <span>
-                    {{ post.reading_time | default: "۵ دقیقه مطالعه" }}
+                    {% include reading-time.html content=post.content %}
                   </span>
                 </div>
 
@@ -779,7 +779,7 @@ permalink: /
                       />
                     </svg>
   
-                    {{ post.reading_time | default: "۵ دقیقه مطالعه" }}
+                    {% include reading-time.html content=post.content %}
                   </span>
   
                 </div>
