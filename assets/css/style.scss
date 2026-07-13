@@ -2531,7 +2531,7 @@ img {
 /* ---------- Post header ---------- */
 
 .post-header {
-  padding: 5rem 0 3rem;
+  padding: 4rem 0 2.5rem;
   background:
     radial-gradient(
       circle at 85% 15%,
@@ -2546,7 +2546,8 @@ img {
 }
 
 .post-header-container {
-  max-width: 900px;
+  width: min(100% - 2rem, 820px);
+  margin-inline: auto;
   text-align: center;
 }
 
@@ -2577,24 +2578,22 @@ img {
   transform: translateY(-2px);
 }
 
+/* عنوان کوچک‌تر */
 .post-title {
-  max-width: 850px;
+  width: 100%;
+  max-width: 760px;
   margin: 0 auto;
   color: #17201d;
-  font-size: clamp(2rem, 5vw, 4.25rem);
+  font-size: clamp(1.8rem, 3.4vw, 2.7rem);
   font-weight: 900;
-  line-height: 1.35;
-  letter-spacing: -0.04em;
+  line-height: 1.45;
+  letter-spacing: -0.025em;
   text-wrap: balance;
 }
 
+/* مخفی کردن خلاصه زیر عنوان */
 .post-excerpt {
-  max-width: 720px;
-  margin: 1.4rem auto 0;
-  color: #66706c;
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  line-height: 2;
-  text-wrap: pretty;
+  display: none !important;
 }
 
 .post-meta {
@@ -2603,7 +2602,7 @@ img {
   align-items: center;
   justify-content: center;
   gap: 0.65rem;
-  margin-top: 1.5rem;
+  margin-top: 1.25rem;
   color: #7b8581;
   font-size: 0.9rem;
 }
@@ -2620,21 +2619,23 @@ img {
 
 /* ---------- Cover image ---------- */
 
+/* تصویر اصلی کوچک‌تر و وسط‌چین */
 .post-cover {
-  max-width: 1180px;
-  margin-top: 2.5rem;
-  margin-bottom: 0;
+  width: calc(100% - 2rem);
+  max-width: 900px;
+  margin: 2.5rem auto 0;
 }
 
 .post-cover img {
   display: block;
   width: 100%;
   height: auto;
-  max-height: 680px;
+  max-height: 540px;
+  margin-inline: auto;
   object-fit: cover;
   background: #edf0ee;
-  border-radius: 1.75rem;
-  box-shadow: 0 24px 70px rgba(16, 37, 31, 0.12);
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 55px rgba(16, 37, 31, 0.11);
 }
 
 .post-cover figcaption {
@@ -2647,25 +2648,39 @@ img {
 
 /* ---------- Main post layout ---------- */
 
-.post-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 280px;
-  gap: clamp(2rem, 6vw, 5rem);
-  align-items: start;
-  max-width: 1120px;
-  margin-top: 4rem;
+/*
+ * صفحه تک‌ستونه است و ستون محتوای اصلی
+ * در مرکز صفحه قرار می‌گیرد.
+ */
+.post-layout,
+.post-layout-single {
+  display: block;
+  width: calc(100% - 2rem);
+  max-width: 760px;
+  margin: 4rem auto 0;
 }
 
 .post-main {
+  width: 100%;
   min-width: 0;
+  margin-inline: auto;
+}
+
+/* سایدبار به‌طور کامل حذف می‌شود */
+.post-sidebar {
+  display: none !important;
 }
 
 /* ---------- Article typography ---------- */
 
 .post-content {
+  width: 100%;
+  margin-inline: auto;
   color: #2d3733;
   font-size: 1.06rem;
   line-height: 2.15;
+  text-align: right;
+  direction: rtl;
   overflow-wrap: anywhere;
 }
 
@@ -2755,6 +2770,7 @@ img {
   margin-bottom: 0;
 }
 
+/* تصاویر داخل متن */
 .post-content img {
   display: block;
   width: auto;
@@ -2921,79 +2937,20 @@ img {
   text-align: left;
 }
 
-/* ---------- Sidebar ---------- */
-
-.post-sidebar {
-  position: sticky;
-  top: 7rem;
-  display: grid;
-  gap: 1rem;
-}
-
-.post-sidebar-card {
-  padding: 1.35rem;
-  background: #f7f9f8;
-  border: 1px solid #e4e9e6;
-  border-radius: 1.15rem;
-}
-
-.post-sidebar-card h2 {
-  margin: 0 0 0.8rem;
-  color: #1e2c27;
-  font-size: 1rem;
-  font-weight: 850;
-}
-
-.post-sidebar-card p {
-  margin: 0;
-  color: #68736e;
-  font-size: 0.87rem;
-  line-height: 1.9;
-}
-
-.post-sidebar-link {
-  display: inline-flex;
-  margin-top: 1rem;
-  color: #176b57;
-  font-size: 0.85rem;
-  font-weight: 800;
-  text-decoration: none;
-}
-
-.post-sidebar-link:hover {
-  color: #0e4d3d;
-}
-
-.post-sidebar-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-}
-
-.post-sidebar-tags span {
-  padding: 0.3rem 0.6rem;
-  color: #52605a;
-  background: #e9efec;
-  border-radius: 999px;
-  font-size: 0.74rem;
-}
-
 /* ---------- Responsive styles ---------- */
 
 @media (max-width: 900px) {
   .post-header {
-    padding: 4rem 0 2.5rem;
+    padding: 3.5rem 0 2.25rem;
   }
 
-  .post-layout {
-    grid-template-columns: minmax(0, 1fr);
+  .post-cover {
+    max-width: 820px;
+  }
+
+  .post-layout,
+  .post-layout-single {
     margin-top: 3rem;
-  }
-
-  .post-sidebar {
-    position: static;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    order: 2;
   }
 }
 
@@ -3003,33 +2960,45 @@ img {
   }
 
   .post-header {
-    padding: 3rem 0 2rem;
+    padding: 2.75rem 0 1.75rem;
+  }
+
+  .post-header-container {
+    width: calc(100% - 2rem);
+  }
+
+  .post-category {
+    margin-bottom: 1rem;
+    font-size: 0.78rem;
   }
 
   .post-title {
-    font-size: clamp(1.8rem, 10vw, 2.65rem);
-    line-height: 1.45;
-  }
-
-  .post-excerpt {
-    font-size: 0.98rem;
+    max-width: 100%;
+    font-size: clamp(1.6rem, 7.5vw, 2.1rem);
+    line-height: 1.5;
+    letter-spacing: -0.015em;
   }
 
   .post-meta {
     gap: 0.45rem;
+    margin-top: 1rem;
     font-size: 0.8rem;
   }
 
   .post-cover {
+    width: calc(100% - 2rem);
     margin-top: 1.5rem;
   }
 
   .post-cover img {
+    max-height: 400px;
     border-radius: 1rem;
+    box-shadow: 0 14px 40px rgba(16, 37, 31, 0.1);
   }
 
-  .post-layout {
-    gap: 2.5rem;
+  .post-layout,
+  .post-layout-single {
+    width: calc(100% - 2rem);
     margin-top: 2.5rem;
   }
 
@@ -3056,11 +3025,8 @@ img {
   .post-navigation-next {
     text-align: right;
   }
-
-  .post-sidebar {
-    grid-template-columns: 1fr;
-  }
 }
+
 
 /* =========================================================
    JavaScript interactive states
