@@ -542,43 +542,172 @@ permalink: /
     </div>
   </section>
 
-  <section class="quote-section" aria-label="نقل‌قول منتخب">
-    <div class="container">
+<!-- ======================================================
+     Automatic Quote Slider
+     ====================================================== -->
 
-      <figure class="quote-card">
+<section class="quote-section" aria-label="نقل‌قول‌های منتخب">
+  <div class="container">
 
-        <div class="quote-avatar">
-          <img
-            src="https://i.pravatar.cc/160?img=11"
-            alt="تصویر نویسنده روایت"
-            width="160"
-            height="160"
-            loading="lazy"
-          >
-        </div>
+    <div
+      class="quote-slider"
+      id="quoteSlider"
+      data-interval="6000"
+      aria-roledescription="carousel"
+    >
 
-        <div class="quote-content">
+      <div class="quote-slider__viewport">
 
-          <span class="quote-mark" aria-hidden="true">“</span>
+        <!-- نقل‌قول اول -->
 
-          <blockquote>
-            <p>
-              نوشتن برای من راهی است برای اینکه تجربه‌های پراکنده
-              را به معنایی روشن‌تر تبدیل کنم.
-            </p>
-          </blockquote>
+        <figure
+          class="quote-card is-active"
+          aria-hidden="false"
+        >
 
-          <figcaption class="quote-author">
-            <strong>نویسنده روایت</strong>
-            <span>پژوهشگر، نویسنده و یادگیرنده همیشگی</span>
-          </figcaption>
+          <div class="quote-avatar">
+            <img
+              src="https://i.pravatar.cc/160?img=11"
+              alt="تصویر نویسنده روایت"
+              width="160"
+              height="160"
+              loading="eager"
+            >
+          </div>
 
-        </div>
+          <div class="quote-content">
 
-      </figure>
+            <span class="quote-mark" aria-hidden="true">“</span>
+
+            <blockquote>
+              <p>
+                نوشتن برای من راهی است برای اینکه تجربه‌های پراکنده
+                را به معنایی روشن‌تر تبدیل کنم.
+              </p>
+            </blockquote>
+
+            <figcaption class="quote-author">
+              <strong>نویسنده روایت</strong>
+              <span>پژوهشگر، نویسنده و یادگیرنده همیشگی</span>
+            </figcaption>
+
+          </div>
+
+        </figure>
+
+        <!-- نقل‌قول دوم -->
+
+        <figure
+          class="quote-card"
+          aria-hidden="true"
+        >
+
+          <div class="quote-avatar">
+            <img
+              src="https://i.pravatar.cc/160?img=12"
+              alt="تصویر نویسنده دوم"
+              width="160"
+              height="160"
+              loading="lazy"
+            >
+          </div>
+
+          <div class="quote-content">
+
+            <span class="quote-mark" aria-hidden="true">“</span>
+
+            <blockquote>
+              <p>
+                گاهی برای یافتن مسیر درست، باید چند قدم از هیاهوی
+                راه فاصله گرفت و دوباره به مقصد نگاه کرد.
+              </p>
+            </blockquote>
+
+            <figcaption class="quote-author">
+              <strong>نویسنده دوم</strong>
+              <span>نویسنده و پژوهشگر علوم انسانی</span>
+            </figcaption>
+
+          </div>
+
+        </figure>
+
+        <!-- نقل‌قول سوم -->
+
+        <figure
+          class="quote-card"
+          aria-hidden="true"
+        >
+
+          <div class="quote-avatar">
+            <img
+              src="https://i.pravatar.cc/160?img=13"
+              alt="تصویر نویسنده سوم"
+              width="160"
+              height="160"
+              loading="lazy"
+            >
+          </div>
+
+          <div class="quote-content">
+
+            <span class="quote-mark" aria-hidden="true">“</span>
+
+            <blockquote>
+              <p>
+                پرسش درست، گاهی بیشتر از یک پاسخ آماده ما را به
+                حقیقت و درک عمیق‌تر جهان نزدیک می‌کند.
+              </p>
+            </blockquote>
+
+            <figcaption class="quote-author">
+              <strong>نویسنده سوم</strong>
+              <span>مترجم، مدرس و جست‌وجوگر معنا</span>
+            </figcaption>
+
+          </div>
+
+        </figure>
+
+      </div>
+
+      <!-- کنترل‌های اسلایدر -->
+
+      <div class="quote-slider__controls">
+
+        <button
+          class="quote-slider__arrow quote-slider__arrow--prev"
+          type="button"
+          aria-label="نمایش نقل‌قول قبلی"
+        >
+          <span aria-hidden="true">→</span>
+        </button>
+
+        <div
+          class="quote-slider__dots"
+          aria-label="انتخاب نقل‌قول"
+        ></div>
+
+        <button
+          class="quote-slider__arrow quote-slider__arrow--next"
+          type="button"
+          aria-label="نمایش نقل‌قول بعدی"
+        >
+          <span aria-hidden="true">←</span>
+        </button>
+
+      </div>
+
+      <!-- نوار زمان -->
+
+      <div class="quote-slider__progress" aria-hidden="true">
+        <span></span>
+      </div>
 
     </div>
-  </section>
+
+  </div>
+</section>
 
    <section
   class="latest-section"
