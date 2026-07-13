@@ -3207,23 +3207,23 @@ img {
    ========================================================= */
 
 /* =========================================================
-   Latest posts
+   Latest posts — Complete replacement
    ========================================================= */
 
 .latest-section {
   --latest-text: #17201b;
   --latest-muted: #6d756f;
-  --latest-border: #e5e9e5;
-  --latest-surface: #ffffff;
+  --latest-border: rgba(35, 91, 67, 0.12);
+  --latest-surface: #fffef9;
   --latest-soft: #f5f7f5;
   --latest-accent: #235b43;
 
   position: relative;
-  padding: 7rem 0;
+  padding: 6rem 0;
   background:
     radial-gradient(
       circle at 90% 5%,
-      rgba(35, 91, 67, 0.055),
+      rgba(35, 91, 67, 0.05),
       transparent 30rem
     ),
     #ffffff;
@@ -3244,7 +3244,7 @@ img {
   align-items: flex-end;
   justify-content: space-between;
   gap: 2.5rem;
-  padding-bottom: 2.25rem;
+  padding-bottom: 2rem;
 }
 
 .latest-heading {
@@ -3301,9 +3301,9 @@ img {
 .latest-filter {
   min-height: 42px;
   padding: 0.55rem 1rem;
-  border: 1px solid var(--latest-border);
+  border: 1px solid rgba(35, 91, 67, 0.13);
   border-radius: 999px;
-  background: var(--latest-surface);
+  background: #ffffff;
   color: #626b65;
   font: inherit;
   font-size: 0.84rem;
@@ -3338,7 +3338,7 @@ img {
 }
 
 /* =========================================================
-   Latest posts grid
+   Posts grid
    دو کارت در هر ردیف
    ========================================================= */
 
@@ -3346,40 +3346,75 @@ img {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: stretch;
-  gap: 3rem 2rem;
+  gap: 1.75rem;
   width: 100%;
-  margin-top: 1.25rem;
+  max-width: 1080px;
+  margin: 1.5rem auto 0;
 }
 
-/* تمام کارت‌ها یکسان هستند */
+/* =========================================================
+   Card
+   کادر کامل دور هر مطلب
+   ========================================================= */
 
 .latest-card {
   display: flex;
   flex-direction: column;
+  align-self: stretch;
   min-width: 0;
   width: 100%;
   height: 100%;
   padding: 0;
-  border: 0;
-  outline: 0;
-  box-shadow: none;
+  overflow: hidden;
+
+  border: 1px solid var(--latest-border);
+  border-radius: 22px;
+  background: var(--latest-surface);
+
+  box-shadow:
+    0 5px 15px rgba(22, 40, 30, 0.035),
+    0 14px 32px rgba(22, 40, 30, 0.05);
+
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+.latest-card:hover {
+  border-color: rgba(35, 91, 67, 0.22);
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 8px 20px rgba(22, 40, 30, 0.05),
+    0 20px 42px rgba(22, 40, 30, 0.085);
 }
 
 .latest-card[hidden] {
   display: none !important;
 }
 
+/* اگر کلاس کارت ویژه هنوز در HTML مانده باشد،
+   اجازه نمی‌دهیم کارت اول بزرگ شود */
+
+.latest-card--featured {
+  grid-column: auto;
+  width: 100%;
+}
+
 /* =========================================================
    Card media
    ========================================================= */
 
-.latest-card__media {
+.latest-card__media,
+.latest-card--featured .latest-card__media {
   position: relative;
   display: block;
   overflow: hidden;
   width: 100%;
-  aspect-ratio: 16 / 10;
-  border-radius: 18px;
+  aspect-ratio: 16 / 9.5;
+  max-height: 300px;
+  border-radius: 0;
   background: #eef1ee;
   color: inherit;
 }
@@ -3390,6 +3425,7 @@ img {
   height: 100%;
   object-fit: cover;
   object-position: center;
+
   transition:
     transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1),
     filter 300ms ease;
@@ -3399,12 +3435,13 @@ img {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  opacity: 0.5;
+
   background: linear-gradient(
     180deg,
-    transparent 45%,
-    rgba(11, 20, 15, 0.2) 100%
+    transparent 52%,
+    rgba(11, 20, 15, 0.18) 100%
   );
-  opacity: 0.65;
 }
 
 .latest-card:hover .latest-card__media img {
@@ -3412,32 +3449,63 @@ img {
   filter: saturate(1.04);
 }
 
-/* در صورتی که نشان جدیدترین روایت هنوز در HTML مانده باشد */
+/* مخفی‌کردن نشان «جدیدترین روایت» */
 
 .latest-card__new {
-  display: none;
+  display: none !important;
+}
+
+/* اگر نشان «روایت ویژه» داری و می‌خواهی باقی بماند */
+
+.latest-card__badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0.45rem 0.85rem;
+
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--latest-text);
+
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.08);
 }
 
 /* =========================================================
    Card content
    ========================================================= */
 
-.latest-card__content {
+.latest-card__content,
+.latest-card--featured .latest-card__content {
   display: flex;
   flex: 1;
   flex-direction: column;
   min-width: 0;
   width: 100%;
-  padding-top: 1.3rem;
+  padding: 1.15rem 1.3rem 1.25rem;
 }
+
+/* =========================================================
+   Card meta
+   ========================================================= */
 
 .latest-card__meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 0.75rem 1rem;
-  margin-bottom: 0.85rem;
+  gap: 0.5rem 0.8rem;
+  margin-bottom: 0.65rem;
 }
 
 .latest-category {
@@ -3445,12 +3513,14 @@ img {
   align-items: center;
   gap: 0.4rem;
   color: var(--latest-accent);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 800;
   text-decoration: none;
 }
 
 .latest-category::before {
+  display: block;
+  flex: 0 0 auto;
   width: 7px;
   height: 7px;
   border-radius: 50%;
@@ -3487,7 +3557,7 @@ img {
   align-items: center;
   gap: 0.35rem;
   color: #89908b;
-  font-size: 0.77rem;
+  font-size: 0.75rem;
   white-space: nowrap;
 }
 
@@ -3495,20 +3565,23 @@ img {
    Card title
    ========================================================= */
 
-.latest-card__title {
+.latest-card__title,
+.latest-card--featured .latest-card__title {
   width: 100%;
+  max-width: none;
   margin: 0;
   color: var(--latest-text);
-  font-size: clamp(1.25rem, 2vw, 1.65rem);
+  font-size: clamp(1.15rem, 1.8vw, 1.45rem);
   font-weight: 900;
   line-height: 1.55;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.025em;
   overflow-wrap: break-word;
 }
 
 .latest-card__title a {
   color: inherit;
   text-decoration: none;
+
   background-image: linear-gradient(
     currentColor,
     currentColor
@@ -3516,6 +3589,7 @@ img {
   background-repeat: no-repeat;
   background-position: right 100%;
   background-size: 0 1px;
+
   transition:
     color 180ms ease,
     background-size 300ms ease;
@@ -3530,14 +3604,16 @@ img {
    Card excerpt
    ========================================================= */
 
-.latest-card__excerpt {
+.latest-card__excerpt,
+.latest-card--featured .latest-card__excerpt {
   display: -webkit-box;
   overflow: hidden;
   width: 100%;
-  margin: 0.8rem 0 0;
+  max-width: none;
+  margin: 0.6rem 0 0;
   color: var(--latest-muted);
-  font-size: 0.92rem;
-  line-height: 1.95;
+  font-size: 0.87rem;
+  line-height: 1.85;
   overflow-wrap: break-word;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -3551,39 +3627,44 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.25rem;
+  gap: 1rem;
   width: 100%;
   margin-top: auto;
-  padding-top: 1.5rem;
+  padding-top: 1.1rem;
 }
+
+/* =========================================================
+   Author
+   ========================================================= */
 
 .latest-author {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: 0.65rem;
   min-width: 0;
 }
 
 .latest-author img {
+  display: block;
   flex: 0 0 auto;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border: 2px solid #ffffff;
   border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0 0 0 1px var(--latest-border);
+  box-shadow: 0 0 0 1px rgba(35, 91, 67, 0.12);
 }
 
 .latest-author div {
   display: grid;
   min-width: 0;
-  gap: 0.12rem;
+  gap: 0.1rem;
 }
 
 .latest-author strong {
   overflow: hidden;
   color: #364039;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 800;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -3591,25 +3672,30 @@ img {
 
 .latest-author time {
   color: #929994;
-  font-size: 0.71rem;
+  font-size: 0.69rem;
 }
+
+/* =========================================================
+   Read more
+   ========================================================= */
 
 .latest-read-more {
   display: inline-flex;
   align-items: center;
   flex: 0 0 auto;
-  gap: 0.45rem;
+  gap: 0.4rem;
   color: var(--latest-text);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 800;
   text-decoration: none;
+
   transition:
     color 180ms ease,
     gap 180ms ease;
 }
 
 .latest-read-more:hover {
-  gap: 0.7rem;
+  gap: 0.65rem;
   color: var(--latest-accent);
 }
 
@@ -3620,7 +3706,7 @@ img {
 .latest-load-more-wrapper {
   display: flex;
   justify-content: center;
-  padding-top: 2.75rem;
+  padding-top: 2.5rem;
 }
 
 .latest-load-more-wrapper[hidden] {
@@ -3632,17 +3718,21 @@ img {
   align-items: center;
   justify-content: center;
   gap: 0.65rem;
-  min-height: 50px;
-  padding: 0.75rem 1.45rem;
-  border: 1px solid var(--latest-border);
+  min-height: 48px;
+  padding: 0.7rem 1.4rem;
+
+  border: 1px solid rgba(35, 91, 67, 0.14);
   border-radius: 999px;
   background: #ffffff;
   color: var(--latest-text);
+
   font: inherit;
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   font-weight: 800;
   cursor: pointer;
+
   box-shadow: 0 8px 25px rgba(22, 40, 30, 0.05);
+
   transition:
     color 180ms ease,
     background-color 180ms ease,
@@ -3703,7 +3793,7 @@ img {
 }
 
 /* =========================================================
-   Card animation
+   Animation
    ========================================================= */
 
 .latest-card.is-visible {
@@ -3728,12 +3818,13 @@ img {
 
 @media (max-width: 980px) {
   .latest-section {
-    padding: 5.5rem 0;
+    padding: 5rem 0;
   }
 
   .latest-header {
     align-items: flex-start;
     flex-direction: column;
+    gap: 1.5rem;
   }
 
   .latest-filters {
@@ -3742,7 +3833,13 @@ img {
   }
 
   .latest-list {
-    gap: 2.5rem 1.5rem;
+    max-width: 100%;
+    gap: 1.4rem;
+  }
+
+  .latest-card__content,
+  .latest-card--featured .latest-card__content {
+    padding: 1.1rem 1.15rem 1.2rem;
   }
 }
 
@@ -3752,7 +3849,7 @@ img {
 
 @media (max-width: 720px) {
   .latest-section {
-    padding: 4.5rem 0;
+    padding: 4rem 0;
   }
 
   .latest-heading h2 {
@@ -3779,24 +3876,46 @@ img {
     flex: 0 0 auto;
   }
 
-  /* در موبایل، یک کارت در هر ردیف */
+  /* یک کارت در هر ردیف */
 
   .latest-list {
     grid-template-columns: 1fr;
-    gap: 2.25rem;
+    gap: 1.5rem;
+    max-width: 560px;
+    margin-inline: auto;
   }
 
-  .latest-card {
+  .latest-card,
+  .latest-card--featured {
+    grid-column: auto;
     width: 100%;
+    max-width: 560px;
+    margin-inline: auto;
+    border-radius: 18px;
   }
 
-  .latest-card__media {
-    aspect-ratio: 16 / 10.5;
-    border-radius: 16px;
+  .latest-card__media,
+  .latest-card--featured .latest-card__media {
+    aspect-ratio: 16 / 9.5;
+    max-height: 290px;
+    border-radius: 0;
   }
 
-  .latest-card__title {
-    font-size: 1.25rem;
+  .latest-card__content,
+  .latest-card--featured .latest-card__content {
+    padding: 1rem 1.1rem 1.15rem;
+  }
+
+  .latest-card__title,
+  .latest-card--featured .latest-card__title {
+    font-size: 1.2rem;
+  }
+
+  .latest-card__excerpt,
+  .latest-card--featured .latest-card__excerpt {
+    font-size: 0.85rem;
+    line-height: 1.8;
+    -webkit-line-clamp: 2;
   }
 }
 
@@ -3805,12 +3924,39 @@ img {
    ========================================================= */
 
 @media (max-width: 480px) {
+  .latest-section {
+    padding: 3.5rem 0;
+  }
+
+  .latest-card,
+  .latest-card--featured {
+    border-radius: 16px;
+  }
+
+  .latest-card__media,
+  .latest-card--featured .latest-card__media {
+    aspect-ratio: 16 / 10;
+    max-height: 250px;
+  }
+
+  .latest-card__content,
+  .latest-card--featured .latest-card__content {
+    padding: 0.95rem 1rem 1.05rem;
+  }
+
   .latest-card__meta {
     align-items: flex-start;
   }
 
+  .latest-card__title,
+  .latest-card--featured .latest-card__title {
+    font-size: 1.14rem;
+    line-height: 1.6;
+  }
+
   .latest-card__footer {
     align-items: center;
+    padding-top: 1rem;
   }
 
   .latest-read-more span {
@@ -3821,9 +3967,9 @@ img {
     display: grid;
     place-items: center;
     flex: 0 0 auto;
-    width: 38px;
-    height: 38px;
-    border: 1px solid var(--latest-border);
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(35, 91, 67, 0.14);
     border-radius: 50%;
   }
 }
