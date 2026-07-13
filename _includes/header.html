@@ -20,46 +20,55 @@
       aria-label="منوی اصلی"
     >
       <a href="{{ '/' | relative_url }}">خانه</a>
+
       <a href="{{ '/about/' | relative_url }}">درباره من</a>
-      <a href="{{ '/search/' | relative_url }}">جست‌وجو</a>
+
+      <button
+        class="nav-search-button js-open-search"
+        type="button"
+        aria-label="باز کردن جست‌وجو"
+        aria-controls="searchPanel"
+        aria-expanded="false"
+      >
+        جست‌وجو
+      </button>
     </nav>
 
     <div class="header-actions">
 
       <button
-  class="icon-button search-button"
-  id="searchButton"
-  type="button"
-  aria-label="باز کردن جست‌وجو"
-  aria-controls="searchPanel"
-  aria-expanded="false"
->
-  <svg
-    width="22"
-    height="22"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-    focusable="false"
-  >
-    <circle
-      cx="11"
-      cy="11"
-      r="7"
-      stroke="currentColor"
-      stroke-width="1.8"
-    />
+        class="icon-button search-button js-open-search"
+        id="searchButton"
+        type="button"
+        aria-label="باز کردن جست‌وجو"
+        aria-controls="searchPanel"
+        aria-expanded="false"
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <circle
+            cx="11"
+            cy="11"
+            r="7"
+            stroke="currentColor"
+            stroke-width="1.8"
+          />
 
-    <path
-      d="M16.25 16.25L21 21"
-      stroke="currentColor"
-      stroke-width="1.8"
-      stroke-linecap="round"
-    />
-  </svg>
-</button>
-
+          <path
+            d="M16.25 16.25L21 21"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
 
       <button
         class="menu-button"
@@ -119,8 +128,18 @@
 
   <nav class="mobile-nav" aria-label="دسترسی موبایل">
     <a href="{{ '/' | relative_url }}">خانه</a>
+
     <a href="{{ '/about/' | relative_url }}">درباره من</a>
-    <a href="{{ '/search/' | relative_url }}">جست‌وجو</a>
+
+    <button
+      class="mobile-search-button js-open-search"
+      type="button"
+      aria-label="باز کردن جست‌وجو"
+      aria-controls="searchPanel"
+      aria-expanded="false"
+    >
+      جست‌وجو
+    </button>
   </nav>
 
   <div class="mobile-menu-footer">
