@@ -303,386 +303,253 @@ document.addEventListener("DOMContentLoaded", () => {
     updateOverlay();
   });
 
-  /* =======================================================
-     Search data and search results
-  ======================================================= */
+ document.addEventListener("DOMContentLoaded", () => {
+  const body = document.body;
 
-  let searchItems = [];
+  const pageOverlay = document.getElementById("pageOverlay");
+  const mobileMenu = document.getElementById("mobileMenu");
+  const menuButton = document.getElementById("menuButton");
+  const closeMenuButton = document.getElementById("closeMenuButton");
+
+  const searchPanel = document.getElementById("searchPanel");
+  const searchForm = document.getElementById("searchForm");
+  const searchInput = document.getElementById("searchInput");
+  const searchMessage = document.getElementById("searchMessage");
+  const searchResults = document.getElementById("searchResults");
+  const closeSearchButton = document.getElementById("closeSearchButton");
+  const searchOpenButtons = document.querySelectorAll(".js-open-search");
+  const searchTagButtons = document.querySelectorAll("[data-search-term]");
+
+  let searchIndex = [];
   let searchIndexLoaded = false;
   let searchIndexLoading = false;
-  let searchIndexPromise = null;
-  let latestSearchRequest = 0;
-  let searchInputTimeout;
 
-  function getSearchIndexUrl() {
-    const baseUrl =
-      document
-        .querySelector('meta[name="baseurl"]')
-        ?.getAttribute("content")
-        ?.trim() || "";
-
-    return `${
-      baseUrl.replace(/\/$/, "")
-    }/search.json`;
+  function setOverlayState(isVisible) {
+    if (!pageOverlay) return;
+    pageOverlay.classList.toggle("is-visible", isVisible);
+    pageOverlay.setAttribute("aria-hidden", String(!isVisible));
   }
 
-  function createSearchableItem(item = {}) {
-    const title = item.title || "";
-    const description = item.description || "";
-    const category = item.category || "";
-
-    const itemTags = Array.isArray(item.tags)
-      ? item.tags
-      : [];
-
-    const searchableTags = itemTags.join(" ");
-
-    return {
-      title,
-      description,
-      category,
-      tags: itemTags,
-      url: item.url || "",
-      date: item.date || "",
-      searchableText: normalizePersianText(
-        `${title} ${description} ${category} ${searchableTags}`
-      )
-    };
+  function closeMobileMenu() {
+    if (!mobileMenu || !menuButton) return;
+    mobileMenu.classList.remove("is-open");
+    mobileMenu.setAttribute("aria-hidden", "true");
+    menuButton.setAttribute("aria-expanded", "false");
+    body.classList.remove("menu-open");
+    setOverlayState(false);
   }
 
-  function collectSearchItemsFromPage() {
-    const selectors = [
-      "[data-search-item]",
-      ".post-card",
-      ".article-card",
-      ".featured-card",
-      "article.post-preview"
-    ];
+  function openMobileMenu() {
+    if (!mobileMenu || !menuButton) return;
+    mobileMenu.classList.add("is-open");
+    mobileMenu.setAttribute("aria-hidden", "false");
+    menuButton.setAttribute("aria-expanded", "true");
+    body.classList.add("menu-open");
+    setOverlayState(true);
+  }
 
-    const elements = Array.from(
-      document.querySelector(
-        selectors.join(",")
-      )
-    );
+  function openSearchPanel() {
+    if (!searchPanel) return;
 
-    const allElements = Array.from(
-      document.querySelectorAll(
-        selectors.join(",")
-      )
-    );
+    closeMobileMenu();
 
-    const uniqueElements = [
-      ...new Set(
-        elements.length
-          ? elements
-          : allElements
-      )
-    ];
+    searchPanel.classList.add("is-open");
+    searchPanel.setAttribute("aria-hidden", "false");
+    body.classList.add("search-open");
+    setOverlayState(true);
 
-    return uniqueElements
-      .map((element) => {
-        const titleElement =
-          element.querySelector(
-            "[data-search-title], h2, h3, .post-title, .card-title"
-          );
+    searchOpenButtons.forEach((button) => {
+      button.setAttribute("aria-expanded", "true");
+    });
 
-        const descriptionElement =
-          element.querySelector(
-            "[data-search-description], .post-excerpt, .card-excerpt, p"
-          );
+    window.setTimeout(() => {
+      searchInput?.focus();
+    }, 60);
 
-        const categoryElement =
-          element.querySelector(
-            "[data-search-category], .post-category, .card-category"
-          );
+    if (!searchIndexLoaded && !searchIndexLoading) {
+      loadSearchIndex();
+    }
+  }
 
-        const linkElement =
-          element.matches("a[href]")
-            ? element
-            : element.querySelector("a[href]");
+  function closeSearchPanel() {
+    if (!searchPanel) return;
 
-        return createSearchableItem({
-          title:
-            element.dataset.searchTitle ||
-            titleElement?.textContent?.trim() ||
-            "",
+    searchPanel.classList.remove("is-open");
+    searchPanel.setAttribute("aria-hidden", "true");
+    body.classList.remove("search-open");
 
-          description:
-            element.dataset.searchDescription ||
-            descriptionElement
-              ?.textContent
-              ?.trim() ||
-            "",
+    searchOpenButtons.forEach((button) => {
+      button.setAttribute("aria-expanded", "false");
+    });
 
-          category:
-            element.dataset.searchCategory ||
-            categoryElement
-              ?.textContent
-              ?.trim() ||
-            "",
+    setOverlayState(false);
+  }
 
-          url:
-            element.dataset.searchUrl ||
-            linkElement?.getAttribute("href") ||
-            ""
-        });
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  function normalizeText(value) {
+    return String(value || "")
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, " ");
+  }
+
+  function renderSearchResults(items, query) {
+    if (!searchResults || !searchMessage) return;
+
+    if (!query) {
+      searchMessage.textContent = "برای شروع، عبارتی را وارد کنید.";
+      searchResults.innerHTML = "";
+      return;
+    }
+
+    if (!items.length) {
+      searchMessage.textContent = `نتیجه‌ای برای «${query}» پیدا نشد.`;
+      searchResults.innerHTML = "";
+      return;
+    }
+
+    searchMessage.textContent = `${items.length} نتیجه برای «${query}» پیدا شد.`;
+
+    searchResults.innerHTML = items
+      .map((item) => {
+        const excerpt = item.excerpt || item.content || "";
+        return `
+          <article class="search-result-item">
+            <a class="search-result-link" href="${item.url}">
+              <div class="search-result-meta">
+                <span>${escapeHtml(item.date || "")}</span>
+              </div>
+              <h3>${escapeHtml(item.title || "بدون عنوان")}</h3>
+              <p>${escapeHtml(excerpt)}</p>
+            </a>
+          </article>
+        `;
       })
-      .filter(
-        (item) => item.title && item.url
-      );
+      .join("");
+  }
+
+  function runSearch(rawQuery) {
+    const query = normalizeText(rawQuery);
+
+    if (!query) {
+      renderSearchResults([], "");
+      return;
+    }
+
+    const results = searchIndex.filter((item) => {
+      const haystack = normalizeText([
+        item.title,
+        item.excerpt,
+        item.content,
+        Array.isArray(item.categories) ? item.categories.join(" ") : "",
+        Array.isArray(item.tags) ? item.tags.join(" ") : ""
+      ].join(" "));
+
+      return haystack.includes(query);
+    });
+
+    renderSearchResults(results, rawQuery.trim());
   }
 
   async function loadSearchIndex() {
-    if (searchIndexLoaded) {
-      return searchItems;
-    }
-
-    if (
-      searchIndexLoading &&
-      searchIndexPromise
-    ) {
-      return searchIndexPromise;
-    }
-
     searchIndexLoading = true;
 
-    searchIndexPromise = (async () => {
-      try {
-        const response = await fetch(
-          getSearchIndexUrl(),
-          {
-            headers: {
-              Accept: "application/json"
-            }
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(
-            `Search index request failed: ${response.status}`
-          );
-        }
-
-        const data = await response.json();
-
-        searchItems = Array.isArray(data)
-          ? data
-              .map(createSearchableItem)
-              .filter(
-                (item) =>
-                  item.title && item.url
-              )
-          : [];
-
-        searchIndexLoaded = true;
-
-        return searchItems;
-      } catch (error) {
-        /*
-         * اگر فایل search.json در دسترس نبود،
-         * اطلاعات از کارت‌های موجود در صفحه
-         * جمع‌آوری می‌شوند.
-         */
-
-        searchItems =
-          collectSearchItemsFromPage();
-
-        searchIndexLoaded = true;
-
-        return searchItems;
-      } finally {
-        searchIndexLoading = false;
-        searchIndexPromise = null;
-      }
-    })();
-
-    return searchIndexPromise;
-  }
-
-  function clearSearchResults() {
-    latestSearchRequest += 1;
-
-    if (searchResults) {
-      searchResults.innerHTML = "";
-    }
-
     if (searchMessage) {
-      searchMessage.textContent = "";
-    }
-  }
-
-  function renderSearchResultItems(results) {
-    if (!searchResults) return;
-
-    const resultList =
-      document.createElement("div");
-
-    resultList.className =
-      "search-results-list";
-
-    results.forEach((item) => {
-      const result =
-        document.createElement("a");
-
-      result.className =
-        "search-result-item";
-
-      result.href = item.url;
-
-      result.innerHTML = `
-        <span class="search-result-content">
-          ${
-            item.category
-              ? `<small>${escapeHTML(
-                  item.category
-                )}</small>`
-              : ""
-          }
-
-          <strong>
-            ${escapeHTML(item.title)}
-          </strong>
-
-          ${
-            item.description
-              ? `<span>${escapeHTML(
-                  item.description
-                )}</span>`
-              : ""
-          }
-        </span>
-
-        <span
-          class="search-result-arrow"
-          aria-hidden="true"
-        >
-          ←
-        </span>
-      `;
-
-      resultList.appendChild(result);
-    });
-
-    searchResults.appendChild(resultList);
-  }
-
-  async function renderSearchResults(query) {
-    if (!searchResults || !searchMessage) {
-      return;
+      searchMessage.textContent = "در حال بارگذاری جست‌وجو...";
     }
 
-    const requestId =
-      ++latestSearchRequest;
+    try {
+      const response = await fetch("/search.json", {
+        headers: {
+          Accept: "application/json"
+        }
+      });
 
-    const normalizedQuery =
-      normalizePersianText(query);
-
-    searchResults.innerHTML = "";
-
-    if (normalizedQuery.length < 2) {
-      searchMessage.textContent =
-        "برای جست‌وجو دست‌کم دو نویسه وارد کنید.";
-
-      return;
-    }
-
-    searchMessage.textContent =
-      "در حال جست‌وجو...";
-
-    const items = await loadSearchIndex();
-
-    /*
-     * اگر جست‌وجوی جدیدتری شروع شده باشد،
-     * نتیجه درخواست قدیمی نادیده گرفته می‌شود.
-     */
-
-    if (
-      requestId !== latestSearchRequest
-    ) {
-      return;
-    }
-
-    const queryWords = normalizedQuery
-      .split(" ")
-      .filter(Boolean);
-
-    const results = items
-      .filter((item) =>
-        queryWords.every((word) =>
-          item.searchableText.includes(word)
-        )
-      )
-      .slice(0, 10);
-
-    searchResults.innerHTML = "";
-
-    if (results.length === 0) {
-      searchMessage.textContent =
-        "مطلبی مطابق عبارت واردشده پیدا نشد.";
-
-      return;
-    }
-
-    searchMessage.textContent =
-      `${results.length} نتیجه پیدا شد.`;
-
-    renderSearchResultItems(results);
-  }
-
-  searchForm?.addEventListener(
-    "submit",
-    (event) => {
-      event.preventDefault();
-
-      window.clearTimeout(
-        searchInputTimeout
-      );
-
-      renderSearchResults(
-        searchInput?.value || ""
-      );
-    }
-  );
-
-  searchInput?.addEventListener(
-    "input",
-    () => {
-      const query =
-        searchInput.value.trim();
-
-      window.clearTimeout(
-        searchInputTimeout
-      );
-
-      if (!query) {
-        clearSearchResults();
-        return;
+      if (!response.ok) {
+        throw new Error("Failed to load search index.");
       }
 
-      searchInputTimeout =
-        window.setTimeout(() => {
-          renderSearchResults(query);
-        }, 180);
+      const data = await response.json();
+      searchIndex = Array.isArray(data) ? data : [];
+      searchIndexLoaded = true;
+
+      if (searchInput?.value.trim()) {
+        runSearch(searchInput.value);
+      } else if (searchMessage) {
+        searchMessage.textContent = "برای شروع، عبارتی را وارد کنید.";
+      }
+    } catch (error) {
+      if (searchMessage) {
+        searchMessage.textContent = "بارگذاری جست‌وجو انجام نشد.";
+      }
+      searchResults.innerHTML = "";
+      console.error(error);
+    } finally {
+      searchIndexLoading = false;
     }
-  );
+  }
+
+  menuButton?.addEventListener("click", () => {
+    const isOpen = mobileMenu?.classList.contains("is-open");
+    if (isOpen) {
+      closeMobileMenu();
+    } else {
+      openMobileMenu();
+    }
+  });
+
+  closeMenuButton?.addEventListener("click", closeMobileMenu);
+
+  searchOpenButtons.forEach((button) => {
+    button.addEventListener("click", openSearchPanel);
+  });
+
+  closeSearchButton?.addEventListener("click", closeSearchPanel);
+
+  pageOverlay?.addEventListener("click", () => {
+    closeMobileMenu();
+    closeSearchPanel();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeMobileMenu();
+      closeSearchPanel();
+    }
+  });
+
+  searchForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    runSearch(searchInput?.value || "");
+  });
+
+  searchInput?.addEventListener("input", (event) => {
+    runSearch(event.target.value);
+  });
 
   searchTagButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      const term =
-        button.dataset.searchTerm || "";
+      const term = button.getAttribute("data-search-term") || "";
+      if (!searchInput) return;
 
-      window.clearTimeout(
-        searchInputTimeout
-      );
-
-      if (searchInput) {
-        searchInput.value = term;
-      }
-
-      renderSearchResults(term);
-      searchInput?.focus();
+      searchInput.value = term;
+      runSearch(term);
+      searchInput.focus();
     });
   });
+
+  if (searchMessage) {
+    searchMessage.textContent = "برای شروع، عبارتی را وارد کنید.";
+  }
+});
 
   /* =======================================================
      Reading progress
