@@ -1092,19 +1092,6 @@ img {
   content: "";
 }
 
-.quote-avatar::after {
-  position: absolute;
-  right: -18px;
-  bottom: 7px;
-  width: 48px;
-  height: 48px;
-  border: 7px solid var(--quote-surface);
-  border-radius: 50%;
-  background: var(--quote-accent);
-  content: "";
-  box-shadow: 0 6px 18px rgba(35, 91, 67, 0.22);
-}
-
 .quote-avatar img {
   display: block;
   width: 160px;
@@ -4497,6 +4484,9 @@ img {
   }
 }
 
+.quote-avatar::after {
+  display: none;
+}
 
 html {
   color-scheme: light;
