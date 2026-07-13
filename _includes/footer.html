@@ -22,27 +22,78 @@
       </p>
 
       <div class="social-links">
-        {% if site.instagram_username %}
-          <a
-            href="https://instagram.com/{{ site.instagram_username }}"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="اینستاگرام {{ site.title | default: 'روایت' }}"
-          >
-            in
-          </a>
-        {% endif %}
 
-        {% if site.telegram_username %}
-          <a
-            href="https://t.me/{{ site.telegram_username }}"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="تلگرام {{ site.title | default: 'روایت' }}"
+        <a
+          href="https://www.instagram.com/amirhoseinbasari"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="اینستاگرام {{ site.title | default: 'روایت' }}"
+          title="Instagram"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            tg
-          </a>
-        {% endif %}
+            <rect
+              x="3"
+              y="3"
+              width="18"
+              height="18"
+              rx="5"
+              stroke="currentColor"
+              stroke-width="1.8"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              r="4"
+              stroke="currentColor"
+              stroke-width="1.8"
+            />
+            <circle
+              cx="17.5"
+              cy="6.5"
+              r="1.25"
+              fill="currentColor"
+            />
+          </svg>
+        </a>
+
+        <a
+          href="https://t.me/Robekamal"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="تلگرام {{ site.title | default: 'روایت' }}"
+          title="Telegram"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M21.5 4.5L3.7 11.35C2.9 11.66 2.92 12.8 3.75 13.08L8.25 14.55L10.05 19.6C10.35 20.45 11.45 20.62 11.98 19.9L14.55 16.45L19.15 19.85C19.9 20.4 20.98 19.98 21.12 19.05L23 5.65C23.13 4.72 22.35 4.17 21.5 4.5Z"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M8.35 14.45L17.75 8.65L10.05 19.6"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </a>
+
       </div>
 
     </div>
@@ -55,13 +106,21 @@
 
     <div class="footer-column">
       <h3>موضوعات</h3>
-      
+
+      <a href="{{ '/category/' | relative_url }}?name=experience">تجربه‌ها</a>
+      <a href="{{ '/category/' | relative_url }}?name=notes">یادداشت‌ها</a>
+      <a href="{{ '/category/' | relative_url }}?name=tutorial">آموزش‌ها</a>
+      <a href="{{ '/category/' | relative_url }}?name=learning">یادگیری</a>
+      <a href="{{ '/category/' | relative_url }}?name=life">زندگی</a>
+
     </div>
 
     <div class="footer-column">
       <h3>دسترسی سریع</h3>
       <a href="{{ '/about/' | relative_url }}">درباره من</a>
       <a href="{{ '/' | relative_url }}">صفحه اصلی</a>
+      <a href="{{ '/#articles' | relative_url }}">آخرین روایت‌ها</a>
+      <a href="{{ '/#experiences' | relative_url }}">انتخاب نویسنده</a>
     </div>
 
   </div>
