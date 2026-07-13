@@ -490,7 +490,7 @@ permalink: /
 
           <div class="quote-avatar">
             <img
-              src="https://i.pravatar.cc/160?img=11"
+              src="{{ '/assets/images/uploads/about-quote-author-1.jpg' | relative_url }}"
               alt="تصویر نویسنده روایت"
               width="160"
               height="160"
@@ -527,7 +527,7 @@ permalink: /
 
           <div class="quote-avatar">
             <img
-              src="https://i.pravatar.cc/160?img=12"
+              src="{{ '/assets/images/uploads/about-quote-author-2.jpg' | relative_url }}"
               alt="تصویر نویسنده دوم"
               width="160"
               height="160"
@@ -564,7 +564,7 @@ permalink: /
 
           <div class="quote-avatar">
             <img
-              src="https://i.pravatar.cc/160?img=13"
+              src="{{ '/assets/images/uploads/about-quote-author-3.jpg' | relative_url }}"
               alt="تصویر نویسنده سوم"
               width="160"
               height="160"
@@ -593,6 +593,7 @@ permalink: /
         </figure>
 
       </div>
+
 
       <!-- کنترل‌های اسلایدر -->
 
