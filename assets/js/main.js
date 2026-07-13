@@ -11,38 +11,31 @@ document.addEventListener("DOMContentLoaded", () => {
   const siteHeader = document.getElementById("siteHeader");
 
   const menuButton = document.getElementById("menuButton");
-  const closeMenuButton =
-    document.getElementById("closeMenuButton");
+  const closeMenuButton = document.getElementById("closeMenuButton");
   const mobileMenu = document.getElementById("mobileMenu");
 
-  const searchButton =
-    document.getElementById("searchButton");
+  const searchButton = document.getElementById("searchButton");
+  const mobileSearchButton =
+    document.getElementById("mobileSearchButton");
   const closeSearchButton =
     document.getElementById("closeSearchButton");
-  const searchPanel =
-    document.getElementById("searchPanel");
-  const searchForm =
-    document.getElementById("searchForm");
-  const searchInput =
-    document.getElementById("searchInput");
-  const searchMessage =
-    document.getElementById("searchMessage");
-  const searchResults =
-    document.getElementById("searchResults");
+  const searchPanel = document.getElementById("searchPanel");
+  const searchForm = document.getElementById("searchForm");
+  const searchInput = document.getElementById("searchInput");
+  const searchMessage = document.getElementById("searchMessage");
+  const searchResults = document.getElementById("searchResults");
   const searchTagButtons =
     document.querySelectorAll("[data-search-term]");
 
-  const pageOverlay =
-    document.getElementById("pageOverlay");
+  const pageOverlay = document.getElementById("pageOverlay");
   const readingProgress =
     document.getElementById("readingProgress");
-  const postContent =
-    document.querySelector(".post-content");
+  const postContent = document.querySelector(".post-content");
 
-  const backToTop =
-    document.getElementById("backToTop");
-  const currentYear =
-    document.getElementById("currentYear");
+  const backToTop = document.getElementById("backToTop");
+  const currentYear = document.getElementById("currentYear");
+
+  let lastSearchTrigger = searchButton;
 
   /* =======================================================
      Force light mode
@@ -65,14 +58,11 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.removeItem("darkMode");
     localStorage.removeItem("color-theme");
   } catch (error) {
-    /*
-     * localStorage ممکن است در حالت خصوصی مرورگر
-     * یا به‌دلیل تنظیمات امنیتی در دسترس نباشد.
-     */
+    // localStorage may be unavailable in private browsing.
   }
 
   /* =======================================================
-     Small utilities
+     Utilities
   ======================================================= */
 
   function setBodyScrollLock(locked) {
@@ -84,60 +74,50 @@ document.addEventListener("DOMContentLoaded", () => {
       .toLocaleLowerCase("fa")
       .replace(/ي/g, "ی")
       .replace(/ك/g, "ک")
-      .replace(/\u200c/g, " ")
-      .replace(/[إأٱآ]/g, "ا")
+      .replace(/ۀ/g, "ه")
       .replace(/ة/g, "ه")
+      .replace(/ؤ/g, "و")
+      .replace(/[إأٱآ]/g, "ا")
+      .replace(/\u200c/g, " ")
       .replace(/\s+/g, " ")
       .trim();
   }
 
-  function escapeHTML(value = "") {
-    const temporaryElement =
-      document.createElement("div");
-
-    temporaryElement.textContent = String(value);
-
-    return temporaryElement.innerHTML;
-  }
-
   function prefersReducedMotion() {
     return Boolean(
-      window.matchMedia &&
-        window.matchMedia(
-          "(prefers-reduced-motion: reduce)"
-        ).matches
+      window.matchMedia?.(
+        "(prefers-reduced-motion: reduce)"
+      ).matches
     );
   }
 
   function isMobileMenuOpen() {
-    return (
-      mobileMenu?.classList.contains("is-open") ??
-      false
+    return Boolean(
+      mobileMenu?.classList.contains("is-open")
     );
   }
 
   function isSearchOpen() {
-    return (
-      searchPanel?.classList.contains("is-open") ??
-      false
+    return Boolean(
+      searchPanel?.classList.contains("is-open")
     );
   }
 
   function updateOverlay() {
-    if (!pageOverlay) return;
-
     const shouldShowOverlay =
       isMobileMenuOpen() || isSearchOpen();
 
-    pageOverlay.classList.toggle(
-      "is-visible",
-      shouldShowOverlay
-    );
+    if (pageOverlay) {
+      pageOverlay.classList.toggle(
+        "is-visible",
+        shouldShowOverlay
+      );
 
-    pageOverlay.setAttribute(
-      "aria-hidden",
-      shouldShowOverlay ? "false" : "true"
-    );
+      pageOverlay.setAttribute(
+        "aria-hidden",
+        shouldShowOverlay ? "false" : "true"
+      );
+    }
 
     setBodyScrollLock(shouldShowOverlay);
   }
@@ -155,21 +135,14 @@ document.addEventListener("DOMContentLoaded", () => {
     mobileMenu.setAttribute("aria-hidden", "false");
 
     menuButton.classList.add("is-active");
-    menuButton.setAttribute(
-      "aria-expanded",
-      "true"
-    );
-    menuButton.setAttribute(
-      "aria-label",
-      "بستن منوی اصلی"
-    );
+    menuButton.setAttribute("aria-expanded", "true");
+    menuButton.setAttribute("aria-label", "بستن منوی اصلی");
 
     updateOverlay();
 
-    const firstFocusableElement =
-      mobileMenu.querySelector(
-        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
-      );
+    const firstFocusableElement = mobileMenu.querySelector(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
 
     window.setTimeout(() => {
       firstFocusableElement?.focus();
@@ -185,10 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
     mobileMenu.setAttribute("aria-hidden", "true");
 
     menuButton.classList.remove("is-active");
-    menuButton.setAttribute(
-      "aria-expanded",
-      "false"
-    );
+    menuButton.setAttribute("aria-expanded", "false");
     menuButton.setAttribute(
       "aria-label",
       "بازکردن منوی اصلی"
@@ -209,46 +179,44 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  closeMenuButton?.addEventListener(
-    "click",
-    () => {
-      closeMobileMenu();
-    }
-  );
+  closeMenuButton?.addEventListener("click", () => {
+    closeMobileMenu();
+  });
 
-  mobileMenu
-    ?.querySelectorAll("a")
-    .forEach((link) => {
-      link.addEventListener("click", () => {
-        closeMobileMenu(false);
-      });
+  mobileMenu?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      closeMobileMenu(false);
     });
+  });
 
   /* =======================================================
      Search panel
   ======================================================= */
 
-  function openSearchPanel() {
-    if (!searchPanel || !searchButton) return;
+  function openSearchPanel(trigger = searchButton) {
+    if (!searchPanel) return;
+
+    lastSearchTrigger = trigger || searchButton;
 
     closeMobileMenu(false);
 
     searchPanel.classList.add("is-open");
-    searchPanel.setAttribute(
-      "aria-hidden",
-      "false"
-    );
+    searchPanel.setAttribute("aria-hidden", "false");
 
-    searchButton.setAttribute(
-      "aria-expanded",
-      "true"
-    );
-    searchButton.setAttribute(
+    searchButton?.setAttribute("aria-expanded", "true");
+    searchButton?.setAttribute(
       "aria-label",
       "بستن جست‌وجو"
     );
 
+    mobileSearchButton?.setAttribute(
+      "aria-expanded",
+      "true"
+    );
+
     updateOverlay();
+
+    loadSearchIndex();
 
     window.setTimeout(() => {
       searchInput?.focus();
@@ -256,29 +224,28 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function closeSearchPanel(returnFocus = true) {
-    if (!searchPanel || !searchButton) return;
+    if (!searchPanel) return;
 
     const wasOpen = isSearchOpen();
 
     searchPanel.classList.remove("is-open");
-    searchPanel.setAttribute(
-      "aria-hidden",
-      "true"
-    );
+    searchPanel.setAttribute("aria-hidden", "true");
 
-    searchButton.setAttribute(
-      "aria-expanded",
-      "false"
-    );
-    searchButton.setAttribute(
+    searchButton?.setAttribute("aria-expanded", "false");
+    searchButton?.setAttribute(
       "aria-label",
       "بازکردن جست‌وجو"
+    );
+
+    mobileSearchButton?.setAttribute(
+      "aria-expanded",
+      "false"
     );
 
     updateOverlay();
 
     if (wasOpen && returnFocus) {
-      searchButton.focus();
+      lastSearchTrigger?.focus();
     }
   }
 
@@ -286,16 +253,23 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isSearchOpen()) {
       closeSearchPanel();
     } else {
-      openSearchPanel();
+      openSearchPanel(searchButton);
     }
   });
 
-  closeSearchButton?.addEventListener(
-    "click",
-    () => {
+  mobileSearchButton?.addEventListener("click", () => {
+    openSearchPanel(mobileSearchButton);
+  });
+
+  closeSearchButton?.addEventListener("click", () => {
+    closeSearchPanel();
+  });
+
+  searchPanel?.addEventListener("click", (event) => {
+    if (event.target === searchPanel) {
       closeSearchPanel();
     }
-  );
+  });
 
   pageOverlay?.addEventListener("click", () => {
     closeMobileMenu(false);
@@ -304,7 +278,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* =======================================================
-     Search data and search results
+     Search index
   ======================================================= */
 
   let searchItems = [];
@@ -312,7 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let searchIndexLoading = false;
   let searchIndexPromise = null;
   let latestSearchRequest = 0;
-  let searchInputTimeout;
+  let searchInputTimeout = null;
 
   function getSearchIndexUrl() {
     const baseUrl =
@@ -321,31 +295,65 @@ document.addEventListener("DOMContentLoaded", () => {
         ?.getAttribute("content")
         ?.trim() || "";
 
-    return `${
-      baseUrl.replace(/\/$/, "")
-    }/search.json`;
+    return `${baseUrl.replace(/\/$/, "")}/search.json`;
+  }
+
+  function normalizeList(value) {
+    if (Array.isArray(value)) {
+      return value.filter(Boolean);
+    }
+
+    if (typeof value === "string" && value.trim()) {
+      return value
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    return [];
   }
 
   function createSearchableItem(item = {}) {
     const title = item.title || "";
-    const description = item.description || "";
-    const category = item.category || "";
+    const excerpt =
+      item.excerpt ||
+      item.description ||
+      "";
 
-    const itemTags = Array.isArray(item.tags)
-      ? item.tags
-      : [];
+    const content = item.content || "";
 
-    const searchableTags = itemTags.join(" ");
+    const categories = normalizeList(
+      item.categories || item.category
+    );
+
+    const tags = normalizeList(item.tags);
+    const author = item.author || "";
+
+    const categoryLabel = categories.join("، ");
 
     return {
       title,
-      description,
-      category,
-      tags: itemTags,
+      excerpt,
+      content,
+      categories,
+      categoryLabel,
+      tags,
+      author,
+      authorAvatar: item.author_avatar || "",
+      image: item.image || "",
       url: item.url || "",
       date: item.date || "",
+      dateIso: item.date_iso || "",
+
       searchableText: normalizePersianText(
-        `${title} ${description} ${category} ${searchableTags}`
+        [
+          title,
+          excerpt,
+          content,
+          categories.join(" "),
+          tags.join(" "),
+          author
+        ].join(" ")
       )
     };
   }
@@ -360,46 +368,28 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     const elements = Array.from(
-      document.querySelector(
-        selectors.join(",")
-      )
+      document.querySelectorAll(selectors.join(","))
     );
 
-    const allElements = Array.from(
-      document.querySelectorAll(
-        selectors.join(",")
-      )
-    );
-
-    const uniqueElements = [
-      ...new Set(
-        elements.length
-          ? elements
-          : allElements
-      )
-    ];
+    const uniqueElements = [...new Set(elements)];
 
     return uniqueElements
       .map((element) => {
-        const titleElement =
-          element.querySelector(
-            "[data-search-title], h2, h3, .post-title, .card-title"
-          );
+        const titleElement = element.querySelector(
+          "[data-search-title], h2, h3, .post-title, .card-title"
+        );
 
-        const descriptionElement =
-          element.querySelector(
-            "[data-search-description], .post-excerpt, .card-excerpt, p"
-          );
+        const descriptionElement = element.querySelector(
+          "[data-search-description], .post-excerpt, .card-excerpt, p"
+        );
 
-        const categoryElement =
-          element.querySelector(
-            "[data-search-category], .post-category, .card-category"
-          );
+        const categoryElement = element.querySelector(
+          "[data-search-category], .post-category, .card-category"
+        );
 
-        const linkElement =
-          element.matches("a[href]")
-            ? element
-            : element.querySelector("a[href]");
+        const linkElement = element.matches("a[href]")
+          ? element
+          : element.querySelector("a[href]");
 
         return createSearchableItem({
           title:
@@ -407,18 +397,14 @@ document.addEventListener("DOMContentLoaded", () => {
             titleElement?.textContent?.trim() ||
             "",
 
-          description:
+          excerpt:
             element.dataset.searchDescription ||
-            descriptionElement
-              ?.textContent
-              ?.trim() ||
+            descriptionElement?.textContent?.trim() ||
             "",
 
           category:
             element.dataset.searchCategory ||
-            categoryElement
-              ?.textContent
-              ?.trim() ||
+            categoryElement?.textContent?.trim() ||
             "",
 
           url:
@@ -427,9 +413,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ""
         });
       })
-      .filter(
-        (item) => item.title && item.url
-      );
+      .filter((item) => item.title && item.url);
   }
 
   async function loadSearchIndex() {
@@ -437,10 +421,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return searchItems;
     }
 
-    if (
-      searchIndexLoading &&
-      searchIndexPromise
-    ) {
+    if (searchIndexLoading && searchIndexPromise) {
       return searchIndexPromise;
     }
 
@@ -448,14 +429,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     searchIndexPromise = (async () => {
       try {
-        const response = await fetch(
-          getSearchIndexUrl(),
-          {
-            headers: {
-              Accept: "application/json"
-            }
+        const response = await fetch(getSearchIndexUrl(), {
+          headers: {
+            Accept: "application/json"
           }
-        );
+        });
 
         if (!response.ok) {
           throw new Error(
@@ -468,25 +446,19 @@ document.addEventListener("DOMContentLoaded", () => {
         searchItems = Array.isArray(data)
           ? data
               .map(createSearchableItem)
-              .filter(
-                (item) =>
-                  item.title && item.url
-              )
+              .filter((item) => item.title && item.url)
           : [];
 
         searchIndexLoaded = true;
 
         return searchItems;
       } catch (error) {
-        /*
-         * اگر فایل search.json در دسترس نبود،
-         * اطلاعات از کارت‌های موجود در صفحه
-         * جمع‌آوری می‌شوند.
-         */
+        console.error(
+          "Unable to load search.json:",
+          error
+        );
 
-        searchItems =
-          collectSearchItemsFromPage();
-
+        searchItems = collectSearchItemsFromPage();
         searchIndexLoaded = true;
 
         return searchItems;
@@ -499,11 +471,15 @@ document.addEventListener("DOMContentLoaded", () => {
     return searchIndexPromise;
   }
 
+  /* =======================================================
+     Search results
+  ======================================================= */
+
   function clearSearchResults() {
     latestSearchRequest += 1;
 
     if (searchResults) {
-      searchResults.innerHTML = "";
+      searchResults.replaceChildren();
     }
 
     if (searchMessage) {
@@ -511,94 +487,107 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function createResultMeta(item) {
+    const values = [
+      item.categoryLabel,
+      item.author,
+      item.date
+    ].filter(Boolean);
+
+    if (!values.length) {
+      return null;
+    }
+
+    const meta = document.createElement("span");
+    meta.className = "search-result-meta";
+
+    values.forEach((value) => {
+      const part = document.createElement("small");
+      part.textContent = value;
+      meta.appendChild(part);
+    });
+
+    return meta;
+  }
+
+  function createSearchResult(item) {
+    const result = document.createElement("a");
+    result.className = "search-result-item";
+    result.href = item.url;
+
+    const content = document.createElement("span");
+    content.className = "search-result-content";
+
+    const meta = createResultMeta(item);
+
+    if (meta) {
+      content.appendChild(meta);
+    }
+
+    const title = document.createElement("strong");
+    title.textContent = item.title;
+    content.appendChild(title);
+
+    if (item.excerpt) {
+      const excerpt = document.createElement("span");
+      excerpt.className = "search-result-excerpt";
+      excerpt.textContent = item.excerpt;
+      content.appendChild(excerpt);
+    }
+
+    const arrow = document.createElement("span");
+    arrow.className = "search-result-arrow";
+    arrow.setAttribute("aria-hidden", "true");
+    arrow.textContent = "←";
+
+    result.append(content, arrow);
+
+    return result;
+  }
+
   function renderSearchResultItems(results) {
     if (!searchResults) return;
 
-    const resultList =
-      document.createElement("div");
+    const resultList = document.createElement("div");
+    resultList.className = "search-results-list";
 
-    resultList.className =
-      "search-results-list";
+    const fragment = document.createDocumentFragment();
 
     results.forEach((item) => {
-      const result =
-        document.createElement("a");
-
-      result.className =
-        "search-result-item";
-
-      result.href = item.url;
-
-      result.innerHTML = `
-        <span class="search-result-content">
-          ${
-            item.category
-              ? `<small>${escapeHTML(
-                  item.category
-                )}</small>`
-              : ""
-          }
-
-          <strong>
-            ${escapeHTML(item.title)}
-          </strong>
-
-          ${
-            item.description
-              ? `<span>${escapeHTML(
-                  item.description
-                )}</span>`
-              : ""
-          }
-        </span>
-
-        <span
-          class="search-result-arrow"
-          aria-hidden="true"
-        >
-          ←
-        </span>
-      `;
-
-      resultList.appendChild(result);
+      fragment.appendChild(createSearchResult(item));
     });
 
-    searchResults.appendChild(resultList);
+    resultList.appendChild(fragment);
+    searchResults.replaceChildren(resultList);
   }
 
-  async function renderSearchResults(query) {
+  async function renderSearchResults(rawQuery) {
     if (!searchResults || !searchMessage) {
       return;
     }
 
-    const requestId =
-      ++latestSearchRequest;
+    const requestId = ++latestSearchRequest;
+    const query = rawQuery.trim();
+    const normalizedQuery = normalizePersianText(query);
 
-    const normalizedQuery =
-      normalizePersianText(query);
+    searchResults.replaceChildren();
 
-    searchResults.innerHTML = "";
+    if (!normalizedQuery) {
+      searchMessage.textContent = "";
+      return;
+    }
 
     if (normalizedQuery.length < 2) {
       searchMessage.textContent =
         "برای جست‌وجو دست‌کم دو نویسه وارد کنید.";
-
       return;
     }
 
-    searchMessage.textContent =
-      "در حال جست‌وجو...";
+    searchMessage.textContent = "در حال جست‌وجو...";
 
     const items = await loadSearchIndex();
 
-    /*
-     * اگر جست‌وجوی جدیدتری شروع شده باشد،
-     * نتیجه درخواست قدیمی نادیده گرفته می‌شود.
-     */
-
-    if (
-      requestId !== latestSearchRequest
-    ) {
+    if (requestId !== latestSearchRequest) {
       return;
     }
 
@@ -614,71 +603,64 @@ document.addEventListener("DOMContentLoaded", () => {
       )
       .slice(0, 10);
 
-    searchResults.innerHTML = "";
+    searchResults.replaceChildren();
 
-    if (results.length === 0) {
+    if (!results.length) {
       searchMessage.textContent =
-        "مطلبی مطابق عبارت واردشده پیدا نشد.";
-
+        `نتیجه‌ای برای «${query}» پیدا نشد.`;
       return;
     }
 
     searchMessage.textContent =
-      `${results.length} نتیجه پیدا شد.`;
+      `${results.length.toLocaleString("fa-IR")} نتیجه پیدا شد.`;
 
     renderSearchResultItems(results);
   }
 
-  searchForm?.addEventListener(
-    "submit",
-    (event) => {
-      event.preventDefault();
+  searchForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
 
-      window.clearTimeout(
-        searchInputTimeout
-      );
+    window.clearTimeout(searchInputTimeout);
 
-      renderSearchResults(
-        searchInput?.value || ""
-      );
+    renderSearchResults(
+      searchInput?.value || ""
+    );
+  });
+
+  searchInput?.addEventListener("input", () => {
+    const query = searchInput.value.trim();
+
+    window.clearTimeout(searchInputTimeout);
+
+    if (!query) {
+      clearSearchResults();
+      return;
     }
-  );
 
-  searchInput?.addEventListener(
-    "input",
-    () => {
-      const query =
-        searchInput.value.trim();
-
-      window.clearTimeout(
-        searchInputTimeout
-      );
-
-      if (!query) {
-        clearSearchResults();
-        return;
-      }
-
-      searchInputTimeout =
-        window.setTimeout(() => {
-          renderSearchResults(query);
-        }, 180);
+    if (normalizePersianText(query).length < 2) {
+      renderSearchResults(query);
+      return;
     }
-  );
+
+    searchInputTimeout = window.setTimeout(() => {
+      renderSearchResults(query);
+    }, 220);
+  });
 
   searchTagButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const term =
-        button.dataset.searchTerm || "";
+        button.dataset.searchTerm?.trim() || "";
 
-      window.clearTimeout(
-        searchInputTimeout
-      );
+      if (!term) return;
+
+      window.clearTimeout(searchInputTimeout);
 
       if (searchInput) {
         searchInput.value = term;
       }
 
+      openSearchPanel(button);
       renderSearchResults(term);
       searchInput?.focus();
     });
@@ -692,11 +674,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!readingProgress) return;
 
     if (!postContent) {
-      readingProgress.style.transform =
-        "scaleX(0)";
-
+      readingProgress.style.transform = "scaleX(0)";
       readingProgress.hidden = true;
-
       return;
     }
 
@@ -708,28 +687,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const contentTop =
       window.scrollY + contentRect.top;
 
-    const contentHeight =
-      postContent.offsetHeight;
+    const contentHeight = postContent.offsetHeight;
 
     const viewportReferenceOffset =
       window.innerHeight * 0.35;
 
     const viewportReference =
-      window.scrollY +
-      viewportReferenceOffset;
+      window.scrollY + viewportReferenceOffset;
 
     const readableDistance = Math.max(
-      contentHeight -
-        viewportReferenceOffset,
+      contentHeight - viewportReferenceOffset,
       1
     );
 
     const progress = Math.min(
       Math.max(
-        (
-          viewportReference -
-          contentTop
-        ) / readableDistance,
+        (viewportReference - contentTop) /
+          readableDistance,
         0
       ),
       1
@@ -757,36 +731,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
       backToTop.setAttribute(
         "aria-hidden",
-        shouldShowButton
-          ? "false"
-          : "true"
+        shouldShowButton ? "false" : "true"
       );
 
       backToTop.tabIndex =
         shouldShowButton ? 0 : -1;
     }
 
-    if (siteHeader) {
-      siteHeader.classList.toggle(
-        "is-scrolled",
-        scrollPosition > 20
-      );
-    }
+    siteHeader?.classList.toggle(
+      "is-scrolled",
+      scrollPosition > 20
+    );
 
     updateReadingProgress();
   }
 
-  backToTop?.addEventListener(
-    "click",
-    () => {
-      window.scrollTo({
-        top: 0,
-        behavior: prefersReducedMotion()
-          ? "auto"
-          : "smooth"
-      });
-    }
-  );
+  backToTop?.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: prefersReducedMotion()
+        ? "auto"
+        : "smooth"
+    });
+  });
 
   let scrollFrameRequested = false;
 
@@ -799,111 +766,71 @@ document.addEventListener("DOMContentLoaded", () => {
 
       window.requestAnimationFrame(() => {
         updateScrollInterface();
-
         scrollFrameRequested = false;
       });
     },
-    {
-      passive: true
-    }
+    { passive: true }
   );
 
-  window.addEventListener(
-    "resize",
-    () => {
-      updateScrollInterface();
+  window.addEventListener("resize", () => {
+    updateScrollInterface();
 
-      /*
-       * اگر عرض صفحه از حالت موبایل بزرگ‌تر شد،
-       * منوی موبایل به‌صورت خودکار بسته می‌شود.
-       */
-
-      if (
-        window.innerWidth > 900 &&
-        isMobileMenuOpen()
-      ) {
-        closeMobileMenu(false);
-      }
+    if (
+      window.innerWidth > 900 &&
+      isMobileMenuOpen()
+    ) {
+      closeMobileMenu(false);
     }
-  );
+  });
 
   /* =======================================================
      Keyboard interactions
   ======================================================= */
 
-  document.addEventListener(
-    "keydown",
-    (event) => {
-      if (event.key === "Escape") {
-        if (isSearchOpen()) {
-          closeSearchPanel();
-          return;
-        }
-
-        if (isMobileMenuOpen()) {
-          closeMobileMenu();
-        }
-
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      if (isSearchOpen()) {
+        closeSearchPanel();
         return;
       }
 
-      const activeElement =
-        document.activeElement;
-
-      const activeTag =
-        activeElement?.tagName;
-
-      const isTyping =
-        activeTag === "INPUT" ||
-        activeTag === "TEXTAREA" ||
-        activeTag === "SELECT" ||
-        activeElement?.isContentEditable;
-
-      if (
-        event.key === "/" &&
-        !isTyping &&
-        !event.ctrlKey &&
-        !event.metaKey &&
-        !event.altKey
-      ) {
-        event.preventDefault();
-        openSearchPanel();
+      if (isMobileMenuOpen()) {
+        closeMobileMenu();
       }
-    }
-  );
 
-  /* =======================================================
-     Footer year
-  ======================================================= */
-
-  if (currentYear) {
-    currentYear.textContent =
-      new Intl.DateTimeFormat(
-        "fa-IR",
-        {
-          year: "numeric"
-        }
-      ).format(new Date());
-  }
-
-  /* =======================================================
-     Initial state
-  ======================================================= */
-
-  clearSearchResults();
-  updateOverlay();
-  updateScrollInterface();
-  /* =======================================================
-   Modern journal section
-======================================================= */
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const section = document.querySelector(".latest-section");
-
-    if (!section) {
       return;
     }
+
+    const activeElement = document.activeElement;
+    const activeTag = activeElement?.tagName;
+
+    const isTyping =
+      activeTag === "INPUT" ||
+      activeTag === "TEXTAREA" ||
+      activeTag === "SELECT" ||
+      activeElement?.isContentEditable;
+
+    if (
+      event.key === "/" &&
+      !isTyping &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey
+    ) {
+      event.preventDefault();
+      openSearchPanel(searchButton);
+    }
+  });
+
+  /* =======================================================
+     Latest journal section
+  ======================================================= */
+
+  function initializeLatestSection() {
+    const section =
+      document.querySelector(".latest-section");
+
+    if (!section) return;
 
     const cards = Array.from(
       section.querySelectorAll("[data-latest-card]")
@@ -913,13 +840,24 @@ document.addEventListener("DOMContentLoaded", () => {
       section.querySelectorAll(".latest-filter")
     );
 
-    const emptyState = section.querySelector("#latestEmpty");
-    const loadMoreButton = section.querySelector("#latestLoadMore");
-    const loadMoreWrapper = section.querySelector(
-      "#latestLoadMoreWrapper"
-    );
+    const emptyState =
+      section.querySelector("#latestEmpty");
+
+    const loadMoreButton =
+      section.querySelector("#latestLoadMore");
+
+    const loadMoreWrapper =
+      section.querySelector("#latestLoadMoreWrapper");
 
     if (!cards.length) {
+      if (emptyState) {
+        emptyState.hidden = false;
+      }
+
+      if (loadMoreWrapper) {
+        loadMoreWrapper.hidden = true;
+      }
+
       return;
     }
 
@@ -929,12 +867,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let activeFilter = "all";
     let visibleCount = initialVisibleCount;
 
-    /**
-     * کارت‌های سازگار با فیلتر فعلی را برمی‌گرداند.
-     */
     function getFilteredCards() {
-      return cards.filter(function (card) {
-        const category = card.dataset.category;
+      return cards.filter((card) => {
+        const category =
+          card.dataset.category || "";
 
         return (
           activeFilter === "all" ||
@@ -943,32 +879,37 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    /**
-     * وضعیت کارت‌ها، حالت خالی و دکمه نمایش بیشتر را به‌روزرسانی می‌کند.
-     */
-    function renderCards(options = {}) {
-      const shouldAnimate = options.animate === true;
+    function showCard(card, shouldAnimate) {
+      card.hidden = false;
+
+      if (shouldAnimate) {
+        card.classList.remove("is-visible");
+
+        window.requestAnimationFrame(() => {
+          card.classList.add("is-visible");
+        });
+      } else {
+        card.classList.add("is-visible");
+      }
+    }
+
+    function renderCards({ animate = false } = {}) {
       const filteredCards = getFilteredCards();
 
-      cards.forEach(function (card) {
+      cards.forEach((card) => {
         card.hidden = true;
         card.classList.remove("is-visible");
       });
 
-      filteredCards.forEach(function (card, index) {
-        if (index < visibleCount) {
-          card.hidden = false;
-
-          if (shouldAnimate) {
-            requestAnimationFrame(function () {
-              card.classList.add("is-visible");
-            });
-          }
-        }
-      });
+      filteredCards
+        .slice(0, visibleCount)
+        .forEach((card) => {
+          showCard(card, animate);
+        });
 
       if (emptyState) {
-        emptyState.hidden = filteredCards.length !== 0;
+        emptyState.hidden =
+          filteredCards.length !== 0;
       }
 
       if (loadMoreWrapper) {
@@ -978,28 +919,28 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    /**
-     * فعال‌سازی دکمه فیلتر انتخاب‌شده
-     */
-    function setActiveFilter(button) {
-      filterButtons.forEach(function (filterButton) {
-        const isCurrentButton = filterButton === button;
+    function setActiveFilter(activeButton) {
+      filterButtons.forEach((button) => {
+        const isActive =
+          button === activeButton;
 
-        filterButton.classList.toggle(
+        button.classList.toggle(
           "is-active",
-          isCurrentButton
+          isActive
         );
 
-        filterButton.setAttribute(
+        button.setAttribute(
           "aria-pressed",
-          String(isCurrentButton)
+          String(isActive)
         );
       });
     }
 
-    filterButtons.forEach(function (button) {
-      button.addEventListener("click", function () {
-        activeFilter = button.dataset.filter || "all";
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        activeFilter =
+          button.dataset.filter || "all";
+
         visibleCount = initialVisibleCount;
 
         setActiveFilter(button);
@@ -1007,36 +948,52 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    if (loadMoreButton) {
-      loadMoreButton.addEventListener("click", function () {
-        const previouslyVisible = visibleCount;
+    loadMoreButton?.addEventListener("click", () => {
+      const filteredCards = getFilteredCards();
+      const previouslyVisible = visibleCount;
 
-        visibleCount += loadMoreStep;
-        renderCards({ animate: true });
+      visibleCount += loadMoreStep;
 
-        const filteredCards = getFilteredCards();
-        const firstNewCard = filteredCards[previouslyVisible];
+      renderCards({ animate: true });
 
-        if (firstNewCard) {
-          firstNewCard.setAttribute("tabindex", "-1");
-          firstNewCard.focus({
-            preventScroll: true
-          });
+      const firstNewCard =
+        filteredCards[previouslyVisible];
 
-          firstNewCard.scrollIntoView({
-            behavior: window.matchMedia(
-              "(prefers-reduced-motion: reduce)"
-            ).matches
-              ? "auto"
-              : "smooth",
-            block: "center"
-          });
-        }
+      if (!firstNewCard) return;
+
+      firstNewCard.setAttribute("tabindex", "-1");
+      firstNewCard.focus({
+        preventScroll: true
       });
-    }
+
+      firstNewCard.scrollIntoView({
+        behavior: prefersReducedMotion()
+          ? "auto"
+          : "smooth",
+        block: "center"
+      });
+    });
 
     renderCards();
-  });
-</script>
+  }
 
+  /* =======================================================
+     Footer year
+  ======================================================= */
+
+  if (currentYear) {
+    currentYear.textContent =
+      new Intl.DateTimeFormat("fa-IR", {
+        year: "numeric"
+      }).format(new Date());
+  }
+
+  /* =======================================================
+     Initial state
+  ======================================================= */
+
+  clearSearchResults();
+  updateOverlay();
+  updateScrollInterface();
+  initializeLatestSection();
 });
